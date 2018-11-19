@@ -1,0 +1,19 @@
+{
+  "name": "net.zlyfer.artist.io",
+  "version": "1.0.0",
+  "description": "artist.io",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ."
+  },
+  "keywords": [
+    "socket.io",
+    "drawing"
+  ],
+  "author": "Frederik 'zlyfer' Shull",
+  "license": "SEE LICENSE IN LICENSE.md",
+  "dependencies": {
+    "express": "^4.15.2",
+    "socket.io": "^2.1.1"
+  }
+}

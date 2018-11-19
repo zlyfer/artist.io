@@ -1,0 +1,492 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+:root {
+	--red1: #FFCDD2;
+	--red2: #EF9A9A;
+	--red3: #E57373;
+	--red4: #EF5350;
+	--red5: #F44336;
+	--red6: #E53935;
+	--red7: #D32F2F;
+	--red8: #C62828;
+	--red9: #B71C1C;
+	--pink1: #F8BBD0;
+	--pink2: #F48FB1;
+	--pink3: #F06292;
+	--pink4: #EC407A;
+	--pink5: #E91E63;
+	--pink6: #D81B60;
+	--pink7: #C2185B;
+	--pink8: #AD1457;
+	--pink9: #880E4F;
+	--purple1: #E1BEE7;
+	--purple2: #CE93D8;
+	--purple3: #BA68C8;
+	--purple4: #AB47BC;
+	--purple5: #9C27B0;
+	--purple6: #8E24AA;
+	--purple7: #7B1FA2;
+	--purple8: #6A1B9A;
+	--purple9: #4A148C;
+	--deeppurple1: #D1C4E9;
+	--deeppurple2: #B39DDB;
+	--deeppurple3: #9575CD;
+	--deeppurple4: #7E57C2;
+	--deeppurple5: #673AB7;
+	--deeppurple6: #5E35B1;
+	--deeppurple7: #512DA8;
+	--deeppurple8: #4527A0;
+	--deeppurple9: #311B92;
+	--indigo1: #C5CAE9;
+	--indigo2: #9FA8DA;
+	--indigo3: #7986CB;
+	--indigo4: #5C6BC0;
+	--indigo5: #3F51B5;
+	--indigo6: #3949AB;
+	--indigo7: #303F9F;
+	--indigo8: #283593;
+	--indigo9: #1A237E;
+	--blue1: #BBDEFB;
+	--blue2: #90CAF9;
+	--blue3: #64B5F6;
+	--blue4: #42A5F5;
+	--blue5: #2196F3;
+	--blue6: #1E88E5;
+	--blue7: #1976D2;
+	--blue8: #1565C0;
+	--blue9: #0D47A1;
+	--lightblue1: #B3E5FC;
+	--lightblue2: #81D4FA;
+	--lightblue3: #4FC3F7;
+	--lightblue4: #29B6F6;
+	--lightblue5: #03A9F4;
+	--lightblue6: #039BE5;
+	--lightblue7: #0288D1;
+	--lightblue8: #0277BD;
+	--lightblue9: #01579B;
+	--cyan1: #B2EBF2;
+	--cyan2: #80DEEA;
+	--cyan3: #4DD0E1;
+	--cyan4: #26C6DA;
+	--cyan5: #00BCD4;
+	--cyan6: #00ACC1;
+	--cyan7: #0097A7;
+	--cyan8: #00838F;
+	--cyan9: #006064;
+	--teal1: #B2DFDB;
+	--teal2: #80CBC4;
+	--teal3: #4DB6AC;
+	--teal4: #26A69A;
+	--teal5: #009688;
+	--teal6: #00897B;
+	--teal7: #00796B;
+	--teal8: #00695C;
+	--teal9: #004D40;
+	--green1: #C8E6C9;
+	--green2: #A5D6A7;
+	--green3: #81C784;
+	--green4: #66BB6A;
+	--green5: #4CAF50;
+	--green6: #43A047;
+	--green7: #388E3C;
+	--green8: #2E7D32;
+	--green9: #1B5E20;
+	--lightgreen1: #DCEDC8;
+	--lightgreen2: #C5E1A5;
+	--lightgreen3: #AED581;
+	--lightgreen4: #9CCC65;
+	--lightgreen5: #8BC34A;
+	--lightgreen6: #7CB342;
+	--lightgreen7: #689F38;
+	--lightgreen8: #558B2F;
+	--lightgreen9: #33691E;
+	--lime1: #F0F4C3;
+	--lime2: #E6EE9C;
+	--lime3: #DCE775;
+	--lime4: #D4E157;
+	--lime5: #CDDC39;
+	--lime6: #C0CA33;
+	--lime7: #AFB42B;
+	--lime8: #9E9D24;
+	--lime9: #827717;
+	--yellow1: #FFF9C4;
+	--yellow2: #FFF59D;
+	--yellow3: #FFF176;
+	--yellow4: #FFEE58;
+	--yellow5: #FFEB3B;
+	--yellow6: #FDD835;
+	--yellow7: #FBC02D;
+	--yellow8: #F9A825;
+	--yellow9: #F57F17;
+	--amber1: #FFECB3;
+	--amber2: #FFE082;
+	--amber3: #FFD54F;
+	--amber4: #FFCA28;
+	--amber5: #FFC107;
+	--amber6: #FFB300;
+	--amber7: #FFA000;
+	--amber8: #FF8F00;
+	--amber9: #FF6F00;
+	--orange1: #FFE0B2;
+	--orange2: #FFCC80;
+	--orange3: #FFB74D;
+	--orange4: #FFA726;
+	--orange5: #FF9800;
+	--orange6: #FB8C00;
+	--orange7: #F57C00;
+	--orange8: #EF6C00;
+	--orange9: #E65100;
+	--deeporange1: #FFCCBC;
+	--deeporange2: #FFAB91;
+	--deeporange3: #FF8A65;
+	--deeporange4: #FF7043;
+	--deeporange5: #FF5722;
+	--deeporange6: #F4511E;
+	--deeporange7: #E64A19;
+	--deeporange8: #D84315;
+	--deeporange9: #BF360C;
+	--brown1: #D7CCC8;
+	--brown2: #BCAAA4;
+	--brown3: #A1887F;
+	--brown4: #8D6E63;
+	--brown5: #795548;
+	--brown6: #6D4C41;
+	--brown7: #5D4037;
+	--brown8: #4E342E;
+	--brown9: #3E2723;
+	--grey1: #F5F5F5;
+	--grey2: #EEEEEE;
+	--grey3: #E0E0E0;
+	--grey4: #BDBDBD;
+	--grey5: #9E9E9E;
+	--grey6: #757575;
+	--grey7: #616161;
+	--grey8: #424242;
+	--grey9: #212121;
+	--bluegrey1: #CFD8DC;
+	--bluegrey2: #B0BEC5;
+	--bluegrey3: #90A4AE;
+	--bluegrey4: #78909C;
+	--bluegrey5: #607D8B;
+	--bluegrey6: #546E7A;
+	--bluegrey7: #455A64;
+	--bluegrey8: #37474F;
+	--bluegrey9: #263238;
+}
+
+* {
+	font-family: 'Roboto', sans-serif;
+}
+
+body {
+	background-color: var(--grey1);
+	padding: 0;
+	margin: 0;
+	background-color: var(--green2);
+}
+
+input {
+	padding: 6px 12px;
+	-webkit-appearance: none;
+	outline: none;
+	border: none;
+	border-radius: 4px;
+}
+
+input[type="text"] {
+	border: 1px solid var(--grey4);
+	color: var(--grey7);
+}
+
+input[type="text"]:active, input[type="text"]:focus {
+	border: 1px solid var(--green6);
+}
+
+input[type="button"] {
+	background-color: var(--green5);
+	color: white;
+}
+
+input[type="button"]:not(:disabled):hover {
+	cursor: pointer;
+	background-color: var(--green6);
+}
+
+input[type="button"]:not(:disabled):focus {
+	background-color: var(--green7);
+}
+
+input[type="button"]:disabled {
+	background-color: var(--green2);
+}
+
+div.ui {
+	position: absolute;
+	height: 85%;
+	top: 7.5%;
+	background-color: var(--grey2);
+	border: 1px solid var(--green8);
+}
+
+div#userconfig {
+	left: 5%;
+	width: 25%;
+}
+
+div#userconfig div#welcome_div {
+	position: absolute;
+	text-align: center;
+	top: 5%;
+	background-color: var(--green7);
+	padding: 0;
+	width: 100%;
+	height: 50px;
+}
+
+div#userconfig div#welcome_div p#welcome_p {
+	text-align: center;
+	width: 100%;
+	height: 100%;
+	line-height: 50px;
+	font-size: 18px;
+	color: white;
+	margin: 0;
+	user-select: none;
+}
+
+div#userconfig input {
+	position: absolute;
+	width: 85%;
+	left: 7.5%;
+	text-align: center;
+	font-size: 1.2em;
+	height: 45px;
+}
+
+div#userconfig input#username {
+	top: calc(50px + 5% + 4% + 0 * (50px));
+}
+
+div#userconfig input#room {
+	top: calc(50px + 5% + 4% + 1 * (50px));
+}
+
+div#userconfig input#join {
+	position: absolute;
+	width: 85%;
+	height: 60px;
+	left: 7.5%;
+	bottom: 5%;
+	text-align: center;
+	font-size: 1.5em;
+}
+
+div#roomlist {
+	left: 32.5%;
+	width: 62.5%;
+}
+
+div.roomlist_entry {
+	width: 100%;
+	border-bottom: 1px solid var(--grey5);
+	height: 32px;
+	background-color: var(--grey3);
+}
+
+div.roomlist_entry:hover {
+	cursor: pointer;
+	background-color: var(--green1);
+}
+
+div.roomlist_entry.selected {
+	background-color: var(--green1);
+}
+
+div.roomlist_entry div.name {
+	height: 100%;
+	width: calc(15% - 1px);
+	float: left;
+	border-right: 1px solid var(--grey5)
+}
+
+div.roomlist_entry div.players {
+	height: 100%;
+	width: calc(60% - 1px);
+	float: left;
+	border-right: 1px solid var(--grey5)
+}
+
+div.roomlist_entry div.gamestate {
+	height: 100%;
+	width: calc(15% - 1px);
+	float: left;
+	border-right: 1px solid var(--grey5)
+}
+
+div.roomlist_entry div.slots {
+	height: 100%;
+	width: 10%;
+	float: left;
+}
+
+div.roomlist_entry span {
+	width: calc(100% - 2%);
+	height: 100%;
+	display: inline-block;
+	text-align: center;
+	line-height: 200%;
+	padding-left: 1%;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	user-select: none;
+	font-weight: bold;
+	color: var(--green7);
+}
+
+div.game, canvas.postlobby {
+	display: none;
+}
+
+div#header {
+	height: 50px;
+	width: 90%;
+	left: 5%;
+	top: 7.5%;
+}
+
+div#userlist {
+	height: 572px;
+	width: calc(29.6% / 2);
+	left: 5%;
+	top: calc(7.5% + 50px + 1.5%);
+}
+
+canvas#game, div#lobby {
+	position: absolute;
+	left: calc(5% + (29.6% / 2) + 0.7%);
+	top: calc(7.5% + 50px + 1.5%);
+	background-color: var(--grey2);
+	border: 1px solid var(--green8);
+	margin-bottom: 2.5%;
+}
+
+div#lobby {
+	width: 776px;
+	height: 572px;
+}
+
+div#chat {
+	height: 572px;
+	width: calc(100% - (5% + (29.6% / 2) + 0.7% + 776px + 0.7%) - 5%);
+	left: calc(5% + (29.6% / 2) + 0.7% + 776px + 0.7%);
+	top: calc(7.5% + 50px + 1.5%);
+}
+
+div#userlist div.userlistentry {
+	width: 100%;
+	height: 30px;
+}
+
+div#lobby input#start_game {
+	position: absolute;
+	width: 25%;
+	height: 32px;
+	bottom: 5%;
+	right: 5%;
+	font-size: 1.1em;
+}
+
+div#userlist span {
+	width: calc(100% - 2%);
+	height: 100%;
+	display: inline-block;
+	text-align: center;
+	line-height: 200%;
+	padding-left: 1%;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	user-select: none;
+	color: white;
+}
+
+div#userlist div.username {
+	width: 70%;
+	float: left;
+}
+
+div#userlist div.score {
+	width: 30%;
+	float: left;
+}
+
+div#header span#roomheader {
+	display: inline-block;
+	width: 100%;
+	height: 100%;
+	text-align: center;
+	line-height: 50px;
+	font-weight: bold;
+	color: var(--green7);
+}
+
+div#chatlog {
+	width: 100%;
+	height: 90%;
+	overflow: scroll;
+	overflow-x: hidden;
+}
+
+div#chatlog::-webkit-scrollbar-track {
+	background-color: var(--grey2);
+}
+
+div#chatlog::-webkit-scrollbar {
+	width: 8px;
+}
+
+div#chatlog::-webkit-scrollbar-thumb {
+	background-color: var(--green7);
+}
+
+div#chatlog::-webkit-scrollbar-thumb:hover {
+	background-color: var(--green8);
+}
+
+div#chatlog div.chatmessage {
+	width: 100%;
+	min-height: 19px;
+	max-height: auto;
+	padding-left: 2px;
+	padding-right: 10px;
+}
+
+div#chatlog div.chatmessage div.author {
+	height: auto;
+	float: left;
+	word-wrap: break-word;
+	max-width: 100%;
+	font-weight: bold;
+	padding-right: 3px;
+}
+
+div#chatlog div.chatmessage div.author span::after {
+	content: ":";
+}
+
+div#chatlog div.chatmessage div.content {
+	height: auto;
+	float: left;
+	word-wrap: break-word;
+	max-width: 100%;
+	color: var(--grey9);
+}
+
+input#newmessage {
+	position: absolute;
+	width: calc(100% - 10px);
+	height: 40px;
+	left: 5px;
+	bottom: 5px;
+}

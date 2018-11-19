@@ -1,0 +1,34 @@
+<html>
+
+	<head>
+		<title>Artist.io</title>
+		<link rel="stylesheet" type="text/css" href="./style.css" />
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+		<script src="./canvas-free-drawing.min.js"></script>
+		<script src="./jscript.js"></script>
+	</head>
+
+	<body>
+		<div id="userconfig" class="ui pregame">
+			<div id="welcome_div">
+				<p id="welcome_p">Welcome!</p>
+			</div>
+			<input id="username" type="text" placeholder="Username" />
+			<input id="room" type="text" placeholder="Room" />
+			<input id="join" type="button" value="Create Room!" disabled />
+		</div>
+		<div id="roomlist" class="ui pregame"> </div>
+		<div id="header" class="ui game"><span id="roomheader"></span></div>
+		<div id="userlist" class="ui game"> </div>
+		<div id="lobby" class="ui game">
+			<input id="start_game" type="button" value="Start Game!" />
+		</div>
+		<canvas id="game" class="ui postlobby"></canvas>
+		<div id="chat" class="ui game">
+			<div id="chatlog"></div>
+			<input id="newmessage" type="text" placeholder="Type here.." />
+		</div>
+		<script src="./drawing.js"></script>
+	</body>
+
+</html>
