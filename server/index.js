@@ -4,8 +4,9 @@ var fs = require('fs');
 var https = require('https');
 
 var server = https.createServer({
-	key: fs.readFileSync('/etc/letsencrypt/keys/0030_key-certbot.pem'),
-	cert: fs.readFileSync('/etc/letsencrypt/csr/0030_csr-certbot.pem'),
+	key: fs.readFileSync('/etc/letsencrypt/live/zlyfer.net/privkey.pem'),
+	cert: fs.readFileSync('/etc/letsencrypt/live/zlyfer.net/cert.pem'),
+	ca: fs.readFileSync('/etc/letsencrypt/live/zlyfer.net/chain.pem'),
 	rejectUnauthorized: false
 });
 var io = require('socket.io')(server);
