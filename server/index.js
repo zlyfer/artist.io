@@ -3,7 +3,8 @@
 const fs = require('fs');
 const server = require('https').createServer({
 	key: fs.readFileSync('./certificate/server-key.pem'),
-	cert: fs.readFileSync('./certificate/server-cert.pem')
+	cert: fs.readFileSync('./certificate/server-cert.pem'),
+	rejectUnauthorized: false
 });
 const io = require('socket.io')(server);
 // var path = require('path');
