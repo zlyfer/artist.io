@@ -5,7 +5,7 @@ function initcfd() {
 		height: 572
 	});
 
-	cfd.setLineWidth(3);
+	cfd.setLineWidth(5);
 	cfd.setStrokeColor([0, 0, 0]);
 	cfd.setBackground([238, 238, 238]);
 

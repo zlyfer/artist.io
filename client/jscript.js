@@ -39,7 +39,8 @@ window.onload = function() {
 	startGame();
 	sendMessage();
 
-	socket = io();
+	// socket = io('http://localhost:3000');
+	socket = io('zlyfer.net:3000');
 	initcfd();
 
 	socket.on('error_message', err_msg => {

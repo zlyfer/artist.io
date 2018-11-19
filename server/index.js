@@ -1,19 +1,19 @@
-var express = require('express');
-var app = express();
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
-var path = require('path');
+// var express = require('express');
+// var app = express();
+// var http = require('http').Server(app);
+var io = require('socket.io')();
+// var path = require('path');
 
 var User = require('./classes/user.js')
 var Room = require('./classes/room.js')
 var rooms = {};
 var users = {};
 
-app.use(express.static(path.join(__dirname, 'website')));
-
-app.get('/', (req, res) => {
-	res.sendFile(`${__dirname}/website/index.html`);
-});
+// app.use(express.static(path.join(__dirname, 'website')));
+//
+// app.get('/', (req, res) => {
+// 	res.sendFile(`${__dirname}/website/index.html`);
+// });
 
 io.on('connection', socket => {
 	users[socket.id] = new User(socket.id);
@@ -105,6 +105,11 @@ io.on('connection', socket => {
 	});
 });
 
-http.listen(8001, () => {
-	console.log("Server listening.");
+// http.listen(8001, () => {
+// 	console.log("Server listening.");
+// });
+io.attach(3000, {
+	pingInterval: 10000,
+	pingTimeout: 5000,
+	cookie: false
 });
