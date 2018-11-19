@@ -1,7 +1,11 @@
 // var express = require('express');
 // var app = express();
-// var http = require('http').Server(app);
-var io = require('socket.io')();
+const fs = require('fs');
+const server = require('https').createServer({
+	key: fs.readFileSync('./certificate/server-key.pem'),
+	cert: fs.readFileSync('./certificate/server-cert.pem')
+});
+const io = require('socket.io')(server);
 // var path = require('path');
 
 var User = require('./classes/user.js')
@@ -108,8 +112,4 @@ io.on('connection', socket => {
 // http.listen(8001, () => {
 // 	console.log("Server listening.");
 // });
-io.attach(3000, {
-	pingInterval: 10000,
-	pingTimeout: 5000,
-	cookie: false
-});
+server.listen(3000);
