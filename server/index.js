@@ -116,6 +116,4 @@ io.on('connection', socket => {
 // http.listen(8001, () => {
 // 	console.log("Server listening.");
 // });
-server.listen(3000, function() {
-	console.log(this);
-});
+server.listen(3000, function() {});
