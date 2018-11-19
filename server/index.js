@@ -1,11 +1,11 @@
-const wd = '/home/zlyfer/artist.io/server';
 // var express = require('express');
 // var app = express();
 var fs = require('fs');
 var https = require('https');
+
 var server = https.createServer({
-	key: fs.readFileSync(wd + '/certificate/server-key.pem'),
-	cert: fs.readFileSync(wd + '/certificate/server-cert.pem'),
+	key: fs.readFileSync('/etc/letsencrypt/keys/0030_key-certbot.pem'),
+	cert: fs.readFileSync('/etc/letsencrypt/csr/0030_csr-certbot.pem'),
 	rejectUnauthorized: false
 });
 var io = require('socket.io')(server);
