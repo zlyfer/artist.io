@@ -1,12 +1,13 @@
 // var express = require('express');
 // var app = express();
-const fs = require('fs');
-const server = require('https').createServer({
+var fs = require('fs');
+var https = require('https');
+var server = https.createServer({
 	key: fs.readFileSync('./certificate/server-key.pem'),
 	cert: fs.readFileSync('./certificate/server-cert.pem'),
 	rejectUnauthorized: false
 });
-const io = require('socket.io')(server);
+var io = require('socket.io')(server);
 // var path = require('path');
 
 var User = require('./classes/user.js')
@@ -113,4 +114,6 @@ io.on('connection', socket => {
 // http.listen(8001, () => {
 // 	console.log("Server listening.");
 // });
-server.listen(3000);
+server.listen(3000, function() {
+	console.log(this);
+});
