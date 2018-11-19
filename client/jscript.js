@@ -41,6 +41,7 @@ window.onload = function() {
 
 	// socket = io('http://localhost:3000');
 	socket = io('https://zlyfer.net:3000', {
+		rejectUnauthorized: false,
 		secure: true
 	});
 	initcfd();
