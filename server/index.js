@@ -5,7 +5,7 @@ var fs = require('fs');
 var https = require('https');
 var server = https.createServer({
 	key: fs.readFileSync(wd + '/certificate/server-key.pem'),
-	cert: fs.readFileSync(wd + './certificate/server-cert.pem'),
+	cert: fs.readFileSync(wd + '/certificate/server-cert.pem'),
 	rejectUnauthorized: false
 });
 var io = require('socket.io')(server);
