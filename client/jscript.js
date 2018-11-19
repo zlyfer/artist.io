@@ -40,7 +40,7 @@ window.onload = function() {
 	sendMessage();
 
 	// socket = io('http://localhost:3000');
-	socket = io('zlyfer.net:3000');
+	socket = io('http://zlyfer.net:3000');
 	initcfd();
 
 	socket.on('error_message', err_msg => {
