@@ -16,7 +16,6 @@ app.get('/', (req, res) => {
 });
 
 io.on('connection', socket => {
-	console.log(socket.id);
 	users[socket.id] = new User(socket.id);
 	socket.emit('send_user', users[socket.id]);
 	io.emit('send_roomlist', rooms);
