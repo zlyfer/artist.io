@@ -40,7 +40,9 @@ window.onload = function() {
 	sendMessage();
 
 	// socket = io('http://localhost:3000');
-	socket = io('https://zlyfer.net:3000');
+	socket = io('https://zlyfer.net:3000', {
+		secure: true
+	});
 	initcfd();
 
 	socket.on('error_message', err_msg => {
