@@ -18,6 +18,7 @@ class Room {
 		this.timer = 0;
 		this.maxTimer = 60;
 		this.dictionaries = [];
+		this.enabledDictionaries = [];
 		this.currentWord = "";
 		this.language = language;
 		this.scheduleJob = null;
@@ -40,15 +41,14 @@ class Room {
 		delete this.players[userid];
 		this.slots.used--;
 	}
-	toggleDictionary(dictionary) {
-		if (this.dictionaries.includes(dictionaries[this.language][dictionary])) {
+	toggleDictionary(dictionary, enable = true, disable = true) {
+		if (this.dictionaries.includes(dictionaries[this.language][dictionary]) && disable) {
 			this.dictionaries.splice(this.dictionaries.indexOf(dictionaries[this.language][dictionary]), 1);
-		} else {
+			this.enabledDictionaries.splice(this.enabledDictionaries.indexOf(dictionary), 1);
+		} else if (enable) {
 			this.dictionaries.push(dictionaries[this.language][dictionary]);
+			this.enabledDictionaries.push(dictionary);
 		}
-	}
-	clearDictionaries() {
-		this.dictionaries = {};
 	}
 	addMessage(author, message) {
 		this.chat.push({
@@ -61,7 +61,7 @@ class Room {
 		this.maxRounds = options.maxRounds;
 		this.slots.available = options.maxPlayers;
 		for (let dict in options.dictionaries) {
-			this.toggleDictionary(options.dictionaries[dict]);
+			this.toggleDictionary(options.dictionaries[dict], true, false);
 		}
 		this.nextRound();
 	}
@@ -121,8 +121,7 @@ class Room {
 		a.artist = true;
 	}
 	pickWord() {
-		let keys = Object.keys(this.dictionaries);
-		let dictionary = this.dictionaries[keys[keys.length * Math.random() << 0]];
+		let dictionary = this.dictionaries[this.dictionaries.length * Math.random() << 0];
 		this.currentWord = dictionary[dictionary.length * Math.random() << 0];
 	}
 }

@@ -16,7 +16,7 @@
 	{"bg": "orange", "fg": 8},
 	{"bg": "deeporange", "fg": 1},
 	{"bg": "brown", "fg": 1},
-	{"bg": "grey", "fg": 1},
-	{"bg": "bluegrey", "fg": 1}
+	{"bg": "bluegrey", "fg": 1},
+	{"bg": "grey", "fg": 1}
 ]
 }

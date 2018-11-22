@@ -7,8 +7,8 @@ var pregame_frames,
 	username_input,
 	language_input,
 	join_input,
-	roomlist;
-var game_frames,
+	roomlist,
+	game_frames,
 	userlist,
 	results,
 	results_nextround_span,
@@ -27,7 +27,9 @@ var game_frames,
 	game,
 	chat,
 	chatlog,
-	newmessage;
+	newmessage,
+	currentColor,
+	colorsContainer;
 
 window.onload = function() {
 	pregame_frames = document.getElementsByClassName('pregame');
@@ -58,7 +60,18 @@ window.onload = function() {
 	chat = document.getElementById('chat');
 	chatlog = document.getElementById('chatlog');
 	newmessage = document.getElementById('newmessage');
+	currentColor = document.getElementById('currentColor');
+	colorsContainer = document.getElementById('colorsContainer');
 
+	game.addEventListener('DOMMouseScroll', function(e) {
+		e.returnValue = false;
+	}, false);
+	game.addEventListener('wheel', function(e) {
+		e.returnValue = false;
+	}, false);
+	game.addEventListener('mousewheel', function(e) {
+		e.returnValue = false;
+	}, false);
 	inputObserver();
 	join();
 	startGame();
@@ -192,14 +205,15 @@ window.onload = function() {
 			}
 		}
 	});
-	socket.on('room_joined', (isCreator, dictionaries) => {
+	socket.on('room_joined', (isCreator, dictionaries, colorPalette, enabledDictionaries) => {
+		genColors(colorPalette);
 		for (let i = 0; i < pregame_frames.length; i++) {
 			pregame_frames[i].style.display = "none";
 		}
 		for (let i = 0; i < game_frames.length; i++) {
 			game_frames[i].style.display = "block";
 		}
-		addDictionaries(dictionaries);
+		addDictionaries(dictionaries, enabledDictionaries);
 		checkIfCreator();
 	});
 }
@@ -226,7 +240,7 @@ function optionsObserver() {
 		},
 		"lobby_timer": {
 			"input": lobby_timer,
-			"min": 30,
+			"min": 2,
 			"max": 300
 		},
 		"lobby_maxrounds": {
@@ -488,7 +502,7 @@ function addChatmessage(sender, message) {
 	chatlog.append(chatmessage);
 }
 
-function addDictionaries(dictionaries) {
+function addDictionaries(dictionaries, enabledDictionaries) {
 	let first = true;
 	for (let dict in dictionaries) {
 		if (first) {
@@ -505,6 +519,9 @@ function addDictionaries(dictionaries) {
 		let option_input = document.createElement('input');
 		option_input.className = "option_input";
 		option_input.id = "dict_input_" + dict;
+		if (enabledDictionaries.includes(dict)) {
+			option_input.checked = true;
+		}
 		option_input.type = "checkbox";
 		option_input.onchange = function() {
 			checkIfStartable();
@@ -549,4 +566,33 @@ function getDictionaries() {
 		}
 	}
 	return dicts;
+}
+
+function genColors(colorPalette) {
+	for (let strength = 3; strength <= 9; strength += 2) {
+		colorPalette.forEach((entry) => {
+			color = entry.bg;
+			let colorSource = document.createElement('div');
+			colorSource.className = "colorSource";
+			colorSource.id = `${color}${strength}`;
+			colorSource.style.backgroundColor = `var(--${color}${strength})`;
+			colorSource.addEventListener('click', function() {
+				currentColor.style.backgroundColor = `var(--${this.id})`;
+				let selColor = window.getComputedStyle(this, null).getPropertyValue("background-color");
+				selColor = selColor.substr(4, selColor.length - 5);
+				selColor = selColor.split(", ");
+				cfd.setStrokeColor(selColor);
+			});
+			colorSource.addEventListener('mouseover', function(event) {
+				if (event.buttons == 1) {
+					currentColor.style.backgroundColor = `var(--${this.id})`;
+					let selColor = window.getComputedStyle(this, null).getPropertyValue("background-color");
+					selColor = selColor.substr(4, selColor.length - 5);
+					selColor = selColor.split(", ");
+					cfd.setStrokeColor(selColor);
+				}
+			});
+			colorsContainer.append(colorSource);
+		});
+	}
 }

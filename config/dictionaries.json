@@ -6,7 +6,7 @@
 		},
 		"German": {
 			"Basis": ["Haus", "Apfel", "Sonne", "Flasche"],
-			"Planeten": ["Merkur", "Venus", "Erde", "Mars", "Jupiter", "Saturn", "Neptun", "Pluto"]
+			"Planeten": ["Merkur", "Venus", "Erde", "Mars", "Jupiter", "Saturn", "Uranus", "Neptun", "Pluto"]
 		}
 	}
 }

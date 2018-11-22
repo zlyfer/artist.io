@@ -20,6 +20,9 @@ var io = require('socket.io')(server);
 var {
 	dictionaries
 } = require('../config/dictionaries.json');
+var {
+	colorPalette
+} = require('../config/colorPalette.json');
 var User = require('./classes/user.js')
 var Room = require('./classes/room.js')
 var rooms = {};
@@ -69,6 +72,7 @@ io.on('connection', socket => {
 		if (already_joined == false) {
 			if (!(data.room in rooms)) {
 				rooms[data.room] = new Room(data.room, data.user.id, data.lang);
+				rooms[data.room].toggleDictionary("Base");
 			}
 			let user = rooms[data.room].joinPlayer(data.user);
 			if (user) {
@@ -77,7 +81,7 @@ io.on('connection', socket => {
 				io.in(data.room).emit('update_room', rooms[data.room]);
 				io.emit('send_roomlist', rooms);
 				socket.emit('send_user', users[user.id]);
-				socket.emit('room_joined', users[user.id], dictionaries[rooms[user.room].language]);
+				socket.emit('room_joined', users[user.id], dictionaries[rooms[user.room].language], colorPalette, rooms[user.room].enabledDictionaries);
 				if (rooms[data.room].gamestate != "Lobby") {
 					socket.emit('apply_artist', rooms[data.room].artist);
 					socket.emit('update_canvas', rooms[data.room].canvas);
@@ -122,14 +126,18 @@ io.on('connection', socket => {
 		}
 	});
 	socket.on('start_game', (user, options) => {
-		rooms[user.room].startRound(options);
-		roomNextRound(rooms[user.room]);
+		if (rooms[user.room]) {
+			rooms[user.room].startRound(options);
+			roomNextRound(rooms[user.room]);
+		}
 	});
 	// socket.on('event', (args) => {
 	// 	io.emit('event', args)
 	// });
 	socket.on('request_usernumber', () => {
-		socket.emit('requested_usernumber', Object.keys(rooms[users[socket.id].room].players).length);
+		if (rooms[users[socket.id].room]) {
+			socket.emit('requested_usernumber', Object.keys(rooms[users[socket.id].room].players).length);
+		}
 	});
 	socket.on('disconnect', () => {
 		if (users[socket.id].room) {
@@ -141,7 +149,7 @@ io.on('connection', socket => {
 				delete rooms[users[socket.id].room];
 			} else {
 				if (socket.id == rooms[users[socket.id].room].artist) {
-					semiRoomNextRound(users[socket.id].room);
+					semiRoomNextRound(rooms[users[socket.id].room]);
 				}
 				io.in(users[socket.id].room).emit('update_room', rooms[users[socket.id].room]);
 			}
@@ -149,6 +157,32 @@ io.on('connection', socket => {
 		delete users[socket.id];
 	});
 });
+
+function semiRoomNextRound(room) {
+	if (rooms[room]) {
+		rooms[room].checkNextRound();
+		if (rooms[room].gamestate != "End Game") {
+			io.in(room).emit('end_round', rooms[room]);
+			rooms[room].endRound();
+		} else {
+			io.in(room).emit('end_round', rooms[room]);
+			rooms[room].endRound();
+			io.emit('send_roomlist', rooms);
+		}
+		setTimeout(function() {
+			if (rooms[room]) {
+				if (rooms[room].gamestate != "End Game") {
+					rooms[room].nextRound();
+					roomNextRound(rooms[room]);
+				} else {
+					rooms[room].nextGame();
+					rooms[room].nextRound();
+					roomNextRound(rooms[room]);
+				}
+			}
+		}, 8000);
+	}
+}
 
 function roomNextRound(room) {
 	io.in(room.name).emit('update_canvas', rooms[room.name].canvas);
@@ -160,33 +194,9 @@ function roomNextRound(room) {
 		rooms[room.name].tick();
 		io.in(room.name).emit('tick', rooms[room.name].timer);
 		if (room.timer == 0) {
-			io.in(room.name).emit('end_round', rooms[room.name]);
+			semiRoomNextRound(room.name);
 		}
 	});
-}
-
-function semiRoomNextRound(room) {
-	rooms[room].checkNextRound();
-	if (rooms[room].gamestate != "End Game") {
-		io.in(room).emit('end_round', rooms[room]);
-		rooms[room].endRound();
-	} else {
-		io.in(room).emit('end_round', rooms[room]);
-		rooms[room].endRound();
-		io.emit('send_roomlist', rooms);
-	}
-	setTimeout(function() {
-		if (rooms[room]) {
-			if (rooms[room].gamestate != "End Game") {
-				rooms[room].nextRound();
-				roomNextRound(rooms[room]);
-			} else {
-				rooms[room].nextGame();
-				rooms[room].nextRound();
-				roomNextRound(rooms[room]);
-			}
-		}
-	}, 8000);
 }
 
 server.listen(3000);

@@ -176,6 +176,7 @@
 
 * {
 	font-family: 'Roboto', sans-serif;
+	user-select: none;
 }
 
 body {
@@ -251,7 +252,6 @@ div#userconfig div#welcome_div p#welcome_p {
 	font-size: 18px;
 	color: white;
 	margin: 0;
-	user-select: none;
 }
 
 div#userconfig input, div#userconfig select {
@@ -342,7 +342,6 @@ div.roomlist_entry span {
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
-	user-select: none;
 	font-weight: bold;
 	color: var(--green7);
 }
@@ -359,7 +358,7 @@ div#header {
 }
 
 div#userlist {
-	height: calc(572px + 1.5% + 70px);
+	height: calc(572px + 1.5% + 80px);
 	width: calc(29.6% / 2);
 	left: 5%;
 	top: calc(7.5% + 50px + 1.5%);
@@ -379,7 +378,7 @@ div#lobby, div.postgame {
 }
 
 div#chat {
-	height: calc(572px + 1.5% + 70px);
+	height: calc(572px + 1.5% + 80px);
 	width: calc(100% - (5% + (29.6% / 2) + 0.7% + 776px + 0.7%) - 5%);
 	left: calc(5% + (29.6% / 2) + 0.7% + 776px + 0.7%);
 	top: calc(7.5% + 50px + 1.5%);
@@ -388,12 +387,35 @@ div#chat {
 div.drawingTools {
 	left: calc(5% + (29.6% / 2) + 0.7%);
 	top: calc(7.5% + 50px + 1.5% + 572px + 1.5%);
-	height: 70px;
+	height: 80px;
 	width: 776px;
 	margin-bottom: 2.5%;
 }
 
-div#drawingTools {}
+div#drawingTools div#colorsContainer {
+	width: 460px;
+	height: 100%;
+}
+
+div#drawingTools div#currentColor {
+	width: 80px;
+	height: 80px;
+	background-color: black;
+	float: left;
+}
+
+div#drawingTools div#colorsContainer div.colorSource {
+	width: 14px;
+	height: 14px;
+	border: 3px solid transparent;
+	cursor: pointer;
+	float: left;
+	opacity: 1;
+}
+
+div#drawingTools div#colorsContainer div.colorSource:hover {
+	opacity: 0.5;
+}
 
 div#drawingTools_disabled {
 	background-color: rgba(0, 0, 0, 0.7);
@@ -523,7 +545,6 @@ div#userlist span {
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
-	user-select: none;
 }
 
 .fas, .far {
