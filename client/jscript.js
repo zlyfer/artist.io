@@ -1,16 +1,28 @@
 var socket;
 var user;
-var canvas;
+var cfd;
 
 var pregame_frames,
 	room_input,
 	username_input,
+	language_input,
 	join_input,
 	roomlist;
 var game_frames,
-	header,
 	userlist,
+	results,
+	results_nextround_span,
+	results_word_span,
 	lobby,
+	lobby_maxplayers,
+	lobby_timer,
+	lobby_maxrounds,
+	lobby_dictionaries,
+	roomname,
+	roomgamestate,
+	roomplayercount,
+	roomword,
+	roomtimer,
 	start_game,
 	game,
 	chat,
@@ -21,13 +33,26 @@ window.onload = function() {
 	pregame_frames = document.getElementsByClassName('pregame');
 	room_input = document.getElementById('room');
 	username_input = document.getElementById('username');
+	language_input = document.getElementById('language');
 	join_input = document.getElementById('join');
 	roomlist = document.getElementById('roomlist');
 
 	game_frames = document.getElementsByClassName('game');
-	header = document.getElementById('header');
 	userlist = document.getElementById('userlist');
+	results = document.getElementById('results');
+	results_nextround_span = document.getElementById('results_nextround_span');
+	results_word_span = document.getElementById('results_word_span');
 	lobby = document.getElementById('lobby');
+	lobby_maxplayers = document.getElementById('lobby_maxplayers');
+	lobby_timer = document.getElementById('lobby_timer');
+	lobby_maxrounds = document.getElementById('lobby_maxrounds');
+	lobby_dictionaries = document.getElementById('lobby_dictionaries');
+	roomname = document.getElementById('roomname');
+	roomgamestate = document.getElementById('roomgamestate');
+	roomplayercount = document.getElementById('roomplayercount');
+	roomword = document.getElementById('roomword');
+	roomtimer = document.getElementById('roomtimer');
+	drawingTools_disabled = document.getElementById('drawingTools_disabled');
 	start_game = document.getElementById('start_game');
 	game = document.getElementById('game');
 	chat = document.getElementById('chat');
@@ -38,27 +63,93 @@ window.onload = function() {
 	join();
 	startGame();
 	sendMessage();
+	optionsObserver();
 
-	// socket = io('http://localhost:3000');
+	// NOT TESTING:
 	socket = io('https://zlyfer.net:3000', {
 		rejectUnauthorized: false
 	});
+	// END
+
+	// TESTING:
+	// socket = io('http://localhost:3000');
+	// END
+
 	initcfd();
 
+	socket.on('test', data => {
+		console.log(data);
+	});
 	socket.on('error_message', err_msg => {
 		console.log(err_msg);
 	});
 	// socket.on('event', args => {
 	// 	socket.emit('event', args);
 	// });
+	socket.on('requested_usernumber', number => {
+		checkIfStartable(false);
+		if (number < 2) {
+			start_game.disabled = true;
+		}
+	});
+	socket.on('tick', timer => {
+		roomtimer.innerHTML = "Time: " + timer;
+	})
+	socket.on('update_options', options => {
+		lobby_maxplayers.value = options.maxPlayers;
+		lobby_timer.value = options.drawTime;
+		lobby_maxrounds.value = options.maxRounds;
+		options.dictionaries.enabled.forEach(dict => {
+			document.getElementById(`dict_input_${dict}`).checked = true;
+		})
+		options.dictionaries.disabled.forEach(dict => {
+			document.getElementById(`dict_input_${dict}`).checked = false;
+		})
+	});
+	socket.on('request_options', creator => {
+		if (user.id == creator) {
+			socket.emit('update_options', user, {
+				"maxPlayers": lobby_maxplayers.value,
+				"drawTime": lobby_timer.value,
+				"maxRounds": lobby_maxrounds.value,
+				"dictionaries": getDictionaries()
+			});
+		}
+	});
 	socket.on('start_game', room => {
+		results.style.display = "none";
+		results_nextround_span.innerHTML = `Next artist in 7 seconds..`;
+		user = room.players[user.id]
 		lobby.style.display = "none";
 		game.style.display = "block";
+		changeRoomHeader(room);
+	});
+	socket.on('end_round', room => {
+		results.style.display = "block";
+		cfd.disableDrawingMode();
+		results_word_span.innerHTML = `The word was: ${room.currentWord}`;
+		let seconds = 6;
+		let timer = setInterval(() => {
+			results_nextround_span.innerHTML = `Next artist in ${seconds} seconds..`;
+			seconds--;
+		}, 1000);
+		setTimeout(() => {
+			clearInterval(timer);
+		}, 7000);
+	});
+	socket.on('end_game', room => {
+
 	});
 	socket.on('new_message', data => {
 		addChatmessage(data.user, data.message);
+		chatlog.scrollTo({
+			top: chatlog.scrollHeight,
+			left: 0,
+			behavior: 'smooth'
+		});
 	});
 	socket.on('update_room', room => {
+		checkIfStartable();
 		changeRoomHeader(room);
 		for (let i = userlist.children.length; i > 0; i--) {
 			userlist.lastChild.remove();
@@ -78,39 +169,94 @@ window.onload = function() {
 			addRoomlistEntry(rl[room]);
 		}
 	});
-	socket.on('checked_room', exists => {
-		if (exists == true) {
+	socket.on('checked_room', (exists, lang) => {
+		if (exists) {
 			join_input.value = "Join Room!";
+			language_input.value = lang;
+			language_input.disabled = true;
 		} else {
 			join_input.value = "Create Room!";
+			language_input.disabled = false;
 		}
 	});
 	socket.on('checked_creator', isCreator => {
 		if (!isCreator) {
-			for (let i = 0; i < lobby.children.length; i++) {
-				if (lobby.children[i].tagName == "INPUT") {
-					lobby.children[i].disabled = true;
+			lobby_maxplayers.disabled = true;
+			lobby_timer.disabled = true;
+			lobby_maxrounds.disabled = true;
+			start_game.disabled = true;
+			for (let i = 0; i < lobby_dictionaries.children.length; i++) {
+				if (lobby_dictionaries.children[i].children[1]) {
+					lobby_dictionaries.children[i].children[1].disabled = true;
 				}
 			}
 		}
 	});
-	socket.on('room_joined', isCreator => {
+	socket.on('room_joined', (isCreator, dictionaries) => {
 		for (let i = 0; i < pregame_frames.length; i++) {
 			pregame_frames[i].style.display = "none";
 		}
 		for (let i = 0; i < game_frames.length; i++) {
 			game_frames[i].style.display = "block";
 		}
+		addDictionaries(dictionaries);
 		checkIfCreator();
 	});
 }
 
+function test(data) {
+	socket.emit('test', data);
+}
+
 function inputObserver() {
 	username_input.oninput = function() {
-		checkJoinable();
+		checkIfJoinable();
 	}
 	room_input.oninput = function() {
-		checkJoinable();
+		checkIfJoinable();
+	}
+}
+
+function optionsObserver() {
+	let number_inputs = {
+		"lobby_maxplayers": {
+			"input": lobby_maxplayers,
+			"min": 2,
+			"max": 99
+		},
+		"lobby_timer": {
+			"input": lobby_timer,
+			"min": 30,
+			"max": 300
+		},
+		"lobby_maxrounds": {
+			"input": lobby_maxrounds,
+			"min": 2,
+			"max": 10
+		}
+	};
+	for (let input in number_inputs) {
+		number_inputs[input].input.onchange = function() {
+			let numbertest = parseInt(this.value);
+			if (numbertest) {
+				if (numbertest < number_inputs[input].min) {
+					this.value = number_inputs[input].min;
+				}
+				if (numbertest > number_inputs[input].max) {
+					this.value = number_inputs[input].max;
+				}
+				this.value = parseInt(this.value);
+			} else if (this.value != "") {
+				this.value = number_inputs[input].min;
+			}
+			checkIfStartable();
+			socket.emit('update_options', user, {
+				"maxPlayers": lobby_maxplayers.value,
+				"drawTime": lobby_timer.value,
+				"maxRounds": lobby_maxrounds.value,
+				"dictionaries": getDictionaries()
+			});
+		}
 	}
 }
 
@@ -119,22 +265,30 @@ function join() {
 		user.name = username_input.value;
 		socket.emit('update_user', user);
 		let room = room_input.value;
+		let lang = language_input.value;
 		socket.emit('join_room', {
 			user,
-			room
+			room,
+			lang
 		});
 	}
 }
 
 function startGame() {
 	start_game.onclick = function() {
-		socket.emit('start_game', user);
+		let options = {
+			"maxPlayers": lobby_maxplayers.value,
+			"drawTime": lobby_timer.value,
+			"maxRounds": lobby_maxrounds.value,
+			"dictionaries": getDictionaries().enabled
+		}
+		socket.emit('start_game', user, options);
 	}
 }
 
 function sendMessage() {
 	newmessage.addEventListener('keydown', function(e) {
-		if (e.keyCode == 13) {
+		if (e.keyCode == 13 && this.value != "") {
 			socket.emit('send_message', {
 				"user": user,
 				"message": this.value
@@ -144,7 +298,7 @@ function sendMessage() {
 	})
 }
 
-function checkJoinable() {
+function checkIfJoinable() {
 	let username = username_input.value;
 	let roomname = room_input.value;
 	if (roomname != "") {
@@ -154,6 +308,23 @@ function checkJoinable() {
 		join_input.disabled = false;
 	} else {
 		join_input.disabled = true;
+	}
+}
+
+function checkIfStartable(request_usernumber = true) {
+	start_game.disabled = false;
+	if (getDictionaries().enabled.length == 0) {
+		start_game.disabled = true;
+	}
+	if (
+		parseInt(lobby_maxplayers.value) != lobby_maxplayers.value ||
+		parseInt(lobby_timer.value) != lobby_timer.value ||
+		parseInt(lobby_maxrounds.value) != lobby_maxrounds.value
+	) {
+		start_game.disabled = true;
+	}
+	if (request_usernumber) {
+		socket.emit('request_usernumber');
 	}
 }
 
@@ -173,7 +344,7 @@ function addRoomlistEntry(room) {
 			}
 		}
 		this.className += " selected";
-		checkJoinable();
+		checkIfJoinable();
 	}
 
 	let name = document.createElement('div');
@@ -232,35 +403,53 @@ function transmitCfdData(cfd) {
 }
 
 function changeRoomHeader(room) {
-	let roomheader = header.children[0];
-	let players_string = 'Player';
-	let player_count = 0;
-	for (let _ in room.players) {
-		player_count++;
+	roomname.innerHTML = `Room Name: ${room.name}`;
+	roomgamestate.innerHTML = `${room.gamestate}`;
+	roomtimer.innerHTML = `Time: ${room.timer}`;
+	if (user.artist) {
+		drawingTools_disabled.style.display = "none";
+		roomword.innerHTML = `Word: ${room.currentWord}`;
+	} else {
+		drawingTools_disabled.style.display = "block";
+		let underscores = "";
+		for (let i = 0; i < room.currentWord.length; i++) {
+			underscores += "_ ";
+		}
+		roomword.innerHTML = `Word: ${underscores}`;
 	}
-	if (player_count > 1) {
+	let players_string = 'Player';
+	if (room.slots.used > 1) {
 		players_string += 's';
 	}
-	roomheader.innerHTML = `${room.name} - ${player_count} ${players_string} - ${room.slots.used}/${room.slots.available}`;
+	roomplayercount.innerHTML = `${players_string}: ${room.slots.used}/${room.slots.available}`;
 }
 
 function addPlayer(player, artists) {
 	let userlistentry = document.createElement('div');
 	userlistentry.className = "userlistentry";
-	userlistentry.style.backgroundColor = player.color;
+	userlistentry.style.backgroundColor = `var(--${player.color.bg}5)`;
+
+	let usernamepre = document.createElement('div');
+	usernamepre.className = "usernamepre";
+	let usernameprespan = document.createElement('span');
+	if (player.artist) {
+		usernameprespan.style.color = `var(--grey${player.color.fg})`;
+		usernameprespan.innerHTML = '<i class="fas fa-circle"></i>';
+	} else if (artists.includes(player.id)) {
+		usernameprespan.style.color = `var(--${player.color.bg}7)`;
+		usernameprespan.innerHTML = '<i class="fas fa-circle"></i>';
+	} else {
+		usernameprespan.style.color = `var(--${player.color.bg}9)`;
+		usernameprespan.innerHTML = '<i class="far fa-circle"></i>';
+	}
 
 	let username = document.createElement('div');
 	username.className = "username";
 	let usernamespan = document.createElement('span');
-	usernamespan.innerHTML = "";
-	if (player.artist) {
-		usernamespan.innerHTML = "✦";
-	} else if (artists.includes(player.id)) {
-		usernamespan.innerHTML = "✧";
-	}
-	usernamespan.innerHTML += player.name;
+	usernamespan.innerHTML = player.name;
+	usernamespan.style.color = `var(--grey${player.color.fg})`;
 	if (player.id == user.id) {
-		usernamespan.innerHTML += " (You)";
+		// usernamespan.innerHTML += " (You)";
 		usernamespan.style.fontWeight = "bold";
 	}
 
@@ -268,9 +457,12 @@ function addPlayer(player, artists) {
 	score.className = "score";
 	let scorespan = document.createElement('span');
 	scorespan.innerHTML = player.score;
+	scorespan.style.color = `var(--grey${player.color.fg})`;
 
+	usernamepre.append(usernameprespan);
 	username.append(usernamespan);
 	score.append(scorespan);
+	userlistentry.append(usernamepre);
 	userlistentry.append(username);
 	userlistentry.append(score);
 	userlist.append(userlistentry);
@@ -283,7 +475,7 @@ function addChatmessage(sender, message) {
 	author.className = "author";
 	let authorspan = document.createElement('span');
 	authorspan.innerHTML = sender.name;
-	authorspan.style.color = sender.color;
+	authorspan.style.color = `var(--${sender.color.bg}9)`;
 	let content = document.createElement('div');
 	content.className = "content";
 	let contentspan = document.createElement('span');
@@ -294,4 +486,67 @@ function addChatmessage(sender, message) {
 	chatmessage.append(author);
 	chatmessage.append(content);
 	chatlog.append(chatmessage);
+}
+
+function addDictionaries(dictionaries) {
+	let first = true;
+	for (let dict in dictionaries) {
+		if (first) {
+			state = "first";
+		} else {
+			state = "second";
+		}
+		first = !first;
+		let option_container = document.createElement('div');
+		option_container.className = "option_container " + state;
+		let option_description = document.createElement('span');
+		option_description.className = "option_description";
+		option_description.innerHTML = dict;
+		let option_input = document.createElement('input');
+		option_input.className = "option_input";
+		option_input.id = "dict_input_" + dict;
+		option_input.type = "checkbox";
+		option_input.onchange = function() {
+			checkIfStartable();
+			socket.emit('update_options', user, {
+				"maxPlayers": lobby_maxplayers.value,
+				"drawTime": lobby_timer.value,
+				"maxRounds": lobby_maxrounds.value,
+				"dictionaries": getDictionaries()
+			});
+		}
+
+		option_container.append(option_description);
+		option_container.append(option_input);
+		lobby_dictionaries.append(option_container);
+	}
+}
+
+function getDictionaries() {
+	let dicts = {
+		"enabled": [],
+		"disabled": []
+	};
+	let dictname, isset;
+	for (let i = 0; i < lobby_dictionaries.children.length; i++) {
+		if (lobby_dictionaries.children[i].className.includes("option_container")) {
+
+			for (let j = 0; j < lobby_dictionaries.children[i].children.length; j++) {
+
+				if (lobby_dictionaries.children[i].children[j].className.includes("option_description")) {
+					dictname = lobby_dictionaries.children[i].children[j].innerHTML;
+				}
+
+				if (lobby_dictionaries.children[i].children[j].className.includes("option_input")) {
+					isset = lobby_dictionaries.children[i].children[j].checked;
+				}
+			}
+			if (isset) {
+				dicts.enabled.push(dictname);
+			} else {
+				dicts.disabled.push(dictname);
+			}
+		}
+	}
+	return dicts;
 }

@@ -1,3 +1,6 @@
+var {
+	colorPalette
+} = require('../../config/colorPalette.json');
 class User {
 	constructor(id) {
 		this.id = id;
@@ -8,7 +11,7 @@ class User {
 		this.artist = false;
 	}
 	genColor() {
-		return "#FF0000";
+		return colorPalette[colorPalette.length * Math.random() << 0];
 	}
 }
 module.exports = User;

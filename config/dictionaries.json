@@ -1,0 +1,12 @@
+{
+	"dictionaries": {
+		"English": {
+			"Base": ["House", "Apple", "Sun", "Bottle"],
+			"Planets": ["Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptun", "Pluto"]
+		},
+		"German": {
+			"Basis": ["Haus", "Apfel", "Sonne", "Flasche"],
+			"Planeten": ["Merkur", "Venus", "Erde", "Mars", "Jupiter", "Saturn", "Neptun", "Pluto"]
+		}
+	}
+}

@@ -2,6 +2,7 @@
 
 	<head>
 		<title>Artist.io</title>
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 		<link rel="stylesheet" type="text/css" href="./style.css" />
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
 		<script src="./canvas-free-drawing.min.js"></script>
@@ -11,24 +12,66 @@
 	<body>
 		<div id="userconfig" class="ui pregame">
 			<div id="welcome_div">
-				<p id="welcome_p">Welcome!</p>
+				<p id="welcome_p">Welcome to Artist.io!</p>
 			</div>
 			<input id="username" type="text" placeholder="Username" />
-			<input id="room" type="text" placeholder="Room" />
+			<input id="room" type="text" placeholder="Room Name" />
+			<select id="language">
+				<option value="English">English</option>
+				<option value="German">German</option>
+			</select>
 			<input id="join" type="button" value="Create Room!" disabled />
 		</div>
 		<div id="roomlist" class="ui pregame"> </div>
-		<div id="header" class="ui game"><span id="roomheader"></span></div>
-		<div id="userlist" class="ui game"> </div>
-		<div id="lobby" class="ui game">
-			<input id="start_game" type="button" value="Start Game!" />
+		<div id="header" class="ui game">
+			<span id="roomname"></span>
+			<span id="roomgamestate"></span>
+			<span id="roomword"></span>
+			<span id="roomtimer"></span>
+			<span id="roomplayercount"></span>
 		</div>
+
+		<div id="lobby" class="ui game">
+			<div class="lobby_container">
+				<div class="lobby_header"><span>Options</span></div>
+				<div class="option_container first">
+					<span class="option_description">Maximum Playercount:</span>
+					<input class="option_input" id="lobby_maxplayers" type="text" value="5" />
+				</div>
+				<div class="option_container second">
+					<span class="option_description">Draw Time (Seconds):</span>
+					<input class="option_input" id="lobby_timer" type="text" value="60" />
+				</div>
+				<div class="option_container first">
+					<span class="option_description">Maximum Rounds:</span>
+					<input class="option_input" id="lobby_maxrounds" type="text" value="10" />
+				</div>
+			</div>
+			<div class="lobby_container" id="lobby_dictionaries">
+				<div class="lobby_header"><span>Dictionaries</span></div>
+			</div>
+			<input id="start_game" type="button" value="Start Game!" disabled />
+		</div>
+
 		<canvas id="game" class="ui postlobby"></canvas>
+		<script src="./drawing.js"></script>
+
 		<div id="chat" class="ui game">
 			<div id="chatlog"></div>
 			<input id="newmessage" type="text" placeholder="Type here.." />
 		</div>
-		<script src="./drawing.js"></script>
+
+		<div id="drawingTools" class="ui game drawingTools">
+		</div>
+		<div id="drawingTools_disabled" class="ui drawingTools"></div>
+
+		<div id="userlist" class="ui game"> </div>
+		<div id="results" class="ui postgame">
+			<div id="results_title"> <span>Time Up!</span> </div>
+			<div id="results_nextround"> <span id="results_nextround_span">Next artist in 7 seconds..</span> </div>
+			<div id="results_word"> <span id="results_word_span">The word was: </span> </div>
+		</div>
+
 	</body>
 
 </html>

@@ -185,7 +185,7 @@ body {
 	background-color: var(--green2);
 }
 
-input {
+input, select {
 	padding: 6px 12px;
 	-webkit-appearance: none;
 	outline: none;
@@ -193,12 +193,12 @@ input {
 	border-radius: 4px;
 }
 
-input[type="text"] {
+input[type="text"], input[type="checkbox"], select {
 	border: 1px solid var(--grey4);
 	color: var(--grey7);
 }
 
-input[type="text"]:active, input[type="text"]:focus {
+input[type="text"]:active, input[type="text"]:focus, select:focus {
 	border: 1px solid var(--green6);
 }
 
@@ -254,11 +254,10 @@ div#userconfig div#welcome_div p#welcome_p {
 	user-select: none;
 }
 
-div#userconfig input {
+div#userconfig input, div#userconfig select {
 	position: absolute;
 	width: 85%;
 	left: 7.5%;
-	text-align: center;
 	font-size: 1.2em;
 	height: 45px;
 }
@@ -269,6 +268,10 @@ div#userconfig input#username {
 
 div#userconfig input#room {
 	top: calc(50px + 5% + 4% + 1 * (50px));
+}
+
+div#userconfig select#language {
+	top: calc(50px + 5% + 4% + 2 * (50px));
 }
 
 div#userconfig input#join {
@@ -344,7 +347,7 @@ div.roomlist_entry span {
 	color: var(--green7);
 }
 
-div.game, canvas.postlobby {
+div.game, canvas.postlobby, div.postgame {
 	display: none;
 }
 
@@ -356,36 +359,119 @@ div#header {
 }
 
 div#userlist {
-	height: 572px;
+	height: calc(572px + 1.5% + 70px);
 	width: calc(29.6% / 2);
 	left: 5%;
 	top: calc(7.5% + 50px + 1.5%);
 }
 
-canvas#game, div#lobby {
+canvas#game, div#lobby, div.postgame {
 	position: absolute;
 	left: calc(5% + (29.6% / 2) + 0.7%);
 	top: calc(7.5% + 50px + 1.5%);
 	background-color: var(--grey2);
 	border: 1px solid var(--green8);
-	margin-bottom: 2.5%;
 }
 
-div#lobby {
+div#lobby, div.postgame {
 	width: 776px;
 	height: 572px;
 }
 
 div#chat {
-	height: 572px;
+	height: calc(572px + 1.5% + 70px);
 	width: calc(100% - (5% + (29.6% / 2) + 0.7% + 776px + 0.7%) - 5%);
 	left: calc(5% + (29.6% / 2) + 0.7% + 776px + 0.7%);
 	top: calc(7.5% + 50px + 1.5%);
 }
 
+div.drawingTools {
+	left: calc(5% + (29.6% / 2) + 0.7%);
+	top: calc(7.5% + 50px + 1.5% + 572px + 1.5%);
+	height: 70px;
+	width: 776px;
+	margin-bottom: 2.5%;
+}
+
+div#drawingTools {}
+
+div#drawingTools_disabled {
+	background-color: rgba(0, 0, 0, 0.7);
+	display: none;
+}
+
 div#userlist div.userlistentry {
 	width: 100%;
 	height: 30px;
+}
+
+div#lobby div.lobby_container {
+	margin-left: 5%;
+	width: 90%;
+	margin-bottom: 50px;
+}
+
+div#lobby div.lobby_container div.lobby_header {
+	width: 100%;
+	height: 50px;
+}
+
+div#lobby div.lobby_container div.lobby_header span {
+	width: 100%;
+	display: inline-block;
+	color: var(--green7);
+	font-weight: bold;
+	text-align: center;
+	line-height: 50px;
+	font-size: 1.3em;
+}
+
+div#lobby div.lobby_container div.option_container {
+	width: 49.5%;
+	height: 30px;
+	float: left;
+}
+
+div#lobby div.lobby_container div.option_container.first {}
+
+div#lobby div.lobby_container div.option_container.second {
+	margin-left: 1%;
+}
+
+div#lobby div.lobby_container div.option_container span.option_description {
+	width: 50%;
+	line-height: 30px;
+	display: inline-block;
+	float: left;
+	color: var(--green7);
+	font-weight: bold;
+}
+
+div#lobby div.lobby_container div.option_container input.option_input {
+	float: left;
+}
+
+div#lobby div.lobby_container div.option_container input.option_input[type="text"] {
+	width: calc(50% - 2px);
+}
+
+div#lobby div.lobby_container div.option_container input.option_input[type="checkbox"] {
+	width: 28px;
+	height: 28px;
+	margin-top: 1px;
+	margin-left: calc(49% - 28px);
+	padding: 0;
+	cursor: pointer;
+	transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+div#lobby div.lobby_container div.option_container input.option_input[type="checkbox"]:checked {
+	background-color: var(--green6);
+	box-shadow: inset 0 0 0 2px var(--grey1);
+}
+
+div#lobby div.lobby_container div.option_container input.option_input[type="checkbox"]:hover {
+	border: 1px solid var(--green6);
 }
 
 div#lobby input#start_game {
@@ -397,22 +483,60 @@ div#lobby input#start_game {
 	font-size: 1.1em;
 }
 
+div#results {
+	background-color: rgba(0, 0, 0, 0.8);
+	border-color: rgba(0, 0, 0, 0.8);
+	color: var(--grey1);
+	font-size: 2em;
+	font-weight: bold;
+}
+
+div#results div {
+	width: 100%;
+}
+
+div#results span {
+	text-align: center;
+	width: 100%;
+	display: inline-block;
+}
+
+div#results div#results_title {
+	margin-top: 30px;
+}
+
+div#results div#results_nextround {
+	font-size: 0.8em;
+}
+
+div#results div#results_word {
+	margin-top: 30px;
+}
+
 div#userlist span {
-	width: calc(100% - 2%);
 	height: 100%;
 	display: inline-block;
 	text-align: center;
-	line-height: 200%;
-	padding-left: 1%;
+	line-height: 30px;
+	margin-left: 5px;
+	margin-right: 5px;
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
 	user-select: none;
-	color: white;
+}
+
+.fas, .far {
+	line-height: 30px;
+}
+
+div#userlist div.usernamepre {
+	width: 15%;
+	float: left;
 }
 
 div#userlist div.username {
-	width: 70%;
+	width: 55%;
 	float: left;
 }
 
@@ -421,14 +545,39 @@ div#userlist div.score {
 	float: left;
 }
 
-div#header span#roomheader {
+div#header span {
 	display: inline-block;
-	width: 100%;
-	height: 100%;
-	text-align: center;
-	line-height: 50px;
+	height: calc(100% - 20px);
+	line-height: 30px;
 	font-weight: bold;
 	color: var(--green7);
+	float: left;
+	padding: 10px;
+}
+
+div#header span#roomname {
+	width: calc(20% - 20px);
+	text-align: left;
+}
+
+div#header span#roomgamestate {
+	width: calc(20% - 20px);
+	text-align: center;
+}
+
+div#header span#roomword {
+	width: calc(20% - 20px);
+	text-align: center;
+}
+
+div#header span#roomtimer {
+	width: calc(20% - 20px);
+	text-align: center;
+}
+
+div#header span#roomplayercount {
+	width: calc(20% - 20px);
+	text-align: right;
 }
 
 div#chatlog {

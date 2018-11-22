@@ -1,5 +1,5 @@
 function initcfd() {
-	const cfd = new CanvasFreeDrawing({
+	cfd = new CanvasFreeDrawing({
 		elementId: 'game',
 		width: 776,
 		height: 572
@@ -10,17 +10,17 @@ function initcfd() {
 	cfd.setBackground([238, 238, 238]);
 
 	cfd.on({
-		event: 'redraw'
+		event: 'redraw',
+		counter: 0
 	}, () => {
 		transmitCfdData(cfd);
 	});
 
 	socket.on('update_canvas', (canvas) => {
-		if (canvas) {
-			cfd.restore(canvas);
-		}
+		cfd.restore(canvas);
 	});
 	socket.on('apply_artist', (artist) => {
+		cfd.clear();
 		if (user.id == artist) {
 			cfd.enableDrawingMode();
 		} else {
