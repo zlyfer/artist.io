@@ -72,7 +72,7 @@ io.on('connection', socket => {
 		if (already_joined == false) {
 			if (!(data.room in rooms)) {
 				rooms[data.room] = new Room(data.room, data.user.id, data.lang);
-				rooms[data.room].toggleDictionary("Base");
+				rooms[data.room].toggleDictionary(Object.keys(dictionaries[data.lang])[0]);
 			}
 			let user = rooms[data.room].joinPlayer(data.user);
 			if (user) {
