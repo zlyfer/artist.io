@@ -17,8 +17,9 @@
 			<input id="username" type="text" placeholder="Username" />
 			<input id="room" type="text" placeholder="Room Name" />
 			<select id="language">
-				<option value="English">English</option>
 				<option value="German">German</option>
+				<option value="English">English</option>
+				<option value="French">French</option>
 			</select>
 			<input id="join" type="button" value="Create Room!" disabled />
 		</div>
@@ -33,7 +34,9 @@
 
 		<div id="lobby" class="ui game">
 			<div class="lobby_container">
-				<div class="lobby_header"><span>Options</span></div>
+				<div class="lobby_header">
+					<span>Options</span>
+				</div>
 				<div class="option_container first">
 					<span class="option_description">Maximum Playercount:</span>
 					<input class="option_input" id="lobby_maxplayers" type="text" value="5" />
@@ -48,7 +51,9 @@
 				</div>
 			</div>
 			<div class="lobby_container" id="lobby_dictionaries">
-				<div class="lobby_header"><span>Dictionaries</span></div>
+				<div class="lobby_header">
+					<span>Dictionaries</span>
+				</div>
 			</div>
 			<input id="start_game" type="button" value="Start Game!" disabled />
 		</div>
@@ -69,9 +74,15 @@
 
 		<div id="userlist" class="ui game"> </div>
 		<div id="results" class="ui postgame">
-			<div id="results_title"> <span>Time Up!</span> </div>
-			<div id="results_nextround"> <span id="results_nextround_span">Next artist in 7 seconds..</span> </div>
-			<div id="results_word"> <span id="results_word_span">The word was: </span> </div>
+			<div id="results_title">
+				<span>Time Up!</span>
+			</div>
+			<div id="results_nextround">
+				<span id="results_nextround_span">Next artist in 7 seconds..</span>
+			</div>
+			<div id="results_word">
+				<span id="results_word_span">The word was: </span>
+			</div>
 		</div>
 
 	</body>
