@@ -1,6 +1,7 @@
 var socket;
 var user;
 var cfd;
+var lastcolor;
 
 var pregame_frames,
 	room_input,
@@ -29,7 +30,11 @@ var pregame_frames,
 	chatlog,
 	newmessage,
 	currentColor,
-	colorsContainer;
+	colorsContainer,
+	pencil,
+	eraser,
+	bucket,
+	clear;
 
 window.onload = function() {
 	pregame_frames = document.getElementsByClassName('pregame');
@@ -62,6 +67,10 @@ window.onload = function() {
 	newmessage = document.getElementById('newmessage');
 	currentColor = document.getElementById('currentColor');
 	colorsContainer = document.getElementById('colorsContainer');
+	pencil = document.getElementById('pencil');
+	eraser = document.getElementById('eraser');
+	bucket = document.getElementById('bucket');
+	clear = document.getElementById('clear');
 
 	game.addEventListener('DOMMouseScroll', function(e) {
 		e.returnValue = false;
@@ -581,7 +590,12 @@ function genColors(colorPalette) {
 				let selColor = window.getComputedStyle(this, null).getPropertyValue("background-color");
 				selColor = selColor.substr(4, selColor.length - 5);
 				selColor = selColor.split(", ");
+				lastcolor = selColor;
 				cfd.setStrokeColor(selColor);
+				cfd.configBucketTool({
+					color: selColor,
+					tolerance: bucketToolTolerance
+				})
 			});
 			colorSource.addEventListener('mouseover', function(event) {
 				if (event.buttons == 1) {
@@ -589,7 +603,12 @@ function genColors(colorPalette) {
 					let selColor = window.getComputedStyle(this, null).getPropertyValue("background-color");
 					selColor = selColor.substr(4, selColor.length - 5);
 					selColor = selColor.split(", ");
+					lastcolor = selColor;
 					cfd.setStrokeColor(selColor);
+					cfd.configBucketTool({
+						color: selColor,
+						tolerance: bucketToolTolerance
+					})
 				}
 			});
 			colorsContainer.append(colorSource);

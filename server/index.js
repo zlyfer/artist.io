@@ -1,3 +1,16 @@
+// TODO: Scrolling changes the pencil size.
+// TODO: Add system messages.
+// TODO: Change "Time Up!" to anything else when round ended due to all players guessed the word.
+// TODO: Give artist score based on how many guessed the word.
+// TODO: Display score changes upon round end.
+// TODO: Display 1st, 2nd and 3rd place upon game end.
+// TODO: Add custom word list.
+// TODO: Add more options.
+// TODO: Make CSS more responsive.
+// TODO: Player can choose their color?
+// TODO: Cookies? (name, color, language, custom word list)
+// TODO: Refractor.
+
 // NOT TESTING:
 var fs = require('fs');
 var https = require('https');
