@@ -2,6 +2,9 @@ var socket;
 var user;
 var cfd;
 var lastcolor;
+var selColor;
+var bucketToolTolerance;
+var pencilWidth;
 
 var pregame_frames,
 	room_input,
@@ -34,7 +37,9 @@ var pregame_frames,
 	pencil,
 	eraser,
 	bucket,
-	clear;
+	clear,
+	undo,
+	redo;
 
 window.onload = function() {
 	pregame_frames = document.getElementsByClassName('pregame');
@@ -71,16 +76,28 @@ window.onload = function() {
 	eraser = document.getElementById('eraser');
 	bucket = document.getElementById('bucket');
 	clear = document.getElementById('clear');
+	undo = document.getElementById('undo');
+	redo = document.getElementById('redo');
 
-	game.addEventListener('DOMMouseScroll', function(e) {
-		e.returnValue = false;
-	}, false);
 	game.addEventListener('wheel', function(e) {
+		if (e.deltaY < 0 && pencilWidth < 98) {
+			pencilWidth += 2;
+			cfd.setLineWidth(pencilWidth);
+			changeCursor(pencilWidth, selColor);
+		} else if (e.deltaY > 0 && pencilWidth > 6) {
+			pencilWidth -= 2;
+			cfd.setLineWidth(pencilWidth);
+			changeCursor(pencilWidth, selColor);
+		}
 		e.returnValue = false;
 	}, false);
-	game.addEventListener('mousewheel', function(e) {
-		e.returnValue = false;
-	}, false);
+	// game.addEventListener('DOMMouseScroll', function(e) {
+	// 	e.returnValue = false;
+	// }, false);
+	// game.addEventListener('mousewheel', function(e) {
+	// 	e.returnValue = false;
+	// }, false);
+
 	inputObserver();
 	join();
 	startGame();
@@ -144,7 +161,9 @@ window.onload = function() {
 		user = room.players[user.id]
 		lobby.style.display = "none";
 		game.style.display = "block";
+		changeCursor(pencilWidth, selColor);
 		changeRoomHeader(room);
+		cfd.snapshots = [];
 	});
 	socket.on('end_round', room => {
 		results.style.display = "block";
@@ -587,10 +606,11 @@ function genColors(colorPalette) {
 			colorSource.style.backgroundColor = `var(--${color}${strength})`;
 			colorSource.addEventListener('click', function() {
 				currentColor.style.backgroundColor = `var(--${this.id})`;
-				let selColor = window.getComputedStyle(this, null).getPropertyValue("background-color");
+				selColor = window.getComputedStyle(this, null).getPropertyValue("background-color");
 				selColor = selColor.substr(4, selColor.length - 5);
 				selColor = selColor.split(", ");
 				lastcolor = selColor;
+				changeCursor(pencilWidth, selColor);
 				cfd.setStrokeColor(selColor);
 				cfd.configBucketTool({
 					color: selColor,
@@ -600,10 +620,11 @@ function genColors(colorPalette) {
 			colorSource.addEventListener('mouseover', function(event) {
 				if (event.buttons == 1) {
 					currentColor.style.backgroundColor = `var(--${this.id})`;
-					let selColor = window.getComputedStyle(this, null).getPropertyValue("background-color");
+					selColor = window.getComputedStyle(this, null).getPropertyValue("background-color");
 					selColor = selColor.substr(4, selColor.length - 5);
 					selColor = selColor.split(", ");
 					lastcolor = selColor;
+					changeCursor(pencilWidth, selColor);
 					cfd.setStrokeColor(selColor);
 					cfd.configBucketTool({
 						color: selColor,
@@ -614,4 +635,32 @@ function genColors(colorPalette) {
 			colorsContainer.append(colorSource);
 		});
 	}
+}
+
+function changeCursor(size, color) {
+	let cursorCanvas = document.getElementById("cursorCanvas");
+	let context = cursorCanvas.getContext("2d");
+	context.clearRect(0, 0, 110, 110);
+	context.beginPath();
+	context.lineWidth = 5;
+	context.strokeStyle = `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
+	context.arc(55, 55, (size / 2) - 2, 0, 2 * Math.PI);
+	context.stroke();
+	context.closePath();
+	context.beginPath();
+	context.lineWidth = 2;
+	context.strokeStyle = "#000";
+	if (size > 8) {
+		context.arc(55, 55, (size / 2) - 4, 0, 2 * Math.PI);
+	}
+	context.stroke();
+	context.closePath();
+	context.beginPath();
+	context.lineWidth = 2;
+	context.strokeStyle = "#000";
+	context.arc(55, 55, (size / 2) + 1, 0, 2 * Math.PI);
+	context.stroke();
+	context.closePath();
+
+	game.style.cursor = `url(${cursorCanvas.toDataURL()}) 50 50, auto`;
 }

@@ -1,4 +1,4 @@
-// TODO: Scrolling changes the pencil size.
+// TODO: Add hints.
 // TODO: Add system messages.
 // TODO: Change "Time Up!" to anything else when round ended due to all players guessed the word.
 // TODO: Give artist score based on how many guessed the word.
@@ -112,7 +112,7 @@ io.on('connection', socket => {
 	socket.on('send_message', data => {
 		if (
 			data.user.id != rooms[data.user.room].artist &&
-			data.message == rooms[data.user.room].currentWord &&
+			data.message.toUpperCase() == rooms[data.user.room].currentWord.toUpperCase() &&
 			rooms[data.user.room].guessedIt.includes(data.user.id) == false
 		) {
 			rooms[data.user.room].guessedIt.push(data.user.id);

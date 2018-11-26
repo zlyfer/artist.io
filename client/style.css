@@ -321,14 +321,14 @@ div.roomlist_entry div.name {
 
 div.roomlist_entry div.players {
 	height: 100%;
-	width: calc(60% - 1px);
+	width: calc(50% - 1px);
 	float: left;
 	border-right: 1px solid var(--grey5)
 }
 
 div.roomlist_entry div.gamestate {
 	height: 100%;
-	width: calc(15% - 1px);
+	width: calc(25% - 1px);
 	float: left;
 	border-right: 1px solid var(--grey5)
 }
@@ -413,23 +413,54 @@ div#drawingTools div#colorsContainer {
 }
 
 div#drawingTools div.tools {
-	margin-left: 8.5px;
-	margin-right: 8.5px;
-	margin-top: 10px;
-	width: 60px;
-	height: 60px;
+	margin-left: 5px;
+	margin-right: 5px;
+	margin-top: 15px;
+	width: 51px;
+	height: 50px;
 	float: left;
 	text-align: center;
 	cursor: pointer;
 	border: 1px solid var(--grey8);
-	border-radius: 15%;
+	border-radius: 5px;
 	transition: border-radius 0.3s ease;
 	background-color: var(--grey2);
 	color: var(--grey8);
+	font-size: 1.4em;
 }
 
 div#drawingTools div.tools:hover {
-	border-radius: 50%;
+	border-radius: 25px;
+}
+
+div#drawingTools div.half.tools {
+	border-radius: 0;
+	width: 25px;
+	font-size: 0.8em;
+}
+
+div#drawingTools div.half.tools.first {
+	margin-right: 0;
+	border-right: 0;
+	border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
+}
+
+div#drawingTools div.half.tools.first:hover {
+	border-top-left-radius: 25px;
+	border-bottom-left-radius: 25px;
+}
+
+div#drawingTools div.half.tools.second {
+	margin-left: 0;
+	border-left: 0;
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+
+div#drawingTools div.half.tools.second:hover {
+	border-top-right-radius: 25px;
+	border-bottom-right-radius: 25px;
 }
 
 div#drawingTools div.tools.active, div#drawingTools div.tools:active {
@@ -437,9 +468,8 @@ div#drawingTools div.tools.active, div#drawingTools div.tools:active {
 	color: var(--grey2);
 }
 
-.fa-pencil-alt, .fa-eraser, .fa-fill-drip, .fa-trash {
-	line-height: 60px;
-	font-size: 1.5em;
+.fa-pencil-alt, .fa-eraser, .fa-fill-drip, .fa-trash, .fa-undo-alt, .fa-redo-alt {
+	line-height: 50px;
 }
 
 div#drawingTools div#colorsContainer div.colorSource {
@@ -697,4 +727,11 @@ input#newmessage {
 	height: 40px;
 	left: 5px;
 	bottom: 5px;
+}
+
+canvas#cursorCanvas {
+	position: absolute;
+	left: -100px;
+	top: -100px;
+	background-color: transparent;
 }
