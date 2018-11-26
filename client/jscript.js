@@ -662,5 +662,5 @@ function changeCursor(size, color) {
 	context.stroke();
 	context.closePath();
 
-	game.style.cursor = `url(${cursorCanvas.toDataURL()}) 50 50, auto`;
+	game.style.cursor = `url(${cursorCanvas.toDataURL()}) 55 55, auto`;
 }
