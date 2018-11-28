@@ -1,15 +1,10 @@
-// TODO: Add hints.
-// TODO: Add system messages.
-// TODO: Change "Time Up!" to anything else when round ended due to all players guessed the word.
-// TODO: Give artist score based on how many guessed the word.
 // TODO: Display score changes upon round end.
-// TODO: Display 1st, 2nd and 3rd place upon game end.
 // TODO: Add custom word list.
 // TODO: Add more options.
 // TODO: Make CSS more responsive.
 // TODO: Player can choose their color?
+// TODO: REFRACTOR.
 // TODO: Cookies? (name, color, language, custom word list)
-// TODO: Refractor.
 
 // NOT TESTING:
 var fs = require('fs');
@@ -89,6 +84,14 @@ io.on('connection', socket => {
 			}
 			let user = rooms[data.room].joinPlayer(data.user);
 			if (user) {
+				let newMSG = {
+					"author": user,
+					"message": "joined the game.",
+					"type": "join",
+					"to": "all"
+				};
+				io.in(user.room).emit('new_message', newMSG);
+				rooms[user.room].addMessage(newMSG);
 				users[user.id] = user;
 				socket.join(data.room);
 				io.in(data.room).emit('update_room', rooms[data.room]);
@@ -111,23 +114,49 @@ io.on('connection', socket => {
 	});
 	socket.on('send_message', data => {
 		if (
-			data.user.id != rooms[data.user.room].artist &&
-			data.message.toUpperCase() == rooms[data.user.room].currentWord.toUpperCase() &&
-			rooms[data.user.room].guessedIt.includes(data.user.id) == false
+			data.author.id != rooms[data.author.room].artist &&
+			data.message.toUpperCase() == rooms[data.author.room].currentWord.toUpperCase() &&
+			rooms[data.author.room].guessedIt.includes(data.author.id) == false
 		) {
-			rooms[data.user.room].guessedIt.push(data.user.id);
-			users[data.user.id].score += Math.floor(((rooms[data.user.room].timer / (rooms[data.user.room].maxTimer / 100)) * rooms[data.user.room].currentWord.length) / 10);
-			if (
-				rooms[data.user.room].guessedIt.length >= Object.keys(rooms[data.user.room].players).length - 1 &&
-				rooms[data.user.room].gamestate != "Lobby"
-			) {
-				semiRoomNextRound(rooms[data.user.room].name);
+			let score = Math.floor((rooms[data.author.room].timer / (rooms[data.author.room].maxTimer / 100)) - ((rooms[data.author.room].guessedIt.length)));
+			if (Object.keys(rooms[data.author.room].scores).length == 0 && rooms[data.author.room].artistScore) {
+				rooms[data.author.room].scores[rooms[data.author.room].artist] = score;
 			}
+			rooms[data.author.room].scores[data.author.id] = score;
+			rooms[data.author.room].guessedIt.push(data.author.id);
+			users[data.author.id].guessedIt = true;
+			socket.emit('send_user', users[data.author.id]);
+			let newMSG = {
+				"author": data.author,
+				"message": "guessed the word!",
+				"type": "guess",
+				"to": "all"
+			};
+			rooms[data.author.room].addMessage(newMSG);
+			io.in(data.author.room).emit('new_message', newMSG);
+			if (
+				rooms[data.author.room].guessedIt.length >= Object.keys(rooms[data.author.room].players).length - 1 &&
+				rooms[data.author.room].gamestate != "Lobby"
+			) {
+				rooms[data.author.room].endReason = "Everyone Guessed The Word!";
+				semiRoomNextRound(rooms[data.author.room].name);
+			}
+		} else if (
+			rooms[data.author.room].guessedIt.includes(data.author.id) ||
+			rooms[data.author.room].artist == data.author.id
+		) {
+			let newMSG = {
+				"author": data.author,
+				"message": data.message,
+				"type": "secret",
+				"to": "guessed"
+			};
+			rooms[data.author.room].addMessage(newMSG);
+			io.in(data.author.room).emit('new_message', newMSG);
 		} else {
-			rooms[data.user.room].addMessage(data.user.id, data.message);
-			io.in(data.user.room).emit('new_message', data);
+			rooms[data.author.room].addMessage(data);
+			io.in(data.author.room).emit('new_message', data);
 		}
-		io.in(data.user.room).emit('update_room', rooms[data.user.room]);
 	});
 	socket.on('canvas_changed', data => {
 		rooms[data.room].canvas = data.canvas;
@@ -154,17 +183,27 @@ io.on('connection', socket => {
 	});
 	socket.on('disconnect', () => {
 		if (users[socket.id].room) {
-			rooms[users[socket.id].room].removePlayer(socket.id);
-			if (rooms[users[socket.id].room].slots.used == 0) {
-				if (rooms[users[socket.id].room].scheduleJob) {
-					rooms[users[socket.id].room].scheduleJob.cancel();
+			let roomname = users[socket.id].room;
+			rooms[roomname].removePlayer(socket.id);
+			let newMSG = {
+				"author": users[socket.id],
+				"message": "left the game.",
+				"type": "leave",
+				"to": "all"
+			};
+			io.in(roomname).emit('new_message', newMSG);
+			rooms[roomname].addMessage(newMSG);
+			if (rooms[roomname].slots.used == 0) {
+				if (rooms[roomname].scheduleJob) {
+					rooms[roomname].scheduleJob.cancel();
 				}
-				delete rooms[users[socket.id].room];
+				delete rooms[roomname];
 			} else {
-				if (socket.id == rooms[users[socket.id].room].artist) {
-					semiRoomNextRound(rooms[users[socket.id].room]);
+				if (socket.id == rooms[roomname].artist) {
+					rooms[roomname].endReason = "The Artist Left!";
+					semiRoomNextRound(roomname);
 				}
-				io.in(users[socket.id].room).emit('update_room', rooms[users[socket.id].room]);
+				io.in(roomname).emit('update_room', rooms[roomname]);
 			}
 		}
 		delete users[socket.id];
@@ -173,6 +212,13 @@ io.on('connection', socket => {
 
 function semiRoomNextRound(room) {
 	if (rooms[room]) {
+		for (let id in rooms[room].scores) {
+			users[id].score += rooms[room].scores[id];
+		}
+		for (let player in rooms[room].players) {
+			rooms[room].players[player].guessedIt = false;
+		}
+		io.in(room).emit('update_room', rooms[room]);
 		rooms[room].checkNextRound();
 		if (rooms[room].gamestate != "End Game") {
 			io.in(room).emit('end_round', rooms[room]);
@@ -206,7 +252,9 @@ function roomNextRound(room) {
 	rooms[room.name].scheduleJob = schedule.scheduleJob('*/1 * * * * *', function() {
 		rooms[room.name].tick();
 		io.in(room.name).emit('tick', rooms[room.name].timer);
+		io.in(room.name).emit('update_room', rooms[room.name]);
 		if (room.timer == 0) {
+			rooms[room.name].endReason = "Time Up!";
 			semiRoomNextRound(room.name);
 		}
 	});

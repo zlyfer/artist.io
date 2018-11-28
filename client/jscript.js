@@ -15,12 +15,14 @@ var pregame_frames,
 	game_frames,
 	userlist,
 	results,
+	results_title_span,
 	results_nextround_span,
 	results_word_span,
 	lobby,
 	lobby_maxplayers,
 	lobby_timer,
 	lobby_maxrounds,
+	lobby_artistscore,
 	lobby_dictionaries,
 	roomname,
 	roomgamestate,
@@ -52,12 +54,15 @@ window.onload = function() {
 	game_frames = document.getElementsByClassName('game');
 	userlist = document.getElementById('userlist');
 	results = document.getElementById('results');
+	results_title_span = document.getElementById('results_title_span');
 	results_nextround_span = document.getElementById('results_nextround_span');
 	results_word_span = document.getElementById('results_word_span');
+	results_places = document.getElementById('results_places');
 	lobby = document.getElementById('lobby');
 	lobby_maxplayers = document.getElementById('lobby_maxplayers');
 	lobby_timer = document.getElementById('lobby_timer');
 	lobby_maxrounds = document.getElementById('lobby_maxrounds');
+	lobby_artistscore = document.getElementById('lobby_artistscore');
 	lobby_dictionaries = document.getElementById('lobby_dictionaries');
 	roomname = document.getElementById('roomname');
 	roomgamestate = document.getElementById('roomgamestate');
@@ -138,6 +143,7 @@ window.onload = function() {
 		lobby_maxplayers.value = options.maxPlayers;
 		lobby_timer.value = options.drawTime;
 		lobby_maxrounds.value = options.maxRounds;
+		lobby_artistscore.checked = options.artistScore;
 		options.dictionaries.enabled.forEach(dict => {
 			document.getElementById(`dict_input_${dict}`).checked = true;
 		})
@@ -151,13 +157,19 @@ window.onload = function() {
 				"maxPlayers": lobby_maxplayers.value,
 				"drawTime": lobby_timer.value,
 				"maxRounds": lobby_maxrounds.value,
+				"artistScore": lobby_artistscore.checked,
 				"dictionaries": getDictionaries()
 			});
 		}
 	});
 	socket.on('start_game', room => {
 		results.style.display = "none";
-		results_nextround_span.innerHTML = `Next artist in 7 seconds..`;
+		results_title_span.innerHTML = "";
+		results_nextround_span.innerHTML = "Next artist in 7 seconds..";
+		results_word_span.innerHTML = "The word was: ";
+		for (let i = results_places.children.length; i > 0; i--) {
+			results_places.lastChild.remove();
+		}
 		user = room.players[user.id]
 		lobby.style.display = "none";
 		game.style.display = "block";
@@ -168,7 +180,35 @@ window.onload = function() {
 	socket.on('end_round', room => {
 		results.style.display = "block";
 		cfd.disableDrawingMode();
+		results_title_span.innerHTML = room.endReason;
 		results_word_span.innerHTML = `The word was: ${room.currentWord}`;
+		if (room.gamestate == "End Game") {
+			let scorelist = [];
+			for (let id in room.players) {
+				scorelist.push({
+					"name": room.players[id].name,
+					"score": room.players[id].score
+				});
+			}
+			scorelist.sort(function(a, b) {
+				return a[1] - b[1];
+			});
+			for (let i = 0; i < 3; i++) {
+				if (scorelist[i]) {
+					let results_places_entry = document.createElement('div');
+					let li_entry_name = document.createElement('span');
+					let li_entry_score = document.createElement('span');
+					results_places_entry.className = "results_places_entry";
+					li_entry_name.innerHTML = `${i+1}. ${scorelist[i].name}:`;
+					li_entry_name.className = "li_entry_name";
+					li_entry_score.innerHTML = scorelist[i].score;
+					li_entry_score.className = "li_entry_score";
+					results_places_entry.append(li_entry_name);
+					results_places_entry.append(li_entry_score);
+					results_places.append(results_places_entry);
+				}
+			}
+		}
 		let seconds = 6;
 		let timer = setInterval(() => {
 			results_nextround_span.innerHTML = `Next artist in ${seconds} seconds..`;
@@ -182,7 +222,9 @@ window.onload = function() {
 
 	});
 	socket.on('new_message', data => {
-		addChatmessage(data.user, data.message);
+		if (data.to == "all" || user.guessedIt == true || user.artist == true) {
+			addChatmessage(data);
+		}
 		chatlog.scrollTo({
 			top: chatlog.scrollHeight,
 			left: 0,
@@ -225,6 +267,7 @@ window.onload = function() {
 			lobby_maxplayers.disabled = true;
 			lobby_timer.disabled = true;
 			lobby_maxrounds.disabled = true;
+			lobby_artistscore.disabled = true;
 			start_game.disabled = true;
 			for (let i = 0; i < lobby_dictionaries.children.length; i++) {
 				if (lobby_dictionaries.children[i].children[1]) {
@@ -260,7 +303,7 @@ function inputObserver() {
 }
 
 function optionsObserver() {
-	let number_inputs = {
+	let all_inputs = {
 		"lobby_maxplayers": {
 			"input": lobby_maxplayers,
 			"min": 2,
@@ -268,34 +311,40 @@ function optionsObserver() {
 		},
 		"lobby_timer": {
 			"input": lobby_timer,
-			"min": 2,
+			"min": 30,
 			"max": 300
 		},
 		"lobby_maxrounds": {
 			"input": lobby_maxrounds,
 			"min": 2,
-			"max": 10
+			"max": 99
+		},
+		"lobby_artistscore": {
+			"input": lobby_artistscore
 		}
 	};
-	for (let input in number_inputs) {
-		number_inputs[input].input.onchange = function() {
-			let numbertest = parseInt(this.value);
-			if (numbertest) {
-				if (numbertest < number_inputs[input].min) {
-					this.value = number_inputs[input].min;
+	for (let input in all_inputs) {
+		all_inputs[input].input.onchange = function() {
+			if (this.type == "text") {
+				let numbertest = parseInt(this.value);
+				if (numbertest) {
+					if (numbertest < all_inputs[input].min) {
+						this.value = all_inputs[input].min;
+					}
+					if (numbertest > all_inputs[input].max) {
+						this.value = all_inputs[input].max;
+					}
+					this.value = parseInt(this.value);
+				} else if (this.value != "") {
+					this.value = all_inputs[input].min;
 				}
-				if (numbertest > number_inputs[input].max) {
-					this.value = number_inputs[input].max;
-				}
-				this.value = parseInt(this.value);
-			} else if (this.value != "") {
-				this.value = number_inputs[input].min;
 			}
 			checkIfStartable();
 			socket.emit('update_options', user, {
 				"maxPlayers": lobby_maxplayers.value,
 				"drawTime": lobby_timer.value,
 				"maxRounds": lobby_maxrounds.value,
+				"artistScore": lobby_artistscore.checked,
 				"dictionaries": getDictionaries()
 			});
 		}
@@ -322,6 +371,7 @@ function startGame() {
 			"maxPlayers": lobby_maxplayers.value,
 			"drawTime": lobby_timer.value,
 			"maxRounds": lobby_maxrounds.value,
+			"artistScore": lobby_artistscore.checked,
 			"dictionaries": getDictionaries().enabled
 		}
 		socket.emit('start_game', user, options);
@@ -332,8 +382,10 @@ function sendMessage() {
 	newmessage.addEventListener('keydown', function(e) {
 		if (e.keyCode == 13 && this.value != "") {
 			socket.emit('send_message', {
-				"user": user,
-				"message": this.value
+				"author": user,
+				"message": this.value,
+				"type": "regular",
+				"to": "all"
 			});
 			this.value = "";
 		}
@@ -453,11 +505,7 @@ function changeRoomHeader(room) {
 		roomword.innerHTML = `Word: ${room.currentWord}`;
 	} else {
 		drawingTools_disabled.style.display = "block";
-		let underscores = "";
-		for (let i = 0; i < room.currentWord.length; i++) {
-			underscores += "_ ";
-		}
-		roomword.innerHTML = `Word: ${underscores}`;
+		roomword.innerHTML = `Word: ${room.hint}`;
 	}
 	let players_string = 'Player';
 	if (room.slots.used > 1) {
@@ -510,18 +558,44 @@ function addPlayer(player, artists) {
 	userlist.append(userlistentry);
 }
 
-function addChatmessage(sender, message) {
+function addChatmessage(data) {
 	let chatmessage = document.createElement('div');
 	chatmessage.className = "chatmessage";
 	let author = document.createElement('div');
 	author.className = "author";
 	let authorspan = document.createElement('span');
-	authorspan.innerHTML = sender.name;
-	authorspan.style.color = `var(--${sender.color.bg}9)`;
+	authorspan.innerHTML = data.author.name;
 	let content = document.createElement('div');
 	content.className = "content";
 	let contentspan = document.createElement('span');
-	contentspan.innerHTML = message;
+	contentspan.innerHTML = data.message;
+
+	switch (data.type) {
+		case "regular":
+			authorspan.innerHTML += ":";
+			authorspan.style.color = `var(--${data.author.color.bg}9)`;
+			break;
+		case "secret":
+			authorspan.innerHTML += ":";
+			authorspan.style.color = `var(--${data.author.color.bg}9)`;
+			contentspan.style.color = `var(--purple7)`;
+			break;
+		case "join":
+			authorspan.style.color = `var(--orange7)`;
+			contentspan.style.color = `var(--orange7)`;
+			contentspan.style.fontWeight = "bold";
+			break;
+		case "leave":
+			authorspan.style.color = `var(--red7)`;
+			contentspan.style.color = `var(--red7)`;
+			contentspan.style.fontWeight = "bold";
+			break;
+		case "guess":
+			authorspan.style.color = `var(--green7)`;
+			contentspan.style.color = `var(--green7)`;
+			contentspan.style.fontWeight = "bold";
+			break;
+	}
 
 	author.append(authorspan);
 	content.append(contentspan);

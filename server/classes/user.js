@@ -9,6 +9,7 @@ class User {
 		this.color = this.genColor();
 		this.score = 0;
 		this.artist = false;
+		this.guessedIt = false;
 	}
 	genColor() {
 		return colorPalette[colorPalette.length * Math.random() << 0];

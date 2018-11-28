@@ -20,7 +20,6 @@
 			<select id="language">
 				<option value="German">German</option>
 				<option value="English">English</option>
-				<option value="French">French</option>
 			</select>
 			<input id="join" type="button" value="Create Room!" disabled />
 		</div>
@@ -49,6 +48,10 @@
 				<div class="option_container first">
 					<span class="option_description">Maximum Rounds:</span>
 					<input class="option_input" id="lobby_maxrounds" type="text" value="10" />
+				</div>
+				<div class="option_container second">
+					<span class="option_description">Artist Score:</span>
+					<input class="option_input" id="lobby_artistscore" type="checkbox" checked />
 				</div>
 			</div>
 			<div class="lobby_container" id="lobby_dictionaries">
@@ -94,7 +97,7 @@
 		<div id="userlist" class="ui game"> </div>
 		<div id="results" class="ui postgame">
 			<div id="results_title">
-				<span>Time Up!</span>
+				<span id="results_title_span">Time Up!</span>
 			</div>
 			<div id="results_nextround">
 				<span id="results_nextround_span">Next artist in 7 seconds..</span>
@@ -102,6 +105,9 @@
 			<div id="results_word">
 				<span id="results_word_span">The word was: </span>
 			</div>
+			<div id="results_places">
+			</div>
+
 		</div>
 
 		<canvas id="cursorCanvas" width="110" height="110"></canvas>

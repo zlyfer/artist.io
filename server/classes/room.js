@@ -9,8 +9,10 @@ class Room {
 		this.chat = [];
 		this.canvas = "";
 		this.artist = null;
+		this.artistScore = true;
 		this.artists = [];
 		this.guessedIt = [];
+		this.scores = {};
 		this.creator = creator;
 		this.gamestate = "Lobby";
 		this.round = 1;
@@ -20,12 +22,14 @@ class Room {
 		this.dictionaries = [];
 		this.enabledDictionaries = [];
 		this.currentWord = "";
+		this.hint = "";
 		this.language = language;
 		this.scheduleJob = null;
 		this.slots = {
 			"used": 0,
 			"available": 5
 		}
+		this.endReason = "";
 	}
 	joinPlayer(user) {
 		if (this.slots.used >= this.slots.available || user.id in this.players) {
@@ -38,6 +42,9 @@ class Room {
 		}
 	}
 	removePlayer(userid) {
+		if (this.scores[userid]) {
+			delete this.scores[userid];
+		}
 		delete this.players[userid];
 		this.slots.used--;
 	}
@@ -50,16 +57,14 @@ class Room {
 			this.enabledDictionaries.push(dictionary);
 		}
 	}
-	addMessage(author, message) {
-		this.chat.push({
-			"author": author,
-			"message": message
-		});
+	addMessage(data) {
+		this.chat.push(data);
 	}
 	startRound(options) {
 		this.maxTimer = options.drawTime;
 		this.maxRounds = options.maxRounds;
 		this.slots.available = options.maxPlayers;
+		this.artistScore = options.artistScore;
 		for (let dict in options.dictionaries) {
 			this.toggleDictionary(options.dictionaries[dict], true, false);
 		}
@@ -73,6 +78,7 @@ class Room {
 		this.gamestate = `In Game (Round ${this.round}/${this.maxRounds})`;
 		this.nextArtist();
 		this.pickWord();
+		this.genHint();
 		this.timer = this.maxTimer;
 	}
 	checkNextRound() {
@@ -86,6 +92,9 @@ class Room {
 	nextGame() {
 		this.artists = [];
 		this.guessedIt = [];
+		this.scores = {};
+		this.hint = "";
+		this.currentWord = "";
 		this.round = 1;
 		this.chat = [];
 		for (let player in this.players) {
@@ -97,12 +106,16 @@ class Room {
 			this.scheduleJob.cancel();
 		}
 		this.guessedIt = [];
+		this.scores = {};
+		this.hint = "";
+		this.currentWord = "";
 	}
 	tick() {
 		this.timer--;
 		if (this.timer == 0) {
 			this.endRound();
 		}
+		this.genHint();
 	}
 	nextArtist() {
 		if (this.artist && this.players[this.artist]) {
@@ -123,6 +136,21 @@ class Room {
 	pickWord() {
 		let dictionary = this.dictionaries[this.dictionaries.length * Math.random() << 0];
 		this.currentWord = dictionary[dictionary.length * Math.random() << 0];
+	}
+	genHint() {
+		let percentage = (this.maxTimer - this.timer) / (this.maxTimer / 100);
+		let step = 90 / this.currentWord.length * 2;
+		let amount = Math.floor(percentage / step);
+		this.hint = "";
+		for (let i = 0; i < this.currentWord.length; i++) {
+			if (i % 2 == 0 && amount > 0 && percentage != 100) {
+				this.hint += this.currentWord[i] + " ";
+				amount--;
+			} else {
+				this.hint += "_ ";
+			}
+		}
+		this.hint = this.hint.substr(0, this.hint.length - 1);
 	}
 }
 module.exports = Room;
