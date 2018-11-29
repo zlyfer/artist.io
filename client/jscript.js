@@ -23,6 +23,7 @@ var pregame_frames,
 	lobby_timer,
 	lobby_maxrounds,
 	lobby_artistscore,
+	lobby_showhints,
 	lobby_dictionaries,
 	roomname,
 	roomgamestate,
@@ -34,7 +35,6 @@ var pregame_frames,
 	chat,
 	chatlog,
 	newmessage,
-	currentColor,
 	colorsContainer,
 	pencil,
 	eraser,
@@ -63,6 +63,7 @@ window.onload = function() {
 	lobby_timer = document.getElementById('lobby_timer');
 	lobby_maxrounds = document.getElementById('lobby_maxrounds');
 	lobby_artistscore = document.getElementById('lobby_artistscore');
+	lobby_showhints = document.getElementById('lobby_showhints');
 	lobby_dictionaries = document.getElementById('lobby_dictionaries');
 	roomname = document.getElementById('roomname');
 	roomgamestate = document.getElementById('roomgamestate');
@@ -75,7 +76,6 @@ window.onload = function() {
 	chat = document.getElementById('chat');
 	chatlog = document.getElementById('chatlog');
 	newmessage = document.getElementById('newmessage');
-	currentColor = document.getElementById('currentColor');
 	colorsContainer = document.getElementById('colorsContainer');
 	pencil = document.getElementById('pencil');
 	eraser = document.getElementById('eraser');
@@ -89,7 +89,7 @@ window.onload = function() {
 			pencilWidth += 2;
 			cfd.setLineWidth(pencilWidth);
 			changeCursor(pencilWidth, selColor);
-		} else if (e.deltaY > 0 && pencilWidth > 6) {
+		} else if (e.deltaY > 0 && pencilWidth > 1) {
 			pencilWidth -= 2;
 			cfd.setLineWidth(pencilWidth);
 			changeCursor(pencilWidth, selColor);
@@ -144,6 +144,7 @@ window.onload = function() {
 		lobby_timer.value = options.drawTime;
 		lobby_maxrounds.value = options.maxRounds;
 		lobby_artistscore.checked = options.artistScore;
+		lobby_showhints.checked = options.showHints;
 		options.dictionaries.enabled.forEach(dict => {
 			document.getElementById(`dict_input_${dict}`).checked = true;
 		})
@@ -158,6 +159,7 @@ window.onload = function() {
 				"drawTime": lobby_timer.value,
 				"maxRounds": lobby_maxrounds.value,
 				"artistScore": lobby_artistscore.checked,
+				"showHints": lobby_showhints.checked,
 				"dictionaries": getDictionaries()
 			});
 		}
@@ -191,7 +193,7 @@ window.onload = function() {
 				});
 			}
 			scorelist.sort(function(a, b) {
-				return a[1] - b[1];
+				return b[1] - a[1];
 			});
 			for (let i = 0; i < 3; i++) {
 				if (scorelist[i]) {
@@ -268,6 +270,7 @@ window.onload = function() {
 			lobby_timer.disabled = true;
 			lobby_maxrounds.disabled = true;
 			lobby_artistscore.disabled = true;
+			lobby_showhints.disabled = true;
 			start_game.disabled = true;
 			for (let i = 0; i < lobby_dictionaries.children.length; i++) {
 				if (lobby_dictionaries.children[i].children[1]) {
@@ -276,7 +279,7 @@ window.onload = function() {
 			}
 		}
 	});
-	socket.on('room_joined', (isCreator, dictionaries, colorPalette, enabledDictionaries) => {
+	socket.on('room_joined', (isCreator, dictionaries, colorPalette, roomDictionaries) => {
 		genColors(colorPalette);
 		for (let i = 0; i < pregame_frames.length; i++) {
 			pregame_frames[i].style.display = "none";
@@ -284,7 +287,7 @@ window.onload = function() {
 		for (let i = 0; i < game_frames.length; i++) {
 			game_frames[i].style.display = "block";
 		}
-		addDictionaries(dictionaries, enabledDictionaries);
+		addDictionaries(dictionaries, roomDictionaries);
 		checkIfCreator();
 	});
 }
@@ -321,6 +324,9 @@ function optionsObserver() {
 		},
 		"lobby_artistscore": {
 			"input": lobby_artistscore
+		},
+		"lobby_showhints": {
+			"input": lobby_showhints
 		}
 	};
 	for (let input in all_inputs) {
@@ -345,6 +351,7 @@ function optionsObserver() {
 				"drawTime": lobby_timer.value,
 				"maxRounds": lobby_maxrounds.value,
 				"artistScore": lobby_artistscore.checked,
+				"showHints": lobby_showhints.checked,
 				"dictionaries": getDictionaries()
 			});
 		}
@@ -372,6 +379,7 @@ function startGame() {
 			"drawTime": lobby_timer.value,
 			"maxRounds": lobby_maxrounds.value,
 			"artistScore": lobby_artistscore.checked,
+			"showHints": lobby_showhints.checked,
 			"dictionaries": getDictionaries().enabled
 		}
 		socket.emit('start_game', user, options);
@@ -604,7 +612,7 @@ function addChatmessage(data) {
 	chatlog.append(chatmessage);
 }
 
-function addDictionaries(dictionaries, enabledDictionaries) {
+function addDictionaries(dictionaries, roomDictionaries) {
 	let first = true;
 	for (let dict in dictionaries) {
 		if (first) {
@@ -621,7 +629,7 @@ function addDictionaries(dictionaries, enabledDictionaries) {
 		let option_input = document.createElement('input');
 		option_input.className = "option_input";
 		option_input.id = "dict_input_" + dict;
-		if (enabledDictionaries.includes(dict)) {
+		if (dict in roomDictionaries) {
 			option_input.checked = true;
 		}
 		option_input.type = "checkbox";
@@ -631,6 +639,8 @@ function addDictionaries(dictionaries, enabledDictionaries) {
 				"maxPlayers": lobby_maxplayers.value,
 				"drawTime": lobby_timer.value,
 				"maxRounds": lobby_maxrounds.value,
+				"artistScore": lobby_artistscore.checked,
+				"showHints": lobby_showhints.checked,
 				"dictionaries": getDictionaries()
 			});
 		}
@@ -675,11 +685,17 @@ function genColors(colorPalette) {
 		colorPalette.forEach((entry) => {
 			color = entry.bg;
 			let colorSource = document.createElement('div');
-			colorSource.className = "colorSource";
 			colorSource.id = `${color}${strength}`;
+			colorSource.className = "colorSource";
+			if (colorSource.id == "grey9") {
+				colorSource.className += " active";
+			}
 			colorSource.style.backgroundColor = `var(--${color}${strength})`;
 			colorSource.addEventListener('click', function() {
-				currentColor.style.backgroundColor = `var(--${this.id})`;
+				for (let i = 0; i < colorsContainer.children.length; i++) {
+					colorsContainer.children[i].className = "colorSource";
+				}
+				colorSource.className += " active";
 				selColor = window.getComputedStyle(this, null).getPropertyValue("background-color");
 				selColor = selColor.substr(4, selColor.length - 5);
 				selColor = selColor.split(", ");
@@ -693,7 +709,10 @@ function genColors(colorPalette) {
 			});
 			colorSource.addEventListener('mouseover', function(event) {
 				if (event.buttons == 1) {
-					currentColor.style.backgroundColor = `var(--${this.id})`;
+					for (let i = 0; i < colorsContainer.children.length; i++) {
+						colorsContainer.children[i].className = "colorSource";
+					}
+					colorSource.className += " active";
 					selColor = window.getComputedStyle(this, null).getPropertyValue("background-color");
 					selColor = selColor.substr(4, selColor.length - 5);
 					selColor = selColor.split(", ");
@@ -714,27 +733,32 @@ function genColors(colorPalette) {
 function changeCursor(size, color) {
 	let cursorCanvas = document.getElementById("cursorCanvas");
 	let context = cursorCanvas.getContext("2d");
-	context.clearRect(0, 0, 110, 110);
+	context.clearRect(0, 0, 120, 120);
+
 	context.beginPath();
 	context.lineWidth = 5;
 	context.strokeStyle = `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
-	context.arc(55, 55, (size / 2) - 2, 0, 2 * Math.PI);
-	context.stroke();
-	context.closePath();
-	context.beginPath();
-	context.lineWidth = 2;
-	context.strokeStyle = "#000";
-	if (size > 8) {
-		context.arc(55, 55, (size / 2) - 4, 0, 2 * Math.PI);
-	}
-	context.stroke();
-	context.closePath();
-	context.beginPath();
-	context.lineWidth = 2;
-	context.strokeStyle = "#000";
-	context.arc(55, 55, (size / 2) + 1, 0, 2 * Math.PI);
+	context.arc(60, 60, (size / 2) + 5, 0, 2 * Math.PI);
 	context.stroke();
 	context.closePath();
 
-	game.style.cursor = `url(${cursorCanvas.toDataURL()}) 55 55, auto`;
+	if (size > 9) {
+		context.beginPath();
+		context.lineWidth = 1;
+		context.strokeStyle = "#000";
+		context.fillStyle = `rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.22)`;
+		context.arc(60, 60, (size / 2), 0, 2 * Math.PI);
+		context.fill();
+		context.stroke();
+		context.closePath();
+	}
+
+	context.beginPath();
+	context.lineWidth = 1;
+	context.strokeStyle = "#000";
+	context.arc(60, 60, (size / 2) + 10, 0, 2 * Math.PI);
+	context.stroke();
+	context.closePath();
+
+	game.style.cursor = `url(${cursorCanvas.toDataURL()}) 60 60, auto`;
 }

@@ -19,12 +19,14 @@ class Room {
 		this.maxRounds = 10;
 		this.timer = 0;
 		this.maxTimer = 60;
-		this.dictionaries = [];
-		this.enabledDictionaries = [];
+		this.dictionaries = {};
+		this.usedWords = {};
+		// this.enabledDictionaries = [];
 		this.currentWord = "";
 		this.hint = "";
 		this.language = language;
 		this.scheduleJob = null;
+		this.showHints = true;
 		this.slots = {
 			"used": 0,
 			"available": 5
@@ -49,12 +51,10 @@ class Room {
 		this.slots.used--;
 	}
 	toggleDictionary(dictionary, enable = true, disable = true) {
-		if (this.dictionaries.includes(dictionaries[this.language][dictionary]) && disable) {
-			this.dictionaries.splice(this.dictionaries.indexOf(dictionaries[this.language][dictionary]), 1);
-			this.enabledDictionaries.splice(this.enabledDictionaries.indexOf(dictionary), 1);
+		if (dictionary in this.dictionaries && disable) {
+			delete this.dictionaries[dictionary];
 		} else if (enable) {
-			this.dictionaries.push(dictionaries[this.language][dictionary]);
-			this.enabledDictionaries.push(dictionary);
+			this.dictionaries[dictionary] = dictionaries[this.language][dictionary];
 		}
 	}
 	addMessage(data) {
@@ -65,8 +65,9 @@ class Room {
 		this.maxRounds = options.maxRounds;
 		this.slots.available = options.maxPlayers;
 		this.artistScore = options.artistScore;
-		for (let dict in options.dictionaries) {
-			this.toggleDictionary(options.dictionaries[dict], true, false);
+		this.showHints = options.showHints;
+		for (let i = 0; i < options.dictionaries.length; i++) {
+			this.toggleDictionary(options.dictionaries[i], true, false);
 		}
 		this.nextRound();
 	}
@@ -115,7 +116,9 @@ class Room {
 		if (this.timer == 0) {
 			this.endRound();
 		}
-		this.genHint();
+		if (this.showHints) {
+			this.genHint();
+		}
 	}
 	nextArtist() {
 		if (this.artist && this.players[this.artist]) {
@@ -134,8 +137,14 @@ class Room {
 		a.artist = true;
 	}
 	pickWord() {
-		let dictionary = this.dictionaries[this.dictionaries.length * Math.random() << 0];
+		let dictionary_name = Object.keys(this.dictionaries)[Object.keys(this.dictionaries).length * Math.random() << 0]
+		let dictionary = this.dictionaries[dictionary_name];
 		this.currentWord = dictionary[dictionary.length * Math.random() << 0];
+		if (!(dictionary_name in this.usedWords)) {
+			this.usedWords[dictionary_name] = [];
+		}
+		this.usedWords[dictionary_name].push(this.currentWord);
+		this.dictionaries[dictionary_name].splice(this.dictionaries[dictionary_name].indexOf(this.currentWord), 1);
 	}
 	genHint() {
 		let percentage = (this.maxTimer - this.timer) / (this.maxTimer / 100);

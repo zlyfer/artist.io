@@ -53,6 +53,10 @@
 					<span class="option_description">Artist Score:</span>
 					<input class="option_input" id="lobby_artistscore" type="checkbox" checked />
 				</div>
+				<div class="option_container first">
+					<span class="option_description">Show Hints:</span>
+					<input class="option_input" id="lobby_showhints" type="checkbox" checked />
+				</div>
 			</div>
 			<div class="lobby_container" id="lobby_dictionaries">
 				<div class="lobby_header">
@@ -71,7 +75,6 @@
 		</div>
 
 		<div id="drawingTools" class="ui game drawingTools">
-			<div id="currentColor"></div>
 			<div id="colorsContainer"></div>
 			<div id="pencil" class="tools active">
 				<i class="fas fa-pencil-alt"></i>
@@ -110,7 +113,7 @@
 
 		</div>
 
-		<canvas id="cursorCanvas" width="110" height="110"></canvas>
+		<canvas id="cursorCanvas" width="120" height="120"></canvas>
 
 	</body>
 

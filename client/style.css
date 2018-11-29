@@ -415,13 +415,6 @@ div.drawingTools {
 	margin-bottom: 2.5%;
 }
 
-div#drawingTools div#currentColor {
-	width: 80px;
-	height: 80px;
-	background-color: black;
-	float: left;
-}
-
 div#drawingTools div#colorsContainer {
 	width: 380px;
 	height: 100%;
@@ -429,11 +422,11 @@ div#drawingTools div#colorsContainer {
 }
 
 div#drawingTools div.tools {
-	margin-left: 5px;
-	margin-right: 5px;
-	margin-top: 15px;
-	width: 51px;
-	height: 50px;
+	margin-left: 3.51px;
+	margin-right: 3.51px;
+	margin-top: 5px;
+	width: 70px;
+	height: 70px;
 	float: left;
 	text-align: center;
 	cursor: pointer;
@@ -442,17 +435,17 @@ div#drawingTools div.tools {
 	transition: border-radius 0.3s ease;
 	background-color: var(--grey2);
 	color: var(--grey8);
-	font-size: 1.4em;
+	font-size: 2em;
 }
 
 div#drawingTools div.tools:hover {
-	border-radius: 25px;
+	border-radius: 50%;
 }
 
 div#drawingTools div.half.tools {
 	border-radius: 0;
-	width: 25px;
-	font-size: 0.8em;
+	width: 35px;
+	font-size: 1.4em;
 }
 
 div#drawingTools div.half.tools.first {
@@ -463,8 +456,8 @@ div#drawingTools div.half.tools.first {
 }
 
 div#drawingTools div.half.tools.first:hover {
-	border-top-left-radius: 25px;
-	border-bottom-left-radius: 25px;
+	border-top-left-radius: 50%;
+	border-bottom-left-radius: 50%;
 }
 
 div#drawingTools div.half.tools.second {
@@ -475,8 +468,8 @@ div#drawingTools div.half.tools.second {
 }
 
 div#drawingTools div.half.tools.second:hover {
-	border-top-right-radius: 25px;
-	border-bottom-right-radius: 25px;
+	border-top-right-radius: 50%;
+	border-bottom-right-radius: 50%;
 }
 
 div#drawingTools div.tools.active, div#drawingTools div.tools:active {
@@ -485,20 +478,21 @@ div#drawingTools div.tools.active, div#drawingTools div.tools:active {
 }
 
 .fa-pencil-alt, .fa-eraser, .fa-fill-drip, .fa-trash, .fa-undo-alt, .fa-redo-alt {
-	line-height: 50px;
+	line-height: 70px;
 }
 
 div#drawingTools div#colorsContainer div.colorSource {
-	width: 14px;
-	height: 14px;
-	border: 3px solid transparent;
+	width: 20px;
+	height: 20px;
 	cursor: pointer;
 	float: left;
-	opacity: 1;
+	border-width: 0px;
 }
 
-div#drawingTools div#colorsContainer div.colorSource:hover {
-	opacity: 0.5;
+div#drawingTools div#colorsContainer div.colorSource:hover, div#drawingTools div#colorsContainer div.colorSource.active {
+	width: 14px;
+	height: 14px;
+	border: 3px solid var(--grey1);
 }
 
 div#drawingTools_disabled {
@@ -516,8 +510,10 @@ div#userlist div.userlistentry {
 }
 
 div#lobby div.lobby_container {
+	margin-top: 20px;
 	margin-left: 5%;
 	width: 90%;
+	height: 25%;
 	margin-bottom: 50px;
 }
 
@@ -540,6 +536,7 @@ div#lobby div.lobby_container div.option_container {
 	width: 49.5%;
 	height: 30px;
 	float: left;
+	margin-top: 5px;
 }
 
 div#lobby div.lobby_container div.option_container.first {}

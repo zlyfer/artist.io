@@ -1,3 +1,5 @@
+// TODO: Fixed artist queue.
+
 // TODO: Display score changes upon round end.
 // TODO: Add custom word list.
 // TODO: Add more options.
@@ -97,7 +99,7 @@ io.on('connection', socket => {
 				io.in(data.room).emit('update_room', rooms[data.room]);
 				io.emit('send_roomlist', rooms);
 				socket.emit('send_user', users[user.id]);
-				socket.emit('room_joined', users[user.id], dictionaries[rooms[user.room].language], colorPalette, rooms[user.room].enabledDictionaries);
+				socket.emit('room_joined', users[user.id], dictionaries[rooms[user.room].language], colorPalette, rooms[user.room].dictionaries);
 				if (rooms[data.room].gamestate != "Lobby") {
 					socket.emit('apply_artist', rooms[data.room].artist);
 					socket.emit('update_canvas', rooms[data.room].canvas);
@@ -119,9 +121,6 @@ io.on('connection', socket => {
 			rooms[data.author.room].guessedIt.includes(data.author.id) == false
 		) {
 			let score = Math.floor((rooms[data.author.room].timer / (rooms[data.author.room].maxTimer / 100)) - ((rooms[data.author.room].guessedIt.length)));
-			if (Object.keys(rooms[data.author.room].scores).length == 0 && rooms[data.author.room].artistScore) {
-				rooms[data.author.room].scores[rooms[data.author.room].artist] = score;
-			}
 			rooms[data.author.room].scores[data.author.id] = score;
 			rooms[data.author.room].guessedIt.push(data.author.id);
 			users[data.author.id].guessedIt = true;
@@ -138,6 +137,9 @@ io.on('connection', socket => {
 				rooms[data.author.room].guessedIt.length >= Object.keys(rooms[data.author.room].players).length - 1 &&
 				rooms[data.author.room].gamestate != "Lobby"
 			) {
+				if (rooms[data.author.room].artistScore) {
+					rooms[data.author.room].scores[rooms[data.author.room].artist] = (rooms[data.author.room].guessedIt.length * (100 / (Object.keys(rooms[data.author.room].players).length - 1)));
+				}
 				rooms[data.author.room].endReason = "Everyone Guessed The Word!";
 				semiRoomNextRound(rooms[data.author.room].name);
 			}
