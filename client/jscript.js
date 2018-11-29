@@ -566,7 +566,7 @@ function addPlayer(player, artists) {
 	usernamespan.innerHTML = player.name;
 	usernamespan.style.color = `var(--grey${player.color.fg})`;
 	if (player.id == user.id) {
-		// usernamespan.innerHTML += " (You)";
+		usernamespan.innerHTML += " (You)";
 		usernamespan.style.fontWeight = "bold";
 	}
 
