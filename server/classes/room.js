@@ -21,12 +21,11 @@ class Room {
 		this.maxTimer = 60;
 		this.dictionaries = {};
 		this.usedWords = {};
-		// this.enabledDictionaries = [];
 		this.currentWord = "";
 		this.hint = "";
+		this.showHints = true;
 		this.language = language;
 		this.scheduleJob = null;
-		this.showHints = true;
 		this.slots = {
 			"used": 0,
 			"available": 5
@@ -66,10 +65,14 @@ class Room {
 		this.slots.available = options.maxPlayers;
 		this.artistScore = options.artistScore;
 		this.showHints = options.showHints;
-		for (let i = 0; i < options.dictionaries.length; i++) {
-			this.toggleDictionary(options.dictionaries[i], true, false);
-		}
+		this.applyDictionaries(options.dictionaries);
 		this.nextRound();
+	}
+	applyDictionaries(dicts) {
+		this.dictionaries = {};
+		for (let i = 0; i < dicts.length; i++) {
+			this.toggleDictionary(dicts[i], true, false);
+		}
 	}
 	nextRound() {
 		this.canvas = "";
@@ -140,11 +143,17 @@ class Room {
 		let dictionary_name = Object.keys(this.dictionaries)[Object.keys(this.dictionaries).length * Math.random() << 0]
 		let dictionary = this.dictionaries[dictionary_name];
 		this.currentWord = dictionary[dictionary.length * Math.random() << 0];
-		if (!(dictionary_name in this.usedWords)) {
-			this.usedWords[dictionary_name] = [];
+		if (this.currentWord == undefined) {
+			this.dictionaries = this.usedWords;
+			this.usedWords = {};
+			this.pickWord();
+		} else {
+			if (!(dictionary_name in this.usedWords)) {
+				this.usedWords[dictionary_name] = [];
+			}
+			this.usedWords[dictionary_name].push(this.currentWord);
+			this.dictionaries[dictionary_name].splice(this.dictionaries[dictionary_name].indexOf(this.currentWord), 1);
 		}
-		this.usedWords[dictionary_name].push(this.currentWord);
-		this.dictionaries[dictionary_name].splice(this.dictionaries[dictionary_name].indexOf(this.currentWord), 1);
 	}
 	genHint() {
 		let percentage = (this.maxTimer - this.timer) / (this.maxTimer / 100);
@@ -152,7 +161,9 @@ class Room {
 		let amount = Math.floor(percentage / step);
 		this.hint = "";
 		for (let i = 0; i < this.currentWord.length; i++) {
-			if (i % 2 == 0 && amount > 0 && percentage != 100) {
+			if (this.currentWord[i] == " ") {
+				this.hint += "  ";
+			} else if (i % 2 == 0 && amount > 0 && percentage != 100) {
 				this.hint += this.currentWord[i] + " ";
 				amount--;
 			} else {

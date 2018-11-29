@@ -455,12 +455,6 @@ function addRoomlistEntry(room) {
 	namespan.innerHTML = room.name;
 	name.append(namespan);
 
-	let players = document.createElement('div');
-	players.className = "players";
-	let playersspan = document.createElement('span');
-	playersspan.innerHTML = genUserlistString(room);
-	players.append(playersspan);
-
 	let gamestate = document.createElement('div');
 	gamestate.className = "gamestate";
 	let gamestatespan = document.createElement('span');
@@ -473,10 +467,34 @@ function addRoomlistEntry(room) {
 	slotsspan.innerHTML = genSlotsString(room);
 	slots.append(slotsspan);
 
+	let dicts = document.createElement('div');
+	dicts.className = "dicts";
+	let dictsspan = document.createElement('span');
+	if (Object.keys(room.dictionaries).length == 1) {
+		dictsspan.innerHTML = `${Object.keys(room.dictionaries).length} Dictionary`
+	} else {
+		dictsspan.innerHTML = `${Object.keys(room.dictionaries).length} Dictionaries`
+	}
+	dicts.append(dictsspan);
+
+	let language = document.createElement('div');
+	language.className = "language";
+	let languagespan = document.createElement('span');
+	languagespan.innerHTML = room.language;
+	language.append(languagespan);
+
+	let players = document.createElement('div');
+	players.className = "players";
+	let playersspan = document.createElement('span');
+	playersspan.innerHTML = genUserlistString(room);
+	players.append(playersspan);
+
 	roomlist_entry.append(name);
-	roomlist_entry.append(players);
+	roomlist_entry.append(language);
 	roomlist_entry.append(gamestate);
+	roomlist_entry.append(dicts);
 	roomlist_entry.append(slots);
+	roomlist_entry.append(players);
 	roomlist.append(roomlist_entry);
 }
 
@@ -515,6 +533,7 @@ function changeRoomHeader(room) {
 		drawingTools_disabled.style.display = "block";
 		roomword.innerHTML = `Word: ${room.hint}`;
 	}
+	roomword.style.whiteSpace = "pre";
 	let players_string = 'Player';
 	if (room.slots.used > 1) {
 		players_string += 's';

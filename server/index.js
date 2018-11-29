@@ -82,7 +82,9 @@ io.on('connection', socket => {
 		if (already_joined == false) {
 			if (!(data.room in rooms)) {
 				rooms[data.room] = new Room(data.room, data.user.id, data.lang);
-				rooms[data.room].toggleDictionary(Object.keys(dictionaries[data.lang])[0]);
+				for (let i = 0; i < Object.keys(dictionaries[data.lang]).length; i++) {
+					rooms[data.room].toggleDictionary(Object.keys(dictionaries[data.lang])[i]);
+				}
 			}
 			let user = rooms[data.room].joinPlayer(data.user);
 			if (user) {
@@ -167,6 +169,8 @@ io.on('connection', socket => {
 	socket.on('update_options', (user, options) => {
 		if (rooms[user.room].creator = user.id) {
 			socket.to(user.room).emit('update_options', options);
+			rooms[user.room].applyDictionaries(options.dictionaries.enabled);
+			io.emit('send_roomlist', rooms);
 		}
 	});
 	socket.on('start_game', (user, options) => {
