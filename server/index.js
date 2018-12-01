@@ -135,16 +135,7 @@ io.on('connection', socket => {
 			};
 			rooms[data.author.room].addMessage(newMSG);
 			io.in(data.author.room).emit('new_message', newMSG);
-			if (
-				rooms[data.author.room].guessedIt.length >= Object.keys(rooms[data.author.room].players).length - 1 &&
-				rooms[data.author.room].gamestate != "Lobby"
-			) {
-				if (rooms[data.author.room].artistScore) {
-					rooms[data.author.room].scores[rooms[data.author.room].artist] = (rooms[data.author.room].guessedIt.length * (100 / (Object.keys(rooms[data.author.room].players).length - 1)));
-				}
-				rooms[data.author.room].endReason = "Everyone Guessed The Word!";
-				semiRoomNextRound(rooms[data.author.room].name);
-			}
+			checkRoundEnd(data.author.room);
 		} else if (
 			rooms[data.author.room].guessedIt.includes(data.author.id) ||
 			rooms[data.author.room].artist == data.author.id
@@ -208,6 +199,8 @@ io.on('connection', socket => {
 				if (socket.id == rooms[roomname].artist) {
 					rooms[roomname].endReason = "The Artist Left!";
 					semiRoomNextRound(roomname);
+				} else {
+					checkRoundEnd(roomname);
 				}
 				io.in(roomname).emit('update_room', rooms[roomname]);
 			}
@@ -236,10 +229,10 @@ function semiRoomNextRound(room) {
 		}
 		setTimeout(function() {
 			if (rooms[room]) {
-				if (rooms[room].gamestate != "End Game") {
+				if (rooms[room].gamestate != "End Game" && rooms[room].gamestate != "Lobby") {
 					rooms[room].nextRound();
 					roomNextRound(rooms[room]);
-				} else {
+				} else if (rooms[room].gamestate != "Lobby") {
 					rooms[room].nextGame();
 					rooms[room].nextRound();
 					roomNextRound(rooms[room]);
@@ -267,3 +260,16 @@ function roomNextRound(room) {
 }
 
 server.listen(3000);
+
+function checkRoundEnd(roomname) {
+	if (
+		rooms[roomname].guessedIt.length >= Object.keys(rooms[roomname].players).length - 1 &&
+		rooms[roomname].gamestate != "Lobby"
+	) {
+		if (rooms[roomname].artistScore) {
+			rooms[roomname].scores[rooms[roomname].artist] = (rooms[roomname].guessedIt.length * (100 / (Object.keys(rooms[roomname].players).length - 1)));
+		}
+		rooms[roomname].endReason = "Everyone Guessed The Word!";
+		semiRoomNextRound(roomname);
+	}
+}

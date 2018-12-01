@@ -82,7 +82,7 @@ class Room {
 		this.gamestate = `In Game (Round ${this.round}/${this.maxRounds})`;
 		this.nextArtist();
 		this.pickWord();
-		this.genHint();
+		this.genHint(false);
 		this.timer = this.maxTimer;
 	}
 	checkNextRound() {
@@ -112,7 +112,6 @@ class Room {
 		this.guessedIt = [];
 		this.scores = {};
 		this.hint = "";
-		this.currentWord = "";
 	}
 	tick() {
 		this.timer--;
@@ -155,7 +154,7 @@ class Room {
 			this.dictionaries[dictionary_name].splice(this.dictionaries[dictionary_name].indexOf(this.currentWord), 1);
 		}
 	}
-	genHint() {
+	genHint(hints = true) {
 		let percentage = (this.maxTimer - this.timer) / (this.maxTimer / 100);
 		let step = 90 / this.currentWord.length * 2;
 		let amount = Math.floor(percentage / step);
@@ -163,7 +162,7 @@ class Room {
 		for (let i = 0; i < this.currentWord.length; i++) {
 			if (this.currentWord[i] == " ") {
 				this.hint += "  ";
-			} else if (i % 2 == 0 && amount > 0 && percentage != 100) {
+			} else if (i % 2 == 0 && amount > 0 && percentage != 100 && hints) {
 				this.hint += this.currentWord[i] + " ";
 				amount--;
 			} else {
