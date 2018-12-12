@@ -1,0 +1,38 @@
+div#userform {
+	width: 25%;
+	height: 100%;
+	background-color: var(--grey2);
+	float: left;
+}
+
+div#userform div#userform-header {
+	width: 100%;
+	height: 50px;
+	padding: 0;
+	background-color: var(--green8);
+	text-align: center;
+}
+
+div#userform div#userform-header p#userform-header-text {
+	width: 100%;
+	color: var(--grey1);
+	text-align: center;
+	line-height: 50px;
+	font-size: 18px;
+}
+
+div#userform input, div#userform select {
+	width: 85%;
+	height: 45px;
+	margin-top: 5px;
+	margin-left: 7.5%;
+	font-size: 1.2em;
+}
+
+div#userform input#userform-username {
+	margin-top: 45px;
+}
+
+div#userform input#userform-join {
+	font-size: 1.5em;
+}

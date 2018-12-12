@@ -1,0 +1,107 @@
+<html>
+
+	<head>
+		<title>Artist.io</title>
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+		<link rel="stylesheet" type="text/css" href="./style.css" />
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+		<script src="./canvas-free-drawing.js"></script>
+		<script src="./jscript.js"></script>
+	</head>
+
+	<body>
+
+		<div id="header" class="ui game">
+			<span id="roomname"></span>
+			<span id="roomgamestate"></span>
+			<span id="roomword"></span>
+			<span id="roomtimer"></span>
+			<span id="roomplayercount"></span>
+		</div>
+
+		<div id="lobby" class="ui game">
+			<div class="lobby_container">
+				<div class="lobby_header">
+					<span>Options</span>
+				</div>
+				<div class="option_container first">
+					<span class="option_description">Maximum Playercount:</span>
+					<input class="option_input" id="lobby_maxplayers" type="text" value="5" />
+				</div>
+				<div class="option_container second">
+					<span class="option_description">Draw Time (Seconds):</span>
+					<input class="option_input" id="lobby_timer" type="text" value="60" />
+				</div>
+				<div class="option_container first">
+					<span class="option_description">Maximum Rounds:</span>
+					<input class="option_input" id="lobby_maxrounds" type="text" value="10" />
+				</div>
+				<div class="option_container second">
+					<span class="option_description">Artist Score:</span>
+					<input class="option_input" id="lobby_artistscore" type="checkbox" checked />
+				</div>
+				<div class="option_container first">
+					<span class="option_description">Show Hints:</span>
+					<input class="option_input" id="lobby_showhints" type="checkbox" checked />
+				</div>
+			</div>
+			<div class="lobby_container" id="lobby_dictionaries">
+				<div class="lobby_header">
+					<span>Dictionaries</span>
+				</div>
+			</div>
+			<input id="start_game" type="button" value="Start Game!" disabled />
+		</div>
+
+		<canvas id="game" class="ui postlobby"></canvas>
+		<script src="./drawing.js"></script>
+
+		<div id="chat" class="ui game">
+			<div id="chatlog"></div>
+			<input id="newmessage" type="text" placeholder="Type here.." />
+		</div>
+
+		<div id="drawingTools" class="ui game drawingTools">
+			<div id="colorsContainer"></div>
+			<div id="pencil" class="tools active">
+				<i class="fas fa-pencil-alt"></i>
+			</div>
+			<div id="eraser" class="tools">
+				<i class="fas fa-eraser"></i>
+			</div>
+			<div id="bucket" class="tools">
+				<i class="fas fa-fill-drip"></i>
+			</div>
+			<div id="undo" class="half tools first">
+				<i class="fas fa-undo-alt"></i>
+			</div>
+			<div id="redo" class="half tools second">
+				<i class="fas fa-redo-alt"></i>
+			</div>
+			<div id="clear" class="tools">
+				<i class="fas fa-trash"></i>
+			</div>
+		</div>
+		<div id="drawingTools_disabled" class="ui drawingTools"></div>
+
+		<div id="userlist" class="ui game"> </div>
+		<div id="results" class="ui postgame">
+			<div id="results_title">
+				<span id="results_title_span">Time Up!</span>
+			</div>
+			<div id="results_nextround">
+				<span id="results_nextround_span">Next artist in 7 seconds..</span>
+			</div>
+			<div id="results_word">
+				<span id="results_word_span">The word was: </span>
+			</div>
+			<div id="results_places">
+			</div>
+
+		</div>
+
+		<canvas id="cursorCanvas" width="120" height="120"></canvas>
+
+	</body>
+
+</html>

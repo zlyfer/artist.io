@@ -1,0 +1,92 @@
+div.drawingTools {
+	left: calc(5% + (29.6% / 2) + 0.7%);
+	top: calc(7.5% + 50px + 1.5% + 572px + 1.5%);
+	height: 80px;
+	width: 776px;
+	margin-bottom: 2.5%;
+}
+
+div#drawingTools div#colorsContainer {
+	width: 380px;
+	height: 100%;
+	float: left;
+}
+
+div#drawingTools div.tools {
+	margin-left: 3.51px;
+	margin-right: 3.51px;
+	margin-top: 5px;
+	width: 70px;
+	height: 70px;
+	float: left;
+	text-align: center;
+	cursor: pointer;
+	border: 1px solid var(--grey8);
+	border-radius: 5px;
+	transition: border-radius 0.3s ease;
+	background-color: var(--grey2);
+	color: var(--grey8);
+	font-size: 2em;
+}
+
+div#drawingTools div.tools:hover {
+	border-radius: 50%;
+}
+
+div#drawingTools div.half.tools {
+	border-radius: 0;
+	width: 35px;
+	font-size: 1.4em;
+}
+
+div#drawingTools div.half.tools.first {
+	margin-right: 0;
+	border-right: 0;
+	border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
+}
+
+div#drawingTools div.half.tools.first:hover {
+	border-top-left-radius: 50%;
+	border-bottom-left-radius: 50%;
+}
+
+div#drawingTools div.half.tools.second {
+	margin-left: 0;
+	border-left: 0;
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+
+div#drawingTools div.half.tools.second:hover {
+	border-top-right-radius: 50%;
+	border-bottom-right-radius: 50%;
+}
+
+div#drawingTools div.tools.active, div#drawingTools div.tools:active {
+	background-color: var(--grey8);
+	color: var(--grey2);
+}
+
+.fa-pencil-alt, .fa-eraser, .fa-fill-drip, .fa-trash, .fa-undo-alt, .fa-redo-alt {
+	line-height: 70px;
+}
+
+div#drawingTools div#colorsContainer div.colorSource {
+	width: 20px;
+	height: 20px;
+	cursor: pointer;
+	float: left;
+	border-width: 0px;
+}
+
+div#drawingTools div#colorsContainer div.colorSource:hover, div#drawingTools div#colorsContainer div.colorSource.active {
+	width: 14px;
+	height: 14px;
+	border: 3px solid var(--grey1);
+}
+
+div#drawingTools_disabled {
+	background-color: rgba(0, 0, 0, 0.7);
+	display: none;
+}

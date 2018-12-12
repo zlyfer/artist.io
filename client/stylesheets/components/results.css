@@ -1,0 +1,65 @@
+div#results {
+	position: absolute;
+	width: 776px;
+	height: 572px;
+	left: calc((100% / 2) - 388px);
+	top: 50px;
+	background-color: rgba(0, 0, 0, 0.75);
+}
+
+div#results span.results-headers {
+	width: 100%;
+	height: 64px;
+	color: var(--grey1);
+	display: inline-block;
+	text-align: center;
+	line-height: 64px;
+	font-weight: bold;
+	font-size: 40px;
+}
+
+div#results span.results-headers span#results-word {
+	color: var(--green8);
+}
+
+div#results div#results-players {
+	width: 100%;
+	height: calc(100% - (4 * 64px));
+	overflow-y: auto;
+}
+
+div#results div#results-players div.results-players-entry {
+	width: 80%;
+	height: 32px;
+	margin-left: 10%;
+}
+
+div#results div#results-players div.results-players-entry span.results-players-info {
+	height: 32px;
+	color: var(--grey1);
+	display: inline-block;
+	line-height: 32px;
+	font-weight: bold;
+	font-size: 20px;
+	float: left;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	padding-left: 1%;
+	padding-right: 1%;
+}
+
+div#results div#results-players div.results-players-entry span.results-players-info.place {
+	width: 15%;
+	text-align: left;
+}
+
+div#results div#results-players div.results-players-entry span.results-players-info.name {
+	width: 59%;
+	text-align: center;
+}
+
+div#results div#results-players div.results-players-entry span.results-players-info.score {
+	width: 20%;
+	text-align: right;
+}

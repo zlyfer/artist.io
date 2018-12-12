@@ -1,0 +1,84 @@
+div#lobby {
+	width: 776px;
+	height: 572px;
+	background-color: var(--grey2);
+	overflow-y: auto;
+	float: left;
+}
+
+div#lobby div.lobby-container {
+	width: 90%;
+	margin-left: 5%;
+	margin-bottom: 25px;
+	padding-bottom: 5px;
+	display: table;
+}
+
+div#lobby div.lobby-container div.lobby-container-header {
+	width: 100%;
+	height: 50px;
+}
+
+div#lobby div.lobby-container div.lobby-container-header span.lobby-container-header-text {
+	width: 100%;
+	color: var(--green7);
+	display: inline-block;
+	text-align: center;
+	font-weight: bold;
+	line-height: 50px;
+	font-size: 1.3em;
+}
+
+div#lobby div.lobby-container div.lobby-container-options-container {
+	width: 49.5%;
+	height: 30px;
+	margin-top: 5px;
+	float: left;
+}
+
+div#lobby div.lobby-container div.lobby-container-options-container:nth-child(odd) {
+	margin-left: 1%;
+}
+
+div#lobby div.lobby-container div.lobby-container-options-container span.lobby-container-options-container-description {
+	width: 50%;
+	color: var(--green7);
+	display: inline-block;
+	font-weight: bold;
+	line-height: 30px;
+	float: left;
+}
+
+div#lobby div.lobby-container div.lobby-container-options-container input.lobby-container-options-container-value {
+	float: left;
+}
+
+div#lobby div.lobby-container div.lobby-container-options-container input.lobby-container-options-container-value[type="text"] {
+	width: calc(50% - 2px);
+}
+
+div#lobby div.lobby-container div.lobby-container-options-container input.lobby-container-options-container-value[type="checkbox"] {
+	width: 28px;
+	height: 28px;
+	margin-top: 1px;
+	margin-left: calc(49% - 28px);
+	padding: 0;
+	cursor: pointer;
+	transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+div#lobby div.lobby-container div.lobby-container-options-container input.lobby-container-options-container-value[type="checkbox"]:checked {
+	background-color: var(--green6);
+	box-shadow: inset 0 0 0 2px var(--grey1);
+}
+
+div#lobby div.lobby-container div.lobby-container-options-container input.lobby-container-options-container-value[type="checkbox"]:hover {
+	border: 1px solid var(--green6);
+}
+
+div#lobby input#lobby-start {
+	width: 30%;
+	height: 64px;
+	margin-left: 35%;
+	font-size: 1.5em;
+}

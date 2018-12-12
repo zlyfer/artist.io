@@ -1,0 +1,25 @@
+div#header {
+	width: 100%;
+	height: 50px;
+	background-color: var(--grey2);
+}
+
+div#header span#header-info {
+	width: calc(20% - 20px);
+	height: calc(100% - 20px);
+	padding: 10px;
+	color: var(--green7);
+	display: inline-block;
+	text-align: center;
+	line-height: 30px;
+	font-weight: bold;
+	float: left;
+}
+
+div#header span#header-info:nth-child(1) {
+	text-align: left;
+}
+
+div#header span#header-info:nth-child(5) {
+	text-align: right;
+}

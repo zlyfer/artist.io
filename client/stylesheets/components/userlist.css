@@ -1,0 +1,45 @@
+div#userlist {
+	width: calc((100% / 2) - 388px);
+	min-height: calc(572px + 80px + 75px);
+	height: calc(100% - 50px);
+	background-color: var(--grey2);
+	overflow-y: auto;
+	float: left;
+}
+
+div#userlist div.userlist-entry {
+	width: 100%;
+	height: 30px;
+}
+
+div#userlist div.userlist-entry span {
+	height: 100%;
+	display: inline-block;
+	text-align: center;
+	line-height: 30px;
+	margin-left: 5px;
+	margin-right: 5px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+div#userlist div.userlist-entry div.userlist-entry-info span i.fa-circle {
+	line-height: 30px;
+}
+
+div#userlist div.userlist-entry div.userlist-entry-info {
+	float: left;
+}
+
+div#userlist div.userlist-entry div.userlist-entry-info.status {
+	width: 15%;
+}
+
+div#userlist div.userlist-entry div.userlist-entry-info.username {
+	width: 55%;
+}
+
+div#userlist div.userlist-entry div.userlist-entry-info.score {
+	width: 30%;
+}

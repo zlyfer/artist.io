@@ -1,0 +1,6 @@
+canvas#cursor {
+	position: absolute;
+	left: -120px;
+	top: -120px;
+	background-color: transparent;
+}

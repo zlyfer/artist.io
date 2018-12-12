@@ -110,13 +110,13 @@ window.onload = function() {
 	optionsObserver();
 
 	// NOT TESTING:
-	socket = io('https://zlyfer.net:3000', {
-		rejectUnauthorized: false
-	});
+	// socket = io('https://zlyfer.net:3000', {
+	// 	rejectUnauthorized: false
+	// });
 	// END
 
 	// TESTING:
-	// socket = io('http://localhost:3000');
+	socket = io('http://localhost:3000');
 	// END
 
 	initcfd();

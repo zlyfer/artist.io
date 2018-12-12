@@ -1,0 +1,6 @@
+a#credits {
+	position: absolute;
+	left: 1%;
+	bottom: 1%;
+	color: var(--grey9);
+}

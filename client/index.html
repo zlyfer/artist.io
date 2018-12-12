@@ -1,119 +1,191 @@
 <html>
 
 	<head>
-		<title>Artist.io</title>
+		<!-- Basic -->
+		<title>Artist.io - by zlyfer</title>
+
+		<!-- Third Party Stylesheets -->
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-		<link rel="stylesheet" type="text/css" href="./style.css" />
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
-		<script src="./canvas-free-drawing.js"></script>
-		<script src="./jscript.js"></script>
+
+		<!-- Stylesheets -->
+		<link rel="stylesheet" type="text/css" href="./stylesheets/colors.css" />
+		<link rel="stylesheet" type="text/css" href="./stylesheets/style.css" />
+		<link rel="stylesheet" type="text/css" href="./stylesheets/components/cursor.css" />
+		<link rel="stylesheet" type="text/css" href="./stylesheets/components/credits.css" />
+		<link rel="stylesheet" type="text/css" href="./stylesheets/components/userform.css" />
+		<link rel="stylesheet" type="text/css" href="./stylesheets/components/roomlist.css" />
+		<link rel="stylesheet" type="text/css" href="./stylesheets/components/header.css" />
+		<link rel="stylesheet" type="text/css" href="./stylesheets/components/userlist.css" />
+		<link rel="stylesheet" type="text/css" href="./stylesheets/components/lobby.css" />
+		<link rel="stylesheet" type="text/css" href="./stylesheets/components/canvas.css" />
+		<link rel="stylesheet" type="text/css" href="./stylesheets/components/results.css" />
+		<link rel="stylesheet" type="text/css" href="./stylesheets/components/drawingTools.css" />
+		<link rel="stylesheet" type="text/css" href="./stylesheets/components/drawingToolsDisabled.css" />
+		<link rel="stylesheet" type="text/css" href="./stylesheets/components/chatlog.css" />
+		<link rel="stylesheet" type="text/css" href="./stylesheets/components/newmessage.css" />
+
+		<!-- Third Party Javascripts -->
+		<script type="text/javascript" src="./javascripts/thirdparty/canvas-free-drawing.js"></script>
+		<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.dev.js" integrity="sha256-i2Orhi397HWPn93rsCUTW8HBoso65vY/VNTllm9Kuqo=" crossorigin="anonymous"></script>
+		<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script> -->
+
+		<!-- Javascripts -->
+		<script type="text/javascript" src="./javascripts/components/cursor.js"></script>
+		<script type="text/javascript" src="./javascripts/components/credits.js"></script>
+		<script type="text/javascript" src="./javascripts/components/userform.js"></script>
+		<script type="text/javascript" src="./javascripts/components/roomlist.js"></script>
+		<script type="text/javascript" src="./javascripts/components/header.js"></script>
+		<script type="text/javascript" src="./javascripts/components/userlist.js"></script>
+		<script type="text/javascript" src="./javascripts/components/lobby.js"></script>
+		<script type="text/javascript" src="./javascripts/components/canvas.js"></script>
+		<script type="text/javascript" src="./javascripts/components/results.js"></script>
+		<script type="text/javascript" src="./javascripts/components/drawingTools.js"></script>
+		<script type="text/javascript" src="./javascripts/components/drawingToolsDisabled.js"></script>
+		<script type="text/javascript" src="./javascripts/components/chatlog.js"></script>
+		<script type="text/javascript" src="./javascripts/components/newmessage.js"></script>
+		<script type="text/javascript" src="./javascripts/jscript.js"></script>
+		<!-- <script type="text/javascript" src="./javascripts/drawing.js"></script> -->
+
+		<!-- Favicons -->
+		<!-- <link rel="apple-touch-icon" href="./images/favicon_mobile.png"> -->
+		<!-- <link rel="shortcut icon" type="image/x-icon"  href="./images/favicon.png"> -->
+
+		<!-- Meta Tags For Mobile Compability -->
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="theme-color" content="#DA7604">
+
+		<!-- Other Meta -->
+
 	</head>
 
 	<body>
-		<a id="credits" href="./credits.html" target="_blank">credits</a>
-		<div id="userconfig" class="ui pregame">
-			<div id="welcome_div">
-				<p id="welcome_p">Welcome to Artist.io!</p>
+
+		<canvas class="misc" id="cursor" width="120" height="120"></canvas>
+
+		<a class="misc" id="credits" href="./pages/credits.html" target="_blank">credits</a>
+
+		<!-- <div class="welcome" id="userform">
+			<div id="userform-header">
+				<p id="userform-header-text">Welcome to Artist.io!</p>
 			</div>
-			<input id="username" type="text" placeholder="Username" />
-			<input id="room" type="text" placeholder="Room Name" />
-			<select id="language">
-				<option value="German">German</option>
-				<option value="English">English</option>
+			<input id="userform-username" type="text" placeholder="Username" />
+			<input id="userform-room" type="text" placeholder="Room Name" />
+			<select id="userform-language">
+				<option id="userform-language-german" value="German">German</option>
+				<option id="userform-language-english" value="English">English</option>
 			</select>
-			<input id="join" type="button" value="Create Room!" disabled />
-		</div>
-		<div id="roomlist" class="ui pregame"> </div>
-		<div id="header" class="ui game">
-			<span id="roomname"></span>
-			<span id="roomgamestate"></span>
-			<span id="roomword"></span>
-			<span id="roomtimer"></span>
-			<span id="roomplayercount"></span>
+			<input id="userform-join" type="button" value="{} Room!" disabled />
 		</div>
 
-		<div id="lobby" class="ui game">
-			<div class="lobby_container">
-				<div class="lobby_header">
-					<span>Options</span>
+		<div class="welcome" id="roomlist">
+			<div class="roomlist-entry">
+				<div class="roomlist-entry-info name">
+					<span class="roomlist-entry-info-text">{}</span>
 				</div>
-				<div class="option_container first">
-					<span class="option_description">Maximum Playercount:</span>
-					<input class="option_input" id="lobby_maxplayers" type="text" value="5" />
+				<div class="roomlist-entry-info language">
+					<span class="roomlist-entry-info-text">{}</span>
 				</div>
-				<div class="option_container second">
-					<span class="option_description">Draw Time (Seconds):</span>
-					<input class="option_input" id="lobby_timer" type="text" value="60" />
+				<div class="roomlist-entry-info players">
+					<span class="roomlist-entry-info-text">{}</span>
 				</div>
-				<div class="option_container first">
-					<span class="option_description">Maximum Rounds:</span>
-					<input class="option_input" id="lobby_maxrounds" type="text" value="10" />
+				<div class="roomlist-entry-info slots">
+					<span class="roomlist-entry-info-text">{}</span>
 				</div>
-				<div class="option_container second">
-					<span class="option_description">Artist Score:</span>
-					<input class="option_input" id="lobby_artistscore" type="checkbox" checked />
+				<div class="roomlist-entry-info gamestate">
+					<span class="roomlist-entry-info-text">{}</span>
 				</div>
-				<div class="option_container first">
-					<span class="option_description">Show Hints:</span>
-					<input class="option_input" id="lobby_showhints" type="checkbox" checked />
+				<div class="roomlist-entry-info dicts">
+					<span class="roomlist-entry-info-text">{}</span>
 				</div>
 			</div>
-			<div class="lobby_container" id="lobby_dictionaries">
-				<div class="lobby_header">
-					<span>Dictionaries</span>
-				</div>
-			</div>
-			<input id="start_game" type="button" value="Start Game!" disabled />
+		</div> -->
+
+		<div class="in" id="header">
+			<span id="header-info">Room Name: {}</span>
+			<span id="header-info">{}</span>
+			<span id="header-info" style="white-space: pre;">Word: {}</span>
+			<span id="header-info">Time: {}</span>
+			<span id="header-info">Player: {}/{}</span>
 		</div>
 
-		<canvas id="game" class="ui postlobby"></canvas>
-		<script src="./drawing.js"></script>
-
-		<div id="chat" class="ui game">
-			<div id="chatlog"></div>
-			<input id="newmessage" type="text" placeholder="Type here.." />
-		</div>
-
-		<div id="drawingTools" class="ui game drawingTools">
-			<div id="colorsContainer"></div>
-			<div id="pencil" class="tools active">
-				<i class="fas fa-pencil-alt"></i>
-			</div>
-			<div id="eraser" class="tools">
-				<i class="fas fa-eraser"></i>
-			</div>
-			<div id="bucket" class="tools">
-				<i class="fas fa-fill-drip"></i>
-			</div>
-			<div id="undo" class="half tools first">
-				<i class="fas fa-undo-alt"></i>
-			</div>
-			<div id="redo" class="half tools second">
-				<i class="fas fa-redo-alt"></i>
-			</div>
-			<div id="clear" class="tools">
-				<i class="fas fa-trash"></i>
+		<div class="in" id="userlist">
+			<div class="userlist-entry">
+				<div class="userlist-entry-info status">
+					<span>
+						<i class="far fa-circle"></i>
+					</span>
+				</div>
+				<div class="userlist-entry-info username">
+					<span>{}</span>
+				</div>
+				<div class="userlist-entry-info score">
+					<span>{}</span>
+				</div>
 			</div>
 		</div>
-		<div id="drawingTools_disabled" class="ui drawingTools"></div>
 
-		<div id="userlist" class="ui game"> </div>
-		<div id="results" class="ui postgame">
-			<div id="results_title">
-				<span id="results_title_span">Time Up!</span>
+		<div class="pre" id="lobby">
+			<div class="lobby-container">
+				<div class="lobby-container-header">
+					<span class="lobby-container-header-text">Options</span>
+				</div>
+				<div class="lobby-container-options-container">
+					<span class="lobby-container-options-container-description">Max. Players:</span>
+					<input class="lobby-container-options-container-value" id="lobby-option-maxPlayers" type="text" value="{}">
+				</div>
+				<div class="lobby-container-options-container">
+					<span class="lobby-container-options-container-description">Draw Time:</span>
+					<input class="lobby-container-options-container-value" id="lobby-option-drawTime" type="text" value="{}">
+				</div>
+				<div class="lobby-container-options-container">
+					<span class="lobby-container-options-container-description">Max. Rounds:</span>
+					<input class="lobby-container-options-container-value" id="lobby-option-maxRounds" type="text" value="{}">
+				</div>
+				<div class="lobby-container-options-container">
+					<span class="lobby-container-options-container-description">Artist Score:</span>
+					<input class="lobby-container-options-container-value" id="lobby-option-artistScore" type="checkbox" {}>
+				</div>
+				<div class="lobby-container-options-container">
+					<span class="lobby-container-options-container-description">Show Hints:</span>
+					<input class="lobby-container-options-container-value" id="lobby-option-showHints" type="checkbox" {}>
+				</div>
 			</div>
-			<div id="results_nextround">
-				<span id="results_nextround_span">Next artist in 7 seconds..</span>
+			<div class="lobby-container">
+				<div class="lobby-container-header">
+					<span class="lobby-container-header-text">Dictionaries</span>
+				</div>
+				<div class="lobby-container-options-container">
+					<span class="lobby-container-options-container-description">{}</span>
+					<input class="lobby-container-options-container-value" id="lobby-option-dictionary-{}" type="checkbox">
+				</div>
 			</div>
-			<div id="results_word">
-				<span id="results_word_span">The word was: </span>
-			</div>
-			<div id="results_places">
-			</div>
-
+			<input id="lobby-start" type="button" value="Start Game!" {}>
 		</div>
 
-		<canvas id="cursorCanvas" width="120" height="120"></canvas>
+		<canvas class="in" id="canvas"></canvas>
+
+		<div class="post" id="results">
+			<span class="results-headers">{}</span>
+			<span class="results-headers">Next artist in {} {}..</span>
+			<span class="results-headers">The word was: <span id="results-word">{}</span></span>
+			<span class="results-headers">Scoreboard:</span>
+			<div id="results-players">
+				<div class="results-players-entry">
+					<span class="results-players-info place">{}</span>
+					<span class="results-players-info name">{}</span>
+					<span class="results-players-info score">{}</span>
+				</div>
+			</div>
+		</div>
+
+		<!-- <div class="in" id="drawingTools"></div> -->
+		<!-- <div class="in" id="drawingToolsDisabled"></div> -->
+		<!-- <div class="in" id="chatlog"></div> -->
+		<!-- <div class="in" id="newmessage"></div> -->
 
 	</body>
 
