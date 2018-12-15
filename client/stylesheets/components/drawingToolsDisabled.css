@@ -1,1 +1,9 @@
-div#drawingToolsDisabled {}
+div#drawingToolsDisabled {
+	position: absolute;
+	left: calc((100% / 2) - 388px);
+	top: 622px;
+	width: 776px;
+	height: 80px;
+	background-color: rgba(0, 0, 0, 0.7);
+	display: none;
+}

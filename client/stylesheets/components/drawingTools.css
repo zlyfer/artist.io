@@ -1,15 +1,30 @@
-div.drawingTools {
-	left: calc(5% + (29.6% / 2) + 0.7%);
-	top: calc(7.5% + 50px + 1.5% + 572px + 1.5%);
-	height: 80px;
+div#drawingTools {
 	width: 776px;
-	margin-bottom: 2.5%;
+	height: 80px;
+	background-color: var(--grey2);
+	float: left;
 }
 
-div#drawingTools div#colorsContainer {
+div#drawingTools div#drawingTools-colors-container {
 	width: 380px;
 	height: 100%;
 	float: left;
+}
+
+div#drawingTools div#drawingTools-colors-container div.color-source {
+	width: 20px;
+	height: 20px;
+	border-width: 0px;
+	cursor: pointer;
+	float: left;
+	background-color: red;
+}
+
+div#drawingTools div#drawingTools-colors-container div.colorSource:hover,
+div#drawingTools div#drawingTools-colors-container div.colorSource.active {
+	width: 14px;
+	height: 14px;
+	border: 3px solid var(--grey1);
 }
 
 div#drawingTools div.tools {
@@ -68,25 +83,11 @@ div#drawingTools div.tools.active, div#drawingTools div.tools:active {
 	color: var(--grey2);
 }
 
-.fa-pencil-alt, .fa-eraser, .fa-fill-drip, .fa-trash, .fa-undo-alt, .fa-redo-alt {
+div#drawingTools div.tools i.fa-pencil-alt,
+div#drawingTools div.tools i.fa-eraser,
+div#drawingTools div.tools i.fa-fill-drip,
+div#drawingTools div.tools i.fa-trash,
+div#drawingTools div.tools i.fa-undo-alt,
+div#drawingTools div.tools i.fa-redo-alt {
 	line-height: 70px;
-}
-
-div#drawingTools div#colorsContainer div.colorSource {
-	width: 20px;
-	height: 20px;
-	cursor: pointer;
-	float: left;
-	border-width: 0px;
-}
-
-div#drawingTools div#colorsContainer div.colorSource:hover, div#drawingTools div#colorsContainer div.colorSource.active {
-	width: 14px;
-	height: 14px;
-	border: 3px solid var(--grey1);
-}
-
-div#drawingTools_disabled {
-	background-color: rgba(0, 0, 0, 0.7);
-	display: none;
 }

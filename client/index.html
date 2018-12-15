@@ -48,7 +48,6 @@
 		<script type="text/javascript" src="./javascripts/components/chatlog.js"></script>
 		<script type="text/javascript" src="./javascripts/components/newmessage.js"></script>
 		<script type="text/javascript" src="./javascripts/jscript.js"></script>
-		<!-- <script type="text/javascript" src="./javascripts/drawing.js"></script> -->
 
 		<!-- Favicons -->
 		<!-- <link rel="apple-touch-icon" href="./images/favicon_mobile.png"> -->
@@ -64,11 +63,11 @@
 
 	<body>
 
-		<canvas class="misc" id="cursor" width="120" height="120"></canvas>
+		<canvas class="cursor" id="cursor" width="120" height="120"></canvas>
 
-		<a class="misc" id="credits" href="./pages/credits.html" target="_blank">credits</a>
+		<a class="welcome" id="credits" href="./pages/credits.html" target="_blank">credits</a>
 
-		<!-- <div class="welcome" id="userform">
+		<div class="welcome" id="userform">
 			<div id="userform-header">
 				<p id="userform-header-text">Welcome to Artist.io!</p>
 			</div>
@@ -102,7 +101,7 @@
 					<span class="roomlist-entry-info-text">{}</span>
 				</div>
 			</div>
-		</div> -->
+		</div>
 
 		<div class="in" id="header">
 			<span id="header-info">Room Name: {}</span>
@@ -182,10 +181,46 @@
 			</div>
 		</div>
 
-		<!-- <div class="in" id="drawingTools"></div> -->
-		<!-- <div class="in" id="drawingToolsDisabled"></div> -->
-		<!-- <div class="in" id="chatlog"></div> -->
-		<!-- <div class="in" id="newmessage"></div> -->
+		<div class="in" id="drawingTools">
+			<div id="drawingTools-colors-container">
+				<div id="{}" class="color-source"></div>
+			</div>
+
+			<div id="pencil" class="tools active">
+				<i class="fas fa-pencil-alt"></i>
+			</div>
+			<div id="eraser" class="tools">
+				<i class="fas fa-eraser"></i>
+			</div>
+			<div id="bucket" class="tools">
+				<i class="fas fa-fill-drip"></i>
+			</div>
+			<div id="undo" class="half tools first">
+				<i class="fas fa-undo-alt"></i>
+			</div>
+			<div id="redo" class="half tools second">
+				<i class="fas fa-redo-alt"></i>
+			</div>
+			<div id="clear" class="tools">
+				<i class="fas fa-trash"></i>
+			</div>
+		</div>
+
+		<div class="in" id="drawingToolsDisabled"></div>
+
+		<div class="in" id="chatlog">
+			<div class="chatlog-message">
+				<span class="chatlog-message-wrapper">
+					<span class="chatlog-message author">{}</span>
+					<span class="chatlog-message content">{}</span>
+				</span>
+			</div>
+		</div>
+
+		<div class="in" id="newmessage">
+			<input id="newmessage-text" type="text" />
+			<input id="newmessage-send" type="button" value="Send" />
+		</div>
 
 	</body>
 

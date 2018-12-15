@@ -21,6 +21,7 @@
 
 body {
 	background-color: var(--green2);
+	background-color: var(--grey2);
 	margin: 0;
 	padding: 0;
 }
@@ -52,10 +53,28 @@ input[type="button"]:not(:disabled):hover {
 	cursor: pointer;
 }
 
-input[type="button"]:not(:disabled):focus {
+input[type="button"]:not(:disabled):active {
 	background-color: var(--green7);
 }
 
 input[type="button"]:disabled {
 	background-color: var(--green2);
+}
+
+.misc {}
+
+.welcome {
+	/* display: none; */
+}
+
+.pre {
+	display: none;
+}
+
+.in {
+	display: none;
+}
+
+.post {
+	display: none;
 }

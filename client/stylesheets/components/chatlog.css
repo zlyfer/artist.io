@@ -1,2 +1,31 @@
 div#chatlog {
+	width: calc((100% / 2) - 388px);
+	min-height: calc(572px + 80px - 75px);
+	height: calc(100% - 125px);
+	background-color: var(--grey2);
+	overflow-y: auto;
+}
+
+div#chatlog div.chatlog-message {
+	width: 100%;
+	float: left;
+	word-break: break-all;
+	word-wrap: break-word;
+}
+
+div#chatlog div.chatlog-message span.chatlog-message {
+	line-height: 24px;
+	padding-left: 2px;
+	padding-right: 2px;
+	float: left;
+}
+
+div#chatlog div.chatlog-message span.chatlog-message-wrapper {}
+
+div#chatlog div.chatlog-message span.chatlog-message-wrapper span.chatlog-message.author {
+	width: calc(25% - 4px);
+}
+
+div#chatlog div.chatlog-message span.chatlog-message-wrapper span.chatlog-message.content {
+	width: calc(75% - 4px);
 }
