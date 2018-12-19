@@ -61,8 +61,11 @@ function main_socketio() {
 	socket.on('joinedRoom', room => {
 		$('.welcome').css('display', 'none');
 		$('.pre').css('display', 'block');
-		vue_header.room = room;
-	})
+		updateRoom(room);
+	});
+	socket.on('updateRoom', room => {
+		updateRoom(room);
+	});
 }
 
 function checkIfJoinable() {
@@ -71,4 +74,9 @@ function checkIfJoinable() {
 	} else {
 		$('#userform-join').prop('disabled', true);
 	}
+}
+
+function updateRoom(room) {
+	vue_header.room = room;
+	vue_userlist.userlist = room.playerList;
 }

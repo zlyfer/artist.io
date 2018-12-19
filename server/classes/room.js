@@ -5,10 +5,11 @@ var User = require('./user.js')
 class Room {
 	constructor(name, creator, language) {
 		this.name = name;
-		this.id = uuid(); // TODO: Make use of.
+		this.id = uuid();
 		this.creator = creator;
 		this.language = language;
 		this.players = {};
+		this.playerList = [];
 		this.gamestate = "Lobby";
 		this.chat = [];
 		this.dictionaries = {};
@@ -40,6 +41,13 @@ class Room {
 		};
 	}
 
+	genPlayerList() {
+		this.playerList = [];
+		for (let player of Object.keys(this.players)) {
+			this.playerList.push(this.players[player]);
+		}
+	}
+
 	addPlayer(user) {
 		if (user.id in this.players) {
 			console.log(errors["01"], `${user.id} => ${this.id}`);
@@ -48,6 +56,7 @@ class Room {
 			user.room = this.id;
 			this.players[user.id] = user;
 			this.slots.used++;
+			this.genPlayerList();
 			return [false];
 		} else {
 			console.log(errors["02"], `${user.id} => ${this.id}`);
@@ -57,6 +66,7 @@ class Room {
 	removePlayer(user) {
 		delete this.players[user.id];
 		this.slots.used--;
+		this.genPlayerList();
 	}
 }
 module.exports = Room;

@@ -1,4 +1,3 @@
-var colorPalette = require('../../config/colorPalette.json')["colorPalette"];
 var errors = require('../../config/errors.json');
 class User {
 	constructor(id) {
@@ -6,10 +5,7 @@ class User {
 		this.name = "Unnamed";
 		this.score = 0;
 		this.room = null;
-		this.color = this.genColor();
-	}
-	genColor() {
-		return colorPalette[colorPalette.length * Math.random() << 0];
+		this.color = Math.floor(Math.random() * 315);
 	}
 	changeName(username) {
 		let oldname = this.name

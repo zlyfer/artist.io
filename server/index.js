@@ -18,7 +18,6 @@ var server = http.createServer();
 var schedule = require('node-schedule');
 var io = require('socket.io')(server);
 var dictionaries = require('../config/dictionaries.json')["dictionaries"];
-var colorPalette = require('../config/colorPalette.json')["colorPalette"];
 var errors = require('../config/errors.json');
 var User = require('./classes/user.js')
 var Room = require('./classes/room.js')
@@ -26,7 +25,7 @@ var rooms = {};
 var users = {};
 
 io.on('connection', socket => {
-	newConnection(socket.id);
+	newConnection(socket);
 	sendRoomlistSingle(socket);
 	// socket.on('', () => ());
 	socket.on('checkJoinOrCreate', checkJoinOrCreate);
@@ -34,15 +33,15 @@ io.on('connection', socket => {
 	socket.on('disconnect', removeUser);
 });
 
-function newConnection(id) {
-	let user = new User(id);
+function newConnection(socket) {
+	let user = new User(socket.id);
 	users[user.id] = user;
+	socket.emit('getUserColor', user.color);
 }
 
 function sendRoomlistSingle(socket) {
 	let user = users[socket.id];
 	socket.emit('getRoomlist', rooms);
-	console.log(`Roomlist sent to ${user.id}.`);
 }
 
 function sendRoomlistAll() {
@@ -109,4 +108,6 @@ function deleteRoom(room) {
 	delete rooms[room.id];
 }
 
-server.listen(3000);
+server.listen(3000, function() {
+	console.log("Server started.");
+});

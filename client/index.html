@@ -71,12 +71,13 @@
 			<div id="userform-header">
 				<p id="userform-header-text">Welcome to Artist.io!</p>
 			</div>
-			<input id="userform-username" type="text" placeholder="Username" />
+			<input id="userform-username" type="text" placeholder="Username" :value=`${username}` />
 			<input id="userform-roomname" type="text" placeholder="Room Name" />
 			<select id="userform-language">
 				<option id="userform-language-german" value="German">German</option>
 				<option id="userform-language-english" value="English">English</option>
 			</select>
+			<input id="userform-color" type="range" :value=`${userColor}` min="0" max="315" />
 			<input id="userform-join" type="button" :value=`${joinOrCreate}` disabled />
 		</div>
 
@@ -89,7 +90,7 @@
 					<span class="roomlist-entry-info-text">{{roomentry.language}}</span>
 				</div>
 				<div class="roomlist-entry-info players">
-					<span class="roomlist-entry-info-text"><span v-for="(player) in roomentry.players">{{player.name}} </span></span>
+					<span class="roomlist-entry-info-text"><span v-for="player in roomentry.players">{{player.name}} </span></span>
 				</div>
 				<div class="roomlist-entry-info slots">
 					<span class="roomlist-entry-info-text">{{roomentry.slots.used}}/{{roomentry.slots.available}}</span>
@@ -112,17 +113,17 @@
 		</div>
 
 		<div class="pre in" id="userlist">
-			<div class="userlist-entry">
+			<div class="userlist-entry" v-for="user in userlist" :style=`background-color:var(--${user.color.bg}${user.color.fg});`>
 				<div class="userlist-entry-info status">
 					<span>
 						<i class="far fa-circle"></i>
 					</span>
 				</div>
 				<div class="userlist-entry-info username">
-					<span>{}</span>
+					<span>{{user.name}}</span>
 				</div>
 				<div class="userlist-entry-info score">
-					<span>{}</span>
+					<span>{{user.score}}</span>
 				</div>
 			</div>
 		</div>
