@@ -23,6 +23,7 @@ div#roomlist div.roomlist-entry div.roomlist-entry-info {
 	width: calc(100% / 6 - 1px);
 	height: 100%;
 	float: left;
+	overflow-x: auto;
 }
 
 div#roomlist div.roomlist-entry div.roomlist-entry-info:not(:nth-child(1)) {
@@ -34,10 +35,10 @@ div#roomlist div.roomlist-entry span.roomlist-entry-info-text {
 	height: 100%;
 	padding-left: 1%;
 	color: var(--green7);
-	text-overflow: ellipsis;
 	display: inline-block;
-	white-space: nowrap;
 	text-align: center;
 	line-height: 30px;
-	overflow: hidden;
+	/* text-overflow: ellipsis; */
+	/* white-space: nowrap; */
+	/* overflow: hidden; */
 }

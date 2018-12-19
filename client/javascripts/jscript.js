@@ -13,7 +13,7 @@ var
 	vue_chatlog,
 	vue_newmessage;
 
-window.onload = function() {
+$(document).ready(function() {
 	main_vue();
 	main_socketio();
 
@@ -30,9 +30,19 @@ window.onload = function() {
 	main_drawingToolsDisabled();
 	main_chatlog();
 	main_newmessage();
-}
+});
 
-function main_vue() {}
+function main_vue() {
+	// vue_header = new Vue({
+	// 	el: '#id',
+	// 	data: {
+	//
+	// 	},
+	// 	methods: {
+	//
+	// 	}
+	// });
+}
 
 function main_socketio() {
 	// NOT TESTING:
@@ -42,6 +52,23 @@ function main_socketio() {
 	// END
 
 	// TESTING:
-	// socket = io('http://localhost:3000');
+	socket = io('http://localhost:3000');
 	// END
+
+	socket.on('displayError', error => {
+		console.log(error);
+	});
+	socket.on('joinedRoom', room => {
+		$('.welcome').css('display', 'none');
+		$('.pre').css('display', 'block');
+		vue_header.room = room;
+	})
+}
+
+function checkIfJoinable() {
+	if ($('#userform-username').val() != "" && $('#userform-roomname').val() != "") {
+		$('#userform-join').prop('disabled', false);
+	} else {
+		$('#userform-join').prop('disabled', true);
+	}
 }

@@ -25,4 +25,5 @@ div#newmessage input#newmessage-send {
 	border-top-left-radius: 0;
 	border-bottom-left-radius: 0;
 	border-left: none;
+	font-size: 1em;
 }

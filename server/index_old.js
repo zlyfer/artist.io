@@ -8,23 +8,6 @@
 // TODO: REFRACTOR.
 // TODO: Cookies? (name, color, language, custom word list)
 
-// NOT TESTING:
-// var fs = require('fs');
-// var https = require('https');
-// var options = {
-// 	key: fs.readFileSync('/etc/letsencrypt/live/zlyfer.net/privkey.pem'),
-// 	cert: fs.readFileSync('/etc/letsencrypt/live/zlyfer.net/cert.pem'),
-// 	ca: fs.readFileSync('/etc/letsencrypt/live/zlyfer.net/chain.pem'),
-// 	rejectUnauthorized: false
-// }
-// var server = https.createServer(options);
-// END
-
-// TESTING:
-var http = require('http');
-var server = http.createServer();
-// END
-
 var schedule = require('node-schedule');
 var io = require('socket.io')(server);
 var {
@@ -258,8 +241,6 @@ function roomNextRound(room) {
 		}
 	});
 }
-
-server.listen(3000);
 
 function checkRoundEnd(roomname) {
 	if (

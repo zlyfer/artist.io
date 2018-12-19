@@ -72,46 +72,46 @@
 				<p id="userform-header-text">Welcome to Artist.io!</p>
 			</div>
 			<input id="userform-username" type="text" placeholder="Username" />
-			<input id="userform-room" type="text" placeholder="Room Name" />
+			<input id="userform-roomname" type="text" placeholder="Room Name" />
 			<select id="userform-language">
 				<option id="userform-language-german" value="German">German</option>
 				<option id="userform-language-english" value="English">English</option>
 			</select>
-			<input id="userform-join" type="button" value="{} Room!" disabled />
+			<input id="userform-join" type="button" :value=`${joinOrCreate}` disabled />
 		</div>
 
 		<div class="welcome" id="roomlist">
-			<div class="roomlist-entry">
+			<div class="roomlist-entry" :id=`${roomentry.id}` v-for="roomentry in roomlist" v-on:click="select(`${roomentry.id}`)">
 				<div class="roomlist-entry-info name">
-					<span class="roomlist-entry-info-text">{}</span>
+					<span class="roomlist-entry-info-text">{{roomentry.name}}</span>
 				</div>
 				<div class="roomlist-entry-info language">
-					<span class="roomlist-entry-info-text">{}</span>
+					<span class="roomlist-entry-info-text">{{roomentry.language}}</span>
 				</div>
 				<div class="roomlist-entry-info players">
-					<span class="roomlist-entry-info-text">{}</span>
+					<span class="roomlist-entry-info-text"><span v-for="(player) in roomentry.players">{{player.name}} </span></span>
 				</div>
 				<div class="roomlist-entry-info slots">
-					<span class="roomlist-entry-info-text">{}</span>
+					<span class="roomlist-entry-info-text">{{roomentry.slots.used}}/{{roomentry.slots.available}}</span>
 				</div>
 				<div class="roomlist-entry-info gamestate">
-					<span class="roomlist-entry-info-text">{}</span>
+					<span class="roomlist-entry-info-text">{{roomentry.gamestate}}</span>
 				</div>
-				<div class="roomlist-entry-info dicts">
-					<span class="roomlist-entry-info-text">{}</span>
+				<div class="roomlist-entry-info dictionaries">
+					<span class="roomlist-entry-info-text">{{roomentry.dictionaries}}</span>
 				</div>
 			</div>
 		</div>
 
-		<div class="in" id="header">
-			<span id="header-info">Room Name: {}</span>
-			<span id="header-info">{}</span>
-			<span id="header-info" style="white-space: pre;">Word: {}</span>
-			<span id="header-info">Time: {}</span>
-			<span id="header-info">Player: {}/{}</span>
+		<div class="pre in" id="header">
+			<span id="header-info">Room: {{room.name}}</span>
+			<span id="header-info">{{room.gamestate}}</span>
+			<span id="header-info" style="white-space: pre;">Word: {{room.word.word}}</span>
+			<span id="header-info">Time: {{room.time.left}}</span>
+			<span id="header-info">Players: {{room.slots.used}}/{{room.slots.available}}</span>
 		</div>
 
-		<div class="in" id="userlist">
+		<div class="pre in" id="userlist">
 			<div class="userlist-entry">
 				<div class="userlist-entry-info status">
 					<span>
@@ -126,6 +126,8 @@
 				</div>
 			</div>
 		</div>
+
+		<canvas class="in" id="canvas"></canvas>
 
 		<div class="pre" id="lobby">
 			<div class="lobby-container">
@@ -165,8 +167,6 @@
 			<input id="lobby-start" type="button" value="Start Game!" {}>
 		</div>
 
-		<canvas class="in" id="canvas"></canvas>
-
 		<div class="post" id="results">
 			<span class="results-headers">{}</span>
 			<span class="results-headers">Next artist in {} {}..</span>
@@ -181,7 +181,7 @@
 			</div>
 		</div>
 
-		<div class="in" id="drawingTools">
+		<div class="pre in" id="drawingTools">
 			<div id="drawingTools-colors-container">
 				<div id="{}" class="color-source"></div>
 			</div>
@@ -206,9 +206,9 @@
 			</div>
 		</div>
 
-		<div class="in" id="drawingToolsDisabled"></div>
+		<div class="pre in" id="drawingToolsDisabled"></div>
 
-		<div class="in" id="chatlog">
+		<div class="pre in" id="chatlog">
 			<div class="chatlog-message">
 				<span class="chatlog-message-wrapper">
 					<span class="chatlog-message author">{}</span>
@@ -217,7 +217,7 @@
 			</div>
 		</div>
 
-		<div class="in" id="newmessage">
+		<div class="pre in" id="newmessage">
 			<input id="newmessage-text" type="text" />
 			<input id="newmessage-send" type="button" value="Send" />
 		</div>
