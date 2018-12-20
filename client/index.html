@@ -70,14 +70,15 @@
 		<div class="welcome" id="userform">
 			<div id="userform-header">
 				<p id="userform-header-text">Welcome to Artist.io!</p>
+				<p id="userform-online-text">Online: {{onlinePlayers}}</p>
 			</div>
 			<input id="userform-username" type="text" placeholder="Username" :value=`${username}` />
+			<input id="userform-color" type="range" :value=`${userColor}` min="0" max="315" />
 			<input id="userform-roomname" type="text" placeholder="Room Name" />
 			<select id="userform-language">
 				<option id="userform-language-german" value="German">German</option>
 				<option id="userform-language-english" value="English">English</option>
 			</select>
-			<input id="userform-color" type="range" :value=`${userColor}` min="0" max="315" />
 			<input id="userform-join" type="button" :value=`${joinOrCreate}` disabled />
 		</div>
 
@@ -113,7 +114,7 @@
 		</div>
 
 		<div class="pre in" id="userlist">
-			<div class="userlist-entry" v-for="user in userlist" :style=`background-color:var(--${user.color.bg}${user.color.fg});`>
+			<div class="userlist-entry" :id=`${user.id}` v-for="user in userlist" :style=`background-color:hsl(${user.color},50%,45%);`>
 				<div class="userlist-entry-info status">
 					<span>
 						<i class="far fa-circle"></i>

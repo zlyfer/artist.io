@@ -37,6 +37,7 @@ function newConnection(socket) {
 	let user = new User(socket.id);
 	users[user.id] = user;
 	socket.emit('getUserColor', user.color);
+	sendOnlinePlayers();
 }
 
 function sendRoomlistSingle(socket) {
@@ -49,7 +50,7 @@ function sendRoomlistAll() {
 }
 
 function updateRoom(room) {
-	io.in(room.id).emit('updateRoom', room); // TODO: Make use of!
+	io.in(room.id).emit('updateRoom', room);
 };
 
 function checkJoinOrCreate(roomname) {
@@ -60,9 +61,14 @@ function checkJoinOrCreate(roomname) {
 	this.emit('checkJoinOrCreate', exists);
 }
 
-function renameAndJoin(username, roomname, language) {
+function sendOnlinePlayers() {
+	io.emit('getOnlinePlayers', Object.keys(users).length);
+}
+
+function renameAndJoin(username, usercolor, roomname, language) {
 	let user = users[this.id];
 	user.changeName(username);
+	user.changeColor(usercolor);
 	let room = roomExists(roomname);
 	let error = false;
 	if (room) {
@@ -100,12 +106,19 @@ function removeUser() {
 		if (Object.keys(room.players).length == 0) {
 			deleteRoom(room);
 		}
+		updateRoom(room);
 		sendRoomlistAll();
 	}
+	deleteUser(user);
+	sendOnlinePlayers();
 }
 
 function deleteRoom(room) {
 	delete rooms[room.id];
+}
+
+function deleteUser(user) {
+	delete users[user.id];
 }
 
 server.listen(3000, function() {

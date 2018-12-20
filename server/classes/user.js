@@ -8,8 +8,10 @@ class User {
 		this.color = Math.floor(Math.random() * 315);
 	}
 	changeName(username) {
-		let oldname = this.name
 		this.name = username;
+	}
+	changeColor(usercolor) {
+		this.color = usercolor;
 	}
 }
 module.exports = User;
