@@ -1,12 +1,12 @@
-// TODO: Fixed artist queue.
+// T0DO: Fixed artist queue.
 
-// TODO: Display score changes upon round end.
-// TODO: Add custom word list.
-// TODO: Add more options.
-// TODO: Make CSS more responsive.
-// TODO: Player can choose their color?
-// TODO: REFRACTOR.
-// TODO: Cookies? (name, color, language, custom word list)
+// T0DO: Display score changes upon round end.
+// T0DO: Add custom word list.
+// T0DO: Add more options.
+// T0DO: Make CSS more responsive.
+// T0DO: Player can choose their color?
+// T0DO: REFRACTOR.
+// T0DO: Cookies? (name, color, language, custom word list)
 
 var schedule = require('node-schedule');
 var io = require('socket.io')(server);
