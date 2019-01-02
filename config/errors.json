@@ -1,4 +1,5 @@
 {
 	"01": "User could not join the room. They are already part of it.",
-	"02": "User could not join the room. The room is full."
+	"02": "User could not join the room. The room is full.",
+	"11": "Could not change lobby settings. You are not the lobby owner."
 }

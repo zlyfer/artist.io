@@ -7,6 +7,7 @@
 		<!-- Third Party Stylesheets -->
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.css" integrity="sha256-gVCm5mRCmW9kVgsSjQ7/5TLtXqvfCoxhdsjE6O1QLm8=" crossorigin="anonymous" />
 
 		<!-- Stylesheets -->
 		<link rel="stylesheet" type="text/css" href="./stylesheets/colors.css" />
@@ -65,25 +66,26 @@
 
 		<canvas class="cursor" id="cursor" width="120" height="120"></canvas>
 
-		<a class="welcome" id="credits" href="./pages/credits.html" target="_blank">credits</a>
 
-		<div class="welcome" id="userform">
+		<div class="welcome animated slideInLeft" id="userform">
 			<div id="userform-header">
 				<p id="userform-header-text">Welcome to Artist.io!</p>
 				<p id="userform-online-text">Online: {{onlinePlayers}}</p>
 			</div>
-			<input id="userform-username" type="text" placeholder="Username" :value=`${username}` />
-			<input id="userform-color" type="range" :value=`${userColor}` min="0" max="315" />
+			<input id="userform-username" type="text" placeholder="Username" :value="username" />
+			<input id="userform-color" type="range" :value="userColor" min="0" max="315" />
 			<input id="userform-roomname" type="text" placeholder="Room Name" />
 			<select id="userform-language">
 				<option id="userform-language-german" value="German">German</option>
 				<option id="userform-language-english" value="English">English</option>
 			</select>
-			<input id="userform-join" type="button" :value=`${joinOrCreate}` disabled />
+			<input id="userform-join" type="button" :value="joinOrCreate" disabled />
 		</div>
 
-		<div class="welcome" id="roomlist">
-			<div class="roomlist-entry" :id=`${roomentry.id}` v-for="roomentry in roomlist" v-on:click="select(`${roomentry.id}`)">
+		<a class="welcome" id="credits" href="./pages/credits.html" target="_blank">credits</a>
+
+		<div class="welcome animated slideInRight" id="roomlist">
+			<div class="roomlist-entry" :id="roomentry.id" v-for="roomentry in roomlist" v-on:click="select(`${roomentry.id}`)">
 				<div class="roomlist-entry-info name">
 					<span class="roomlist-entry-info-text">{{roomentry.name}}</span>
 				</div>
@@ -94,27 +96,24 @@
 					<span class="roomlist-entry-info-text"><span v-for="player in roomentry.players">{{player.name}} </span></span>
 				</div>
 				<div class="roomlist-entry-info slots">
-					<span class="roomlist-entry-info-text">{{roomentry.slots.used}}/{{roomentry.slots.available}}</span>
+					<span class="roomlist-entry-info-text">{{roomentry.options.slots.current}}/{{roomentry.options.slots.value}}</span>
 				</div>
 				<div class="roomlist-entry-info gamestate">
 					<span class="roomlist-entry-info-text">{{roomentry.gamestate}}</span>
 				</div>
-				<div class="roomlist-entry-info dictionaries">
-					<span class="roomlist-entry-info-text">{{roomentry.dictionaries}}</span>
-				</div>
 			</div>
 		</div>
 
-		<div class="pre in" id="header">
-			<span id="header-info">Room: {{room.name}}</span>
-			<span id="header-info">{{room.gamestate}}</span>
-			<span id="header-info" style="white-space: pre;">Word: {{room.word.word}}</span>
-			<span id="header-info">Time: {{room.time.left}}</span>
-			<span id="header-info">Players: {{room.slots.used}}/{{room.slots.available}}</span>
+		<div class="pre in animated slideInDown" id="header">
+			<span id="header-info">Room: {{name}}</span>
+			<span id="header-info">{{gamestate}}</span>
+			<span id="header-info" style="white-space: pre;">Word: {{word}}</span>
+			<span id="header-info">Time: {{time}}</span>
+			<span id="header-info">Players: {{slots.current}}/{{slots.value}}</span>
 		</div>
 
-		<div class="pre in" id="userlist">
-			<div class="userlist-entry" :id=`${user.id}` v-for="user in userlist" :style=`background-color:hsl(${user.color},50%,45%);`>
+		<div class="pre in animated slideInLeft" id="userlist">
+			<div class="userlist-entry" :id="user.id" v-for="user in userlist" :style=`background-color:hsl(${user.color},50%,45%);`>
 				<div class="userlist-entry-info status">
 					<span>
 						<i class="far fa-circle"></i>
@@ -131,45 +130,31 @@
 
 		<canvas class="in" id="canvas"></canvas>
 
-		<div class="pre" id="lobby">
+		<div class="pre animated zoomIn" id="lobby">
 			<div class="lobby-container">
 				<div class="lobby-container-header">
 					<span class="lobby-container-header-text">Options</span>
 				</div>
-				<div class="lobby-container-options-container">
-					<span class="lobby-container-options-container-description">Max. Players:</span>
-					<input class="lobby-container-options-container-value" id="lobby-option-maxPlayers" type="text" value="{}">
-				</div>
-				<div class="lobby-container-options-container">
-					<span class="lobby-container-options-container-description">Draw Time:</span>
-					<input class="lobby-container-options-container-value" id="lobby-option-drawTime" type="text" value="{}">
-				</div>
-				<div class="lobby-container-options-container">
-					<span class="lobby-container-options-container-description">Max. Rounds:</span>
-					<input class="lobby-container-options-container-value" id="lobby-option-maxRounds" type="text" value="{}">
-				</div>
-				<div class="lobby-container-options-container">
-					<span class="lobby-container-options-container-description">Artist Score:</span>
-					<input class="lobby-container-options-container-value" id="lobby-option-artistScore" type="checkbox" {}>
-				</div>
-				<div class="lobby-container-options-container">
-					<span class="lobby-container-options-container-description">Show Hints:</span>
-					<input class="lobby-container-options-container-value" id="lobby-option-showHints" type="checkbox" {}>
+				<div class="lobby-container-options-container" v-for="option in options">
+					<span class="lobby-container-options-container-description">{{option.name}}</span>
+					<input v-if="option.type == 'number'" class="lobby-container-options-container-value" :id=`lobby-option-${option.id}` type="text" :disabled="!allowEdit" v-model="option.value" v-on:change="updateLobby" v-on:input="updateLobby">
+					<input v-if="option.type == 'toggle'" class="lobby-container-options-container-value" :id=`lobby-option-${option.id}` type="checkbox" :disabled="!allowEdit" v-model="option.value" v-on:change="updateLobby" v-on:input="updateLobby">
 				</div>
 			</div>
 			<div class="lobby-container">
 				<div class="lobby-container-header">
 					<span class="lobby-container-header-text">Dictionaries</span>
 				</div>
-				<div class="lobby-container-options-container">
-					<span class="lobby-container-options-container-description">{}</span>
-					<input class="lobby-container-options-container-value" id="lobby-option-dictionary-{}" type="checkbox">
+				<div class="lobby-container-options-container" v-for="dictionary in dictionaries">
+					<span class="lobby-container-options-container-description">{{dictionary.name}}</span>
+					<input class="lobby-container-options-container-value" :id=`lobby-option-dictionary-${dictionary.name}` type="checkbox" :disabled="!allowEdit" :checked="dictionary.activated" v-model="dictionary.activated" v-on:change="updateLobby">
 				</div>
 			</div>
-			<input id="lobby-start" type="button" value="Start Game!" {}>
+			<input id="lobby-start" type="button" value="Start Game!" :disabled="!allowEdit">
+			<!-- TODO: Fix disabled start button (gets enabled again if a owner leaves and someone becomes the new owner even if all dictionaries are disabled)-->
 		</div>
 
-		<div class="post" id="results">
+		<div class="post animate slideInDown" id="results">
 			<span class="results-headers">{}</span>
 			<span class="results-headers">Next artist in {} {}..</span>
 			<span class="results-headers">The word was: <span id="results-word">{}</span></span>
@@ -183,7 +168,7 @@
 			</div>
 		</div>
 
-		<div class="pre in" id="drawingTools">
+		<div class="pre in animated slideInUp" id="drawingTools">
 			<div id="drawingTools-colors-container">
 				<div id="{}" class="color-source"></div>
 			</div>
@@ -208,19 +193,19 @@
 			</div>
 		</div>
 
-		<div class="pre in" id="drawingToolsDisabled"></div>
+		<div class="pre in animated slideInUp" id="drawingToolsDisabled"></div>
 
-		<div class="pre in" id="chatlog">
-			<div class="chatlog-message">
+		<div class="pre in animated slideInRight" id="chatlog">
+			<div class="chatlog-message" v-for="message in chatlog">
 				<span class="chatlog-message-wrapper">
-					<span class="chatlog-message author">{}</span>
-					<span class="chatlog-message content">{}</span>
+					<span class="chatlog-message author" :style=`color:hsl(${message.authorcolor},50%,45%);`>{{message.author}}</span>
+					<span class="chatlog-message content" :style=`color:var(--msg-${message.type});`>{{message.content}}</span>
 				</span>
 			</div>
 		</div>
 
-		<div class="pre in" id="newmessage">
-			<input id="newmessage-text" type="text" />
+		<div class="pre in animated slideInRight" id="newmessage">
+			<input id="newmessage-text" type="text" placeholder="Send a message.." />
 			<input id="newmessage-send" type="button" value="Send" />
 		</div>
 

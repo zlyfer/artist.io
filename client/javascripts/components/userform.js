@@ -23,19 +23,26 @@ function main_userform() {
 		socket.emit('renameAndJoin', $('#userform-username').val(), $('#userform-color').val(), $('#userform-roomname').val(), $('#userform-language').val());
 	});
 
-	socket.on('checkJoinOrCreate', function(joinOrCreate) {
-		vue_userform.joinOrCreate = {
-			true: "Join Room",
-			false: "Create Room"
-		} [joinOrCreate];
-	});
 	socket.on('getUserColor', function(userColor) {
 		vue_userform.userColor = userColor;
 		$('#userform-color').css('--userColor', userColor);
 	});
 	socket.on('getOnlinePlayers', function(onlinePlayers) {
-		console.log(onlinePlayers);
 		vue_userform.onlinePlayers = onlinePlayers;
 	});
+	socket.on('checkJoinOrCreate', function(joinOrCreate) { // FIXME: username- and color gets resetted upon input of roomname.
+		if (joinOrCreate) {
+			vue_userform.joinOrCreate = "Join Room";
+		} else {
+			vue_userform.joinOrCreate = "Create Room";
+		}
+	});
+}
 
+function checkIfJoinable() {
+	if ($('#userform-username').val() != "" && $('#userform-roomname').val() != "") {
+		$('#userform-join').prop('disabled', false);
+	} else {
+		$('#userform-join').prop('disabled', true);
+	}
 }

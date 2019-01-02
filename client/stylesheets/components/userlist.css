@@ -38,6 +38,7 @@ div#userlist div.userlist-entry div.userlist-entry-info.status {
 
 div#userlist div.userlist-entry div.userlist-entry-info.username {
 	width: 55%;
+	font-weight: bold;
 }
 
 div#userlist div.userlist-entry div.userlist-entry-info.score {

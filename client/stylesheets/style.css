@@ -1,5 +1,10 @@
 :root {
 	--userColor: 0;
+	--msg-normal: var(--grey8);
+	--msg-guessed: var(--green7);
+	--msg-system: var(--purple7);
+	--msg-leave: var(--red7);
+	--msg-join: var(--orange7);
 }
 
 * {

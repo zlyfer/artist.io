@@ -65,11 +65,6 @@ div#userform input#userform-color::-webkit-slider-thumb {
 	appearance: none;
 }
 
-/*
-div#userform input#userform-color::-webkit-slider-thumb:hover,
-div#userform input#userform-color::-webkit-slider-thumb:active {
-	background: rgba(255, 255, 255, 0.7);
-} */
 div#userform input#userform-color::-moz-range-thumb {
 	height: 100%;
 	width: 15px;
@@ -78,9 +73,3 @@ div#userform input#userform-color::-moz-range-thumb {
 	border-radius: 4px;
 	border: none;
 }
-
-/*
-div#userform input#userform-color::-moz-range-thumb:hover,
-div#userform input#userform-color::-moz-range-thumb:active {
-	background: rgba(255, 255, 255, 0.7);
-} */

@@ -33,8 +33,8 @@ $(document).ready(function() {
 });
 
 function main_vue() {
-	// vue_header = new Vue({
-	// 	el: '#id',
+	// vue_ = new Vue({
+	// 	el: '#',
 	// 	data: {
 	//
 	// 	},
@@ -58,25 +58,25 @@ function main_socketio() {
 	socket.on('displayError', error => {
 		console.log(error);
 	});
-	socket.on('joinedRoom', room => {
-		$('.welcome').css('display', 'none');
-		$('.pre').css('display', 'block');
-		updateRoom(room);
+	socket.on('joinedRoom', () => {
+		$('#userform').removeClass('slideInLeft');
+		$('#roomlist').removeClass('slideInRight');
+		$('.welcome').addClass('zoomOut');
+		setTimeout(function() {
+			$('.welcome').css('display', 'none');
+			$('.pre').css('display', 'block');
+		}, 250);
 	});
-	socket.on('updateRoom', room => {
-		updateRoom(room);
+	socket.on('updateRoom', data => {
+		vue_header.name = data.header.name;
+		vue_header.gamestate = data.header.gamestate;
+		vue_header.word = data.header.word;
+		vue_header.time = data.header.time;
+		vue_header.slots.current = data.header.slots.current;
+		vue_header.slots.value = data.header.slots.value;
+		vue_userlist.userlist = data.userlist.players;
+		vue_lobby.options = data.lobby.options;
+		vue_lobby.dictionaries = data.lobby.dictionaries;
+		vue_lobby.allowEdit = data.lobby.allowEdit;
 	});
-}
-
-function checkIfJoinable() {
-	if ($('#userform-username').val() != "" && $('#userform-roomname').val() != "") {
-		$('#userform-join').prop('disabled', false);
-	} else {
-		$('#userform-join').prop('disabled', true);
-	}
-}
-
-function updateRoom(room) {
-	vue_header.room = room;
-	vue_userlist.userlist = room.playerList;
 }
