@@ -50,11 +50,10 @@ body {
 	background-color: var(--grey3);
 	margin: 0;
 	padding: 0;
-	background-image: url('../images/background.png');
-	/* TODO: Make 16:9 background image */
+	/* background-image: url('../images/background.png');
 	background-repeat: no-repeat;
-	background-size: contain;
-	background-position: center;
+	background-size: cover;
+	background-position: center; */
 }
 
 input, select {
