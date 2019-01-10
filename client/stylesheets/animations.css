@@ -1,0 +1,24 @@
+.slideInLeft,
+.slideOutLeft,
+.slideInRight,
+.slideOutRight,
+.slideInUp,
+.slideOutUp,
+.slideInDown,
+.slideOutDown {
+	animation-duration: 0.5s;
+}
+
+.zoomIn {
+	animation-duration: 0.5s;
+}
+
+.zoomInLeft,
+.zoomOutLeft {
+	animation-duration: 1s;
+}
+
+.pulse {
+	animation-duration: 2s;
+	animation-iteration-count: infinite;
+}

@@ -8,7 +8,8 @@ function main_header() {
 			time: 0,
 			slots: {
 				current: 0,
-				value: 0
+				value: 0,
+				spectators: 0
 			}
 		},
 		methods: {

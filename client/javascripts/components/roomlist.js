@@ -18,5 +18,6 @@ function main_roomlist() {
 
 	socket.on('getRoomlist', function(roomlist) {
 		vue_roomlist.roomlist = roomlist;
+		socket.emit('checkJoinOrCreate', $('#userform-roomname').val());
 	});
 }

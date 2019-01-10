@@ -1,36 +1,23 @@
 div#userform {
-	width: 25%;
+	width: 480px;
 	height: 100%;
 	background-color: var(--grey2);
 	float: left;
+	display: none;
+	overflow-y: auto;
 }
 
-div#userform div#userform-header {
+div#userform div#userform-logo {
 	width: 100%;
-	height: 80px;
+	height: 115px;
 	padding: 0;
-	background-color: var(--green8);
 	text-align: center;
+	background-image: url("../../images/banner.png");
+	background-size: 100% 115px;
+	margin-top: 20px;
 }
 
-div#userform div#userform-header p {
-	width: 100%;
-	color: var(--grey1);
-	text-align: center;
-}
-
-div#userform div#userform-header p#userform-header-text {
-	line-height: 18px;
-	font-size: 18px;
-	padding-top: 15px;
-}
-
-div#userform div#userform-header p#userform-online-text {
-	line-height: 15px;
-	font-size: 15px;
-}
-
-div#userform input, div#userform select {
+div#userform input, div#userform select#userform-language {
 	width: 85%;
 	height: 45px;
 	margin-top: 5px;
@@ -38,12 +25,21 @@ div#userform input, div#userform select {
 	font-size: 1.2em;
 }
 
+div#userform select#userform-language:disabled {
+	background-color: var(--grey12);
+}
+
 div#userform input#userform-username {
 	margin-top: 45px;
 }
 
-div#userform input#userform-join {
+div#userform input#userform-join,
+div#userform input#userform-spectate {
 	font-size: 1.5em;
+}
+
+div#userform input#userform-spectate {
+	margin-bottom: 25px;
 }
 
 div#userform input#userform-color {
@@ -72,4 +68,23 @@ div#userform input#userform-color::-moz-range-thumb {
 	box-shadow: inset 0 0 0 1px rgb(255, 255, 255);
 	border-radius: 4px;
 	border: none;
+}
+
+div#userform a#userform-credits,
+div#userform p#userform-online {
+	position: absolute;
+	color: var(--grey9);
+	padding: 0;
+	margin: 0;
+	width: 20%;
+	bottom: 0;
+}
+
+div#userform a#userform-credits {
+	left: 0;
+}
+
+div#userform p#userform-online {
+	right: 0;
+	text-align: right;
 }

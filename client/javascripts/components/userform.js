@@ -3,9 +3,9 @@ function main_userform() {
 		el: '#userform',
 		data: {
 			onlinePlayers: 0,
-			joinOrCreate: "Create Room",
 			username: "Unnamed",
-			userColor: 0
+			userColor: 0,
+			joinOrCreate: "Create Room"
 		}
 	});
 
@@ -14,6 +14,7 @@ function main_userform() {
 	});
 	$('#userform-roomname').on('input', function() {
 		checkIfJoinable();
+		$('.roomlist-entry').removeClass('selected');
 		socket.emit('checkJoinOrCreate', this.value);
 	});
 	$('#userform-color').on('input', function() {
@@ -21,6 +22,9 @@ function main_userform() {
 	})
 	$('#userform-join').on('click', function() {
 		socket.emit('renameAndJoin', $('#userform-username').val(), $('#userform-color').val(), $('#userform-roomname').val(), $('#userform-language').val());
+	});
+	$('#userform-spectate').on('click', function() {
+		socket.emit('renameAndSpectate', $('#userform-username').val(), $('#userform-color').val(), $('#userform-roomname').val(), $('#userform-language').val());
 	});
 
 	socket.on('getUserColor', function(userColor) {
@@ -30,11 +34,15 @@ function main_userform() {
 	socket.on('getOnlinePlayers', function(onlinePlayers) {
 		vue_userform.onlinePlayers = onlinePlayers;
 	});
-	socket.on('checkJoinOrCreate', function(joinOrCreate) { // FIXME: username- and color gets resetted upon input of roomname.
+	socket.on('checkJoinOrCreate', function(joinOrCreate) {
 		if (joinOrCreate) {
 			vue_userform.joinOrCreate = "Join Room";
+			$('#userform-spectate').prop('disabled', false);
+			$('#userform-language').prop('disabled', true);
 		} else {
 			vue_userform.joinOrCreate = "Create Room";
+			$('#userform-spectate').prop('disabled', true);
+			$('#userform-language').prop('disabled', false);
 		}
 	});
 }

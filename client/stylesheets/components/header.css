@@ -4,7 +4,7 @@ div#header {
 	background-color: var(--grey2);
 }
 
-div#header span#header-info {
+div#header span.header-info {
 	width: calc(20% - 20px);
 	height: calc(100% - 20px);
 	padding: 10px;
@@ -16,10 +16,10 @@ div#header span#header-info {
 	float: left;
 }
 
-div#header span#header-info:nth-child(1) {
+div#header span.header-info:nth-child(1) {
 	text-align: left;
 }
 
-div#header span#header-info:nth-child(5) {
+div#header span.header-info:nth-child(5) {
 	text-align: right;
 }

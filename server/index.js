@@ -25,11 +25,15 @@ var rooms = {};
 var users = {};
 
 io.on('connection', socket => {
+	socket.emit('connected');
 	newConnection(socket);
 	sendRoomlistSingle(socket);
 	// socket.on('', () => ());
 	socket.on('checkJoinOrCreate', checkJoinOrCreate);
 	socket.on('renameAndJoin', renameAndJoin);
+	socket.on('renameAndSpectate', (a, b, c, d) => {
+		renameAndJoin(a, b, c, d, true, socket);
+	});
 	socket.on('sendMessage', sendMessage);
 	socket.on('updateLobby', updateLobby);
 	socket.on('disconnect', removeUser);
@@ -64,6 +68,7 @@ function updateRoom(room) {
 	data.header.slots = {};
 	data.header.slots.current = room.options.slots.current;
 	data.header.slots.value = room.options.slots.value;
+	data.header.slots.spectators = room.options.slots.spectators;
 	data.userlist.players = room.getPlayerList();
 	data.lobby.options = room.options;
 	data.lobby.dictionaries = room.dictionaries;
@@ -86,33 +91,47 @@ function sendOnlinePlayers() {
 	io.emit('getOnlinePlayers', Object.keys(users).length);
 }
 
-function renameAndJoin(username, usercolor, roomname, language) {
-	let user = users[this.id];
+function renameAndJoin(username, usercolor, roomname, language, spec = false, socket = this) {
+	let user = users[socket.id];
 	user.changeName(username);
 	user.changeColor(usercolor);
+	if (spec) {
+		user.changeTitle('spectator');
+	} else {
+		user.changeTitle();
+	}
 	let room = roomExists(roomname);
 	let error = false;
 	if (room) {
-		error = room.addPlayer(user);
-	} else {
+		if (spec) {
+			error = room.addSpectator(user);
+		} else {
+			error = room.addPlayer(user);
+		}
+	} else if (spec == false) {
+		user.changeTitle('owner');
 		room = new Room(roomname, user, language);
 		rooms[room.id] = room;
 		error = room.addPlayer(user);
 	}
 	if (error[0]) {
-		this.emit('displayError', error[1]);
+		socket.emit('toast', error[1]);
 	} else {
-		this.join(room.id);
-		this.emit('joinedRoom');
+		socket.join(room.id);
+		socket.emit('joinedRoom');
 		updateRoom(room);
 		sendRoomlistAll();
-		newMessage(room, user, 'join', 'joined the lobby.');
+		if (spec) {
+			newMessage(room, user, 'join', 'is spectating now.');
+		} else {
+			newMessage(room, user, 'join', 'joined the room.');
+		}
 	}
 }
 
 function roomExists(roomname) {
 	let exists = false;
-	for (let id of Object.keys(rooms)) {
+	for (id of Object.keys(rooms)) {
 		if (rooms[id].name == roomname) {
 			exists = rooms[id];
 		}
@@ -124,15 +143,18 @@ function updateLobby(opts, dicts) {
 	let user = users[this.id];
 	let room = rooms[user.room];
 	if (user.id == room.owner.id) {
-		if (!jsonCompare(room.options, opts)) {
-			room.options = opts;
-		}
 		if (!jsonCompare(room.dictionaries, dicts)) {
 			room.dictionaries = dicts;
 		}
+		if (!jsonCompare(room.options, opts)) {
+			room.options = opts;
+			room.applyOptions();
+		}
+		sendRoomlistAll();
 		updateRoom(room);
 	} else {
-		this.emit('displayError', errors['11']);
+		this.emit('toast', errors['notowner']);
+		updateRoom(room);
 	}
 }
 
@@ -141,14 +163,26 @@ function removeUser() {
 	if (user.room) {
 		let room = rooms[user.room];
 		let ownerID = room.owner.id;
-		room.removePlayer(user);
-		newMessage(room, user, 'leave', 'left the lobby.');
-		if (user.id == ownerID && room.getPlayerList().length != 0) {
-			let newOwner = room.players[room.getPlayerList()[0].id]
-			newMessage(room, newOwner, 'system', 'is now the new lobby owner.');
-			room.owner = newOwner;
+		if (user.title == "spectator") {
+			room.removeSpectator(user);
+		} else {
+			room.removePlayer(user);
 		}
-		if (room.getPlayerList().length == 0) {
+		newMessage(room, user, 'leave', 'left the room.');
+		if (user.id == ownerID && Object.keys(room.players).length != 0) {
+			let newOwner = room.players[Object.keys(room.players)[0]];
+			newMessage(room, newOwner, 'system', 'is now the new room owner.');
+			room.owner = newOwner;
+			if (room.gamestate == "In Lobby") {
+				room.owner.changeTitle('owner');
+			}
+		}
+		if (Object.keys(room.players).length == 0) {
+			for (let spectator in room.spectators) {
+				let socket = io.sockets.connected[room.spectators[spectator].id];
+				socket.emit('closeRoom', errors['roomclosedspectator']);
+				user.room = null;
+			}
 			deleteRoom(room);
 		} else {
 			updateRoom(room);

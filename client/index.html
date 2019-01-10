@@ -8,12 +8,13 @@
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.css" integrity="sha256-gVCm5mRCmW9kVgsSjQ7/5TLtXqvfCoxhdsjE6O1QLm8=" crossorigin="anonymous" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" integrity="sha256-ENFZrbVzylNbgnXx0n3I1g//2WeO47XxoPe0vkp3NC8=" crossorigin="anonymous" />
 
 		<!-- Stylesheets -->
 		<link rel="stylesheet" type="text/css" href="./stylesheets/colors.css" />
 		<link rel="stylesheet" type="text/css" href="./stylesheets/style.css" />
+		<link rel="stylesheet" type="text/css" href="./stylesheets/animations.css" />
 		<link rel="stylesheet" type="text/css" href="./stylesheets/components/cursor.css" />
-		<link rel="stylesheet" type="text/css" href="./stylesheets/components/credits.css" />
 		<link rel="stylesheet" type="text/css" href="./stylesheets/components/userform.css" />
 		<link rel="stylesheet" type="text/css" href="./stylesheets/components/roomlist.css" />
 		<link rel="stylesheet" type="text/css" href="./stylesheets/components/header.css" />
@@ -27,16 +28,16 @@
 		<link rel="stylesheet" type="text/css" href="./stylesheets/components/newmessage.css" />
 
 		<!-- Third Party Javascripts -->
-		<script type="text/javascript" src="./javascripts/thirdparty/canvas-free-drawing.js"></script>
+		<script src="./javascripts/thirdparty/canvas-free-drawing.js" type="text/javascript"></script>
 		<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 		<!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.dev.js" integrity="sha256-i2Orhi397HWPn93rsCUTW8HBoso65vY/VNTllm9Kuqo=" crossorigin="anonymous"></script>
 		<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script> -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js" integrity="sha256-3blsJd4Hli/7wCQ+bmgXfOdK7p/ZUMtPXY08jmxSSgk=" crossorigin="anonymous"></script>
 
 		<!-- Javascripts -->
 		<script type="text/javascript" src="./javascripts/components/cursor.js"></script>
-		<script type="text/javascript" src="./javascripts/components/credits.js"></script>
 		<script type="text/javascript" src="./javascripts/components/userform.js"></script>
 		<script type="text/javascript" src="./javascripts/components/roomlist.js"></script>
 		<script type="text/javascript" src="./javascripts/components/header.js"></script>
@@ -51,8 +52,8 @@
 		<script type="text/javascript" src="./javascripts/jscript.js"></script>
 
 		<!-- Favicons -->
-		<!-- <link rel="apple-touch-icon" href="./images/favicon_mobile.png"> -->
-		<!-- <link rel="shortcut icon" type="image/x-icon"  href="./images/favicon.png"> -->
+		<link rel="apple-touch-icon" href="./images/logo_round.png">
+		<link rel="shortcut icon" type="image/x-icon" href="./images/logo.png">
 
 		<!-- Meta Tags For Mobile Compability -->
 		<meta name="apple-mobile-web-app-capable" content="yes">
@@ -64,28 +65,27 @@
 
 	<body>
 
+		<p class="animated pulse" id="connecting">Connecting..</p>
+
 		<canvas class="cursor" id="cursor" width="120" height="120"></canvas>
 
-
-		<div class="welcome animated slideInLeft" id="userform">
-			<div id="userform-header">
-				<p id="userform-header-text">Welcome to Artist.io!</p>
-				<p id="userform-online-text">Online: {{onlinePlayers}}</p>
-			</div>
-			<input id="userform-username" type="text" placeholder="Username" :value="username" />
-			<input id="userform-color" type="range" :value="userColor" min="0" max="315" />
+		<div class="welcome animated" id="userform">
+			<div id="userform-logo"></div>
+			<input id="userform-username" type="text" placeholder="Username" v-model="username" />
+			<input id="userform-color" type="range" v-model="userColor" min="0" max="315" />
 			<input id="userform-roomname" type="text" placeholder="Room Name" />
 			<select id="userform-language">
 				<option id="userform-language-german" value="German">German</option>
 				<option id="userform-language-english" value="English">English</option>
 			</select>
 			<input id="userform-join" type="button" :value="joinOrCreate" disabled />
+			<input id="userform-spectate" type="button" value="Spectate" disabled />
+			<a id="userform-credits" href="./pages/credits.html" target="_blank">credits</a>
+			<p id="userform-online">Online: {{onlinePlayers}}</p>
 		</div>
 
-		<a class="welcome" id="credits" href="./pages/credits.html" target="_blank">credits</a>
-
-		<div class="welcome animated slideInRight" id="roomlist">
-			<div class="roomlist-entry" :id="roomentry.id" v-for="roomentry in roomlist" v-on:click="select(`${roomentry.id}`)">
+		<div class="welcome animated" id="roomlist">
+			<div class="roomlist-entry animated fadeIn" :id="roomentry.id" v-for="roomentry in roomlist" v-on:click="select(`${roomentry.id}`)">
 				<div class="roomlist-entry-info name">
 					<span class="roomlist-entry-info-text">{{roomentry.name}}</span>
 				</div>
@@ -96,7 +96,7 @@
 					<span class="roomlist-entry-info-text"><span v-for="player in roomentry.players">{{player.name}} </span></span>
 				</div>
 				<div class="roomlist-entry-info slots">
-					<span class="roomlist-entry-info-text">{{roomentry.options.slots.current}}/{{roomentry.options.slots.value}}</span>
+					<span class="roomlist-entry-info-text">{{roomentry.options.slots.current}}/{{roomentry.options.slots.value}}<span v-if="roomentry.options.slots.spectators > 0">({{roomentry.options.slots.spectators}})</span></span>
 				</div>
 				<div class="roomlist-entry-info gamestate">
 					<span class="roomlist-entry-info-text">{{roomentry.gamestate}}</span>
@@ -105,18 +105,18 @@
 		</div>
 
 		<div class="pre in animated slideInDown" id="header">
-			<span id="header-info">Room: {{name}}</span>
-			<span id="header-info">{{gamestate}}</span>
-			<span id="header-info" style="white-space: pre;">Word: {{word}}</span>
-			<span id="header-info">Time: {{time}}</span>
-			<span id="header-info">Players: {{slots.current}}/{{slots.value}}</span>
+			<span class="header-info">Room: {{name}}</span>
+			<span class="header-info">{{gamestate}}</span>
+			<span class="header-info" style="white-space: pre;">Word: {{word}}</span>
+			<span class="header-info">Time: {{time}}</span>
+			<span class="header-info">Players: {{slots.current}}/{{slots.value}}<span v-if="slots.spectators > 0">({{slots.spectators}})</span></span>
 		</div>
 
 		<div class="pre in animated slideInLeft" id="userlist">
-			<div class="userlist-entry" :id="user.id" v-for="user in userlist" :style=`background-color:hsl(${user.color},50%,45%);`>
+			<div class="userlist-entry animated zoomInLeft" :id="user.id" v-for="user in userlist" :style=`background-color:hsl(${user.color},50%,45%);`>
 				<div class="userlist-entry-info status">
 					<span>
-						<i class="far fa-circle"></i>
+						<i class="fas" :class=`fa-${user.titleicon}`></i>
 					</span>
 				</div>
 				<div class="userlist-entry-info username">
@@ -137,8 +137,13 @@
 				</div>
 				<div class="lobby-container-options-container" v-for="option in options">
 					<span class="lobby-container-options-container-description">{{option.name}}</span>
-					<input v-if="option.type == 'number'" class="lobby-container-options-container-value" :id=`lobby-option-${option.id}` type="text" :disabled="!allowEdit" v-model="option.value" v-on:change="updateLobby" v-on:input="updateLobby">
-					<input v-if="option.type == 'toggle'" class="lobby-container-options-container-value" :id=`lobby-option-${option.id}` type="checkbox" :disabled="!allowEdit" v-model="option.value" v-on:change="updateLobby" v-on:input="updateLobby">
+					<input v-if="option.type == 'number' || option.type == 'text'" :id=`option-${option.id}` class="lobby-container-options-container-value" type="text" :disabled="!allowEdit || option.disabled" v-model="option.value" v-on:change="updateLobby($event)" v-on:input="updateLobby($event, false)" />
+					<select v-if="option.type == 'select'" :id=`option-${option.id}` class="lobby-container-options-container-value" :disabled="!allowEdit || option.disabled" v-model="option.value" v-on:change="updateLobby($event)">
+						<option v-for="selectable in option.list" :value="selectable">
+							{{selectable}}
+						</option>
+					</select>
+					<input v-if="option.type == 'toggle'" :id=`option-${option.id}` class="lobby-container-options-container-value" type="checkbox" :disabled="!allowEdit || option.disabled" v-model="option.value" v-on:change="updateLobby($event)" />
 				</div>
 			</div>
 			<div class="lobby-container">
@@ -147,11 +152,11 @@
 				</div>
 				<div class="lobby-container-options-container" v-for="dictionary in dictionaries">
 					<span class="lobby-container-options-container-description">{{dictionary.name}}</span>
-					<input class="lobby-container-options-container-value" :id=`lobby-option-dictionary-${dictionary.name}` type="checkbox" :disabled="!allowEdit" :checked="dictionary.activated" v-model="dictionary.activated" v-on:change="updateLobby">
+					<input class="lobby-container-options-container-value" :id=`lobby-option-dictionary-${dictionary.name}` type="checkbox" :disabled="!allowEdit" :checked="dictionary.activated" v-model="dictionary.activated" v-on:change="updateLobby($event)" />
 				</div>
 			</div>
-			<input id="lobby-start" type="button" value="Start Game!" :disabled="!allowEdit">
-			<!-- TODO: Fix disabled start button (gets enabled again if a owner leaves and someone becomes the new owner even if all dictionaries are disabled)-->
+			<input id="lobby-start" type="button" value="Start Game!" :disabled="!allowEdit" />
+			<!-- FIXME: Disabled start button (gets enabled again if a owner leaves and someone becomes the new owner even if all dictionaries are disabled)-->
 		</div>
 
 		<div class="post animate slideInDown" id="results">
@@ -172,7 +177,6 @@
 			<div id="drawingTools-colors-container">
 				<div id="{}" class="color-source"></div>
 			</div>
-
 			<div id="pencil" class="tools active">
 				<i class="fas fa-pencil-alt"></i>
 			</div>
@@ -196,7 +200,7 @@
 		<div class="pre in animated slideInUp" id="drawingToolsDisabled"></div>
 
 		<div class="pre in animated slideInRight" id="chatlog">
-			<div class="chatlog-message" v-for="message in chatlog">
+			<div class="chatlog-message animated fadeIn" v-for="message in chatlog">
 				<span class="chatlog-message-wrapper">
 					<span class="chatlog-message author" :style=`color:hsl(${message.authorcolor},50%,45%);`>{{message.author}}</span>
 					<span class="chatlog-message content" :style=`color:var(--msg-${message.type});`>{{message.content}}</span>

@@ -1,9 +1,10 @@
 div#roomlist {
-	width: calc(75% - 1px);
+	width: calc(100% - 1px - 480px);
 	height: 100%;
 	background-color: var(--grey2);
 	border-left: 1px solid var(--grey8);
 	float: left;
+	display: none;
 }
 
 div#roomlist div.roomlist-entry {

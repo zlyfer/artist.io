@@ -1,5 +1,34 @@
 {
-	"01": "User could not join the room. They are already part of it.",
-	"02": "User could not join the room. The room is full.",
-	"11": "Could not change lobby settings. You are not the lobby owner."
+	"success": {
+		"type": "success",
+		"content": "The operation was successful."
+	},
+	"alreadyjoined": {
+		"type": "warning",
+		"content": "You already joined this lobby."
+	},
+	"roomfull": {
+		"type": "error",
+		"content": "You cannot join this lobby. The lobby is full."
+	},
+	"notowner": {
+		"type": "warning",
+		"content": "You cannot change lobby settings. You are not the lobby owner."
+	},
+	"alreadyjoinedspectator": {
+		"type": "warning",
+		"content": "You are already spectator in this lobby."
+	},
+	"nospectator": {
+		"type": "error",
+		"content": "You cannot join this lobby as spectator. This lobby does not allow spectators to join."
+	},
+	"roomclosedspectator": {
+		"type": "warning",
+		"content": "The room was closed because no non-spectator were left."
+	},
+	"invalidsession": {
+		"type": "error",
+		"content": "Your sessions seems to be outdated. Sorry."
+	}
 }

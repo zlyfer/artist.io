@@ -24,8 +24,14 @@ div#userlist div.userlist-entry span {
 	text-overflow: ellipsis;
 }
 
-div#userlist div.userlist-entry div.userlist-entry-info span i.fa-circle {
+div#userlist div.userlist-entry div.userlist-entry-info span i.fas.fa-paint-brush,
+div#userlist div.userlist-entry div.userlist-entry-info span i.fas.fa-eye,
+div#userlist div.userlist-entry div.userlist-entry-info span i.fas.fa-question-circle,
+div#userlist div.userlist-entry div.userlist-entry-info span i.fas.fa-check-circle,
+div#userlist div.userlist-entry div.userlist-entry-info span i.fas.fa-crown,
+div#userlist div.userlist-entry div.userlist-entry-info span i.fas.fa-clock {
 	line-height: 30px;
+	font-size: 23px
 }
 
 div#userlist div.userlist-entry div.userlist-entry-info {

@@ -1,4 +1,5 @@
 :root {
+	--grey12: #EBEBEB;
 	--userColor: 0;
 	--msg-normal: var(--grey8);
 	--msg-guessed: var(--green7);
@@ -45,10 +46,15 @@
 }
 
 body {
-	background-color: var(--green2);
-	background-color: var(--grey2);
+	/* background-color: var(--green2); */
+	background-color: var(--grey3);
 	margin: 0;
 	padding: 0;
+	background-image: url('../images/background.png');
+	/* TODO: Make 16:9 background image */
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: center;
 }
 
 input, select {
@@ -102,4 +108,12 @@ input[type="button"]:disabled {
 
 .post {
 	display: none;
+}
+
+#connecting {
+	text-align: center;
+	line-height: 100vh;
+	font-size: 50px;
+	font-weight: bold;
+	color: var(--grey6);
 }
