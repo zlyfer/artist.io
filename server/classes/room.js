@@ -161,6 +161,7 @@ class Room {
 	}
 
 	removePlayer(user) {
+		user.room = null;
 		delete this.players[user.id];
 		this.options.slots.current--;
 	}
@@ -178,6 +179,7 @@ class Room {
 	}
 
 	removeSpectator(user) {
+		user.room = null;
 		delete this.spectators[user.id];
 		this.options.slots.spectators--;
 	}

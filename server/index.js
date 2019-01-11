@@ -160,8 +160,8 @@ function updateLobby(opts, dicts) {
 
 function removeUser() {
 	let user = users[this.id];
-	if (user.room) {
-		let room = rooms[user.room];
+	let room = rooms[user.room];
+	if (room) {
 		let ownerID = room.owner.id;
 		if (user.title == "spectator") {
 			room.removeSpectator(user);
