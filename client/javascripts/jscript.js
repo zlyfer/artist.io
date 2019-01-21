@@ -1,3 +1,6 @@
+// FIXME: When server restart and page not reloaded just 'soft' resetted, upon creating a room as previously not room-owner error message gets displayed: cannot change settings
+// TODO: Reset every component
+// TODO: add/remove classes of components and display/don't display them
 var
 	vue_cursor,
 	vue_userform,
@@ -11,6 +14,10 @@ var
 	vue_drawingToolsDisabled,
 	vue_chatlog,
 	vue_newmessage;
+
+var
+	drawingCanvas,
+	userlistTimeout;
 
 $(document).ready(function() {
 	main_vue();
@@ -67,14 +74,13 @@ function main_socketio() {
 		showWelcome();
 	});
 	socket.on('updateRoom', data => {
+		clearTimeout(userlistTimeout);
 		vue_header.name = data.header.name;
 		vue_header.gamestate = data.header.gamestate;
-		vue_header.word = data.header.word;
 		vue_header.time = data.header.time;
 		vue_header.slots.current = data.header.slots.current;
 		vue_header.slots.value = data.header.slots.value;
 		vue_header.slots.spectators = data.header.slots.spectators;
-		// START IDEA: Transition for userlist entry that leaves the room. Maybe find a better vue-native solution?
 		if (jsonCompare(data.userlist.players, vue_userlist.userlist) == false) {
 			for (let user of vue_userlist.userlist) {
 				if (JSON.stringify(data.userlist.players).includes(user.id) == false) {
@@ -83,14 +89,39 @@ function main_socketio() {
 				}
 			}
 		}
-		setTimeout(function() {
-			$('.userlist-entry').removeClass('zoomOutLeft');
-			vue_userlist.userlist = data.userlist.players;
-		}, 1000);
-		// END
 		vue_lobby.options = data.lobby.options;
 		vue_lobby.dictionaries = data.lobby.dictionaries;
-		vue_lobby.allowEdit = data.lobby.allowEdit;
+		userlistTimeout = setTimeout(function() {
+			$('.userlist-entry').removeClass('zoomOutLeft');
+			vue_userlist.userlist = data.userlist.players;
+			vue_lobby.checkStart();
+		}, 1000);
+	});
+	socket.on('artist', (artist) => {
+		if (artist) {
+			drawingCanvas.enableDrawingMode();
+			$('#drawingToolsDisabled').css('display', 'none');
+		} else {
+			drawingCanvas.disableDrawingMode();
+			$('#drawingToolsDisabled').css('display', 'block');
+		}
+	});
+	socket.on('startGame', () => {
+		$('#lobby').removeClass('zoomIn');
+		$('#lobby').addClass('slideOutRight');
+		$('#canvas').css('display', 'block');
+	});
+	socket.on('nextRound', () => {
+		// TODO: update everything
+	});
+	socket.on('endRound', (reason, scores) => {
+		// TODO: update everything
+	});
+	socket.on('endGame', (reason, scores) => {
+		// TODO: update everything
+	});
+	socket.on('resetGame', () => {
+		// TODO: update everything
 	});
 }
 
@@ -104,6 +135,8 @@ function showWelcome() {
 		$('.welcome').css('display', 'block');
 		$('.pre').css('display', 'none');
 	}, 500);
+	$('#canvas').css('display', 'none');
+	drawingCanvas.clear();
 }
 
 function showLobby() {
@@ -123,4 +156,12 @@ function jsonCompare(obj1, obj2) {
 	} else {
 		return false;
 	}
+}
+
+function getRGB(cssString) {
+	let rgb = cssString.replace('rgb(', '').replace(')', '').split(',');
+	rgb[0] = parseInt(rgb[0]);
+	rgb[1] = parseInt(rgb[1]);
+	rgb[2] = parseInt(rgb[2]);
+	return rgb;
 }

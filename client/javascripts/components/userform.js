@@ -26,10 +26,18 @@ function main_userform() {
 	$('#userform-spectate').on('click', function() {
 		socket.emit('renameAndSpectate', $('#userform-username').val(), $('#userform-color').val(), $('#userform-roomname').val(), $('#userform-language').val());
 	});
+	$('.userform-enter2continue').on('keypress', function(event) {
+		if (event.keyCode == 13) {
+			socket.emit('renameAndJoin', $('#userform-username').val(), $('#userform-color').val(), $('#userform-roomname').val(), $('#userform-language').val());
+		}
+	})
 
 	socket.on('getUserColor', function(userColor) {
 		vue_userform.userColor = userColor;
 		$('#userform-color').css('--userColor', userColor);
+	});
+	socket.on('getUsername', function(username) {
+		vue_userform.username = username;
 	});
 	socket.on('getOnlinePlayers', function(onlinePlayers) {
 		vue_userform.onlinePlayers = onlinePlayers;

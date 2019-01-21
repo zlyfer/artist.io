@@ -1,8 +1,9 @@
 div#drawingTools {
 	width: 776px;
-	height: 80px;
+	height: calc(80px - 1px);
 	background-color: var(--grey2);
 	float: left;
+	border-top: 1px solid var(--green7);
 }
 
 div#drawingTools div#drawingTools-colors-container {
@@ -17,11 +18,10 @@ div#drawingTools div#drawingTools-colors-container div.color-source {
 	border-width: 0px;
 	cursor: pointer;
 	float: left;
-	background-color: red;
 }
 
-div#drawingTools div#drawingTools-colors-container div.colorSource:hover,
-div#drawingTools div#drawingTools-colors-container div.colorSource.active {
+div#drawingTools div#drawingTools-colors-container div.color-source:hover,
+div#drawingTools div#drawingTools-colors-container div.color-source.active {
 	width: 14px;
 	height: 14px;
 	border: 3px solid var(--grey1);

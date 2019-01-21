@@ -30,5 +30,9 @@
 	"invalidsession": {
 		"type": "error",
 		"content": "Your sessions seems to be outdated. Sorry."
+	},
+	"notartist": {
+		"type": "warning",
+		"content": "You cannot draw on the canvas. You are currently not the artist."
 	}
 }

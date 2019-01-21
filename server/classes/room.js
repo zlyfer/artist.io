@@ -12,13 +12,25 @@ class Room {
 		this.spectators = {};
 		this.dictionaries = dictionaries[this.language];
 		this.chatlog = [];
-		this.word = '';
+		this.canvas = null;
 		this.gamestate = 'In Lobby';
+		this.customEnd = null;
+		this.toScore = {};
+		this.word = {
+			actual: '',
+			hidden: '',
+			revealed: [],
+			used: []
+		};
+		this.artist = {
+			actual: null,
+			used: []
+		}
 		this.options = {
 			roomName: {
 				id: 'roomName',
-				name: "Room Name",
-				type: "text",
+				name: 'Room Name',
+				type: 'text',
 				min: 1,
 				max: 16,
 				value: name,
@@ -27,8 +39,8 @@ class Room {
 			},
 			roomLang: {
 				id: 'roomLang',
-				name: "Room Language",
-				type: "select",
+				name: 'Room Language',
+				type: 'select',
 				list: Object.keys(dictionaries),
 				value: language,
 				dependencies: false,
@@ -37,9 +49,9 @@ class Room {
 			slots: {
 				id: 'slots',
 				name: 'Max. Players',
+				type: 'number',
 				min: 2,
 				max: 99,
-				type: 'number',
 				value: 10,
 				current: 0,
 				spectators: 0,
@@ -49,10 +61,10 @@ class Room {
 			drawTime: {
 				id: 'drawTime',
 				name: 'Draw Time',
+				type: 'number',
 				min: 30,
 				max: 900,
-				type: 'number',
-				value: 60,
+				value: 90,
 				current: 0,
 				dependencies: false,
 				disabled: false
@@ -60,11 +72,30 @@ class Room {
 			rounds: {
 				id: 'rounds',
 				name: 'Max. Rounds',
+				type: 'number',
 				min: 1,
 				max: 99,
-				type: 'number',
 				value: 10,
 				current: 0,
+				dependencies: false,
+				disabled: false
+			},
+			waitTime: {
+				id: 'waitTime',
+				name: 'Wait Time',
+				type: 'number',
+				min: 1,
+				max: 60,
+				value: 8,
+				current: 0,
+				dependencies: false,
+				disabled: false
+			},
+			multiWords: {
+				id: 'multiWords',
+				name: 'Allow Used Words',
+				type: 'toggle',
+				value: false,
 				dependencies: false,
 				disabled: false
 			},
@@ -82,6 +113,18 @@ class Room {
 				type: 'toggle',
 				value: true,
 				dependencies: false,
+				disabled: false
+			},
+			hintLevel: {
+				id: 'hintLevel',
+				name: 'Max. Word Reveal',
+				type: 'select',
+				list: ['25%', '50%', '75%'],
+				value: '50%',
+				dependencies: [{
+					name: 'showHints',
+					value: true
+				}],
 				disabled: false
 			},
 			allowSpectators: {
@@ -134,17 +177,134 @@ class Room {
 		return playerList;
 	}
 
-	// getDictionaryList() {
-	// 	let dictionaryList = [];
-	// 	for (let dictionary of Object.keys(this.dictionaries)) {
-	// 		dictionaryList.push(this.dictionaries[dictionary]);
-	// 	}
-	// 	return dictionaryList;
-	// }
+	startGame() {
+		return this.nextRound();
+	}
 
-	getHint() {
-		// TODO!
-		return this.word;
+	endRound() {
+		for (let player in this.players) {
+			if (this.toScore[player])
+				this.players[player].score += this.toScore[player];
+		}
+		this.options.drawTime.current = 0;
+		if (this.options.rounds.current >= this.options.rounds.value) {
+			return true;
+		}
+		return false;
+	}
+
+	nextRound() {
+		if (Object.keys(this.players).length <= 1) {
+			return false;
+		}
+		this.customEnd = null;
+		for (let player in this.players)
+			this.players[player].changeTitle('guesser');
+		this.pickWord();
+		this.pickArtist();
+		this.word.revealed = [];
+		this.options.rounds.current++;
+		this.gamestate = `In Game (${this.options.rounds.current}/${this.options.rounds.value})`;
+		return true;
+	}
+
+	endGame() {
+		this.endRound();
+		this.gamestate = 'End Game';
+		this.word.actual = '';
+		this.word.used = [];
+	}
+
+	resetGame() {
+		this.gamestate = 'In Lobby';
+	}
+
+	tick() {
+		this.options.drawTime.current++;
+		if (this.options.drawTime.current > this.options.drawTime.value || this.customEnd != null) {
+			return true;
+		}
+		this.genHidden();
+		return false;
+	}
+
+	pickArtist() {
+		let artistlist = Object.keys(this.players);
+		artistlist = artistlist.filter(player => this.artist.used.includes(player) == false);
+		let selartist = artistlist[Math.floor(Math.random() * artistlist.length)];
+		if (this.artist.used.length == Object.keys(this.players).length || selartist == undefined) {
+			this.artist.used = [];
+			this.pickArtist();
+			return;
+		}
+		this.artist.used.push(selartist);
+		this.artist.actual = selartist;
+		this.players[selartist].changeTitle('artist');
+	}
+
+	getWordList(filter) {
+		let wordlist = [];
+		for (let dict of this.dictionaries) {
+			if (dict.activated)
+				wordlist = wordlist.concat(dict.words);
+		}
+		if (filter)
+			wordlist = wordlist.filter(word => filter.includes(word) == false);
+		return wordlist;
+	}
+
+	pickWord() {
+		let wordlist = this.getWordList();
+		if (this.options.multiWords.value == false)
+			wordlist = this.getWordList(this.word.used);
+		let selword = wordlist[Math.floor(Math.random() * wordlist.length)];
+		if (this.word.used.length == this.getWordList().length || selword == undefined) {
+			this.word.used = [];
+			this.pickWord();
+			return;
+		}
+		this.word.used.push(selword);
+		this.word.actual = selword;
+	}
+
+	genHidden() {
+		// Fill this.word.revealed:
+		let hintlevel = 0;
+		if (this.options.showHints.value)
+			hintlevel = parseInt(this.options.hintLevel.value.substr(0, this.options.hintLevel.value.length - 1));
+		let wordprogress = (this.options.drawTime.current / (this.options.drawTime.value / 100));
+		let maxreveal = Math.ceil(hintlevel * (this.word.actual.length / 100));
+		// Thanks to: https://gist.github.com/AugustMiller/85b54d49493bb71ba81e
+		let toreveal = Math.ceil((wordprogress - 0) * (maxreveal - 0) / (100 - 0) + 0);
+		for (let i = 0; i < toreveal - this.word.revealed.length; i++) {
+			let nextreveal = 0;
+			do {
+				nextreveal = Math.floor(Math.random() * this.word.actual.length - 1);
+			} while (this.word.revealed.includes(nextreveal) || this.word.actual[nextreveal] == ' ')
+			this.word.revealed.push(nextreveal);
+		}
+		// Generate hint based on this.word.revealed:
+		this.word.hidden = '';
+		for (let i = 0; i < this.word.actual.length; i++) {
+			if (this.word.actual[i] === ' ') {
+				this.word.hidden += ' ';
+			} else {
+				if (this.word.revealed.includes(i)) {
+					this.word.hidden += this.word.actual[i];
+				} else {
+					this.word.hidden += '_';
+				}
+				if (i < this.word.actual.length - 1)
+					this.word.hidden += ' ';
+			}
+		}
+		return this.word.hidden;
+	}
+
+	solved(user) {
+		user.changeTitle('solver');
+		let score = 1; // TODO: Calculate score.
+		this.toScore[user.id] = score;
 	}
 
 	addPlayer(user) {
@@ -165,6 +325,7 @@ class Room {
 		delete this.players[user.id];
 		this.options.slots.current--;
 	}
+
 	addSpectator(user) {
 		if (user.id in this.spectators) {
 			return [true, errors['alreadyjoinedspectator']];

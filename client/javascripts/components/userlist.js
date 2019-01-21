@@ -8,11 +8,7 @@ function main_userlist() {
 			fixTextColor: function() {
 				$('.userlist-entry').each(function() {
 					// Get background-color
-					let bg = $(`#${this.id}`).css('background-color');
-					let rgb = bg.replace('rgb(', '').replace(')', '').split(',');
-					rgb[0] = parseInt(rgb[0]);
-					rgb[1] = parseInt(rgb[1]);
-					rgb[2] = parseInt(rgb[2]);
+					let rgb = getRGB($(`#${this.id}`).css('background-color'));
 					// Calculate luminescence
 					for (val in rgb) {
 						val /= 255;

@@ -71,10 +71,11 @@
 
 		<div class="welcome animated" id="userform">
 			<div id="userform-logo"></div>
-			<input id="userform-username" type="text" placeholder="Username" v-model="username" />
+			<input id="userform-username" class="userform-enter2continue" type="text" placeholder="Username" v-model="username" />
 			<input id="userform-color" type="range" v-model="userColor" min="0" max="315" />
-			<input id="userform-roomname" type="text" placeholder="Room Name" />
+			<input id="userform-roomname" class="userform-enter2continue" type="text" placeholder="Room Name" />
 			<select id="userform-language">
+				<!-- TODO: Auto generate -->
 				<option id="userform-language-german" value="German">German</option>
 				<option id="userform-language-english" value="English">English</option>
 			</select>
@@ -85,6 +86,7 @@
 		</div>
 
 		<div class="welcome animated" id="roomlist">
+			<!-- TODO: Make header for roomlist-entry to display which column has which information. -->
 			<div class="roomlist-entry animated fadeIn" :id="roomentry.id" v-for="roomentry in roomlist" v-on:click="select(`${roomentry.id}`)">
 				<div class="roomlist-entry-info name">
 					<span class="roomlist-entry-info-text">{{roomentry.name}}</span>
@@ -96,7 +98,7 @@
 					<span class="roomlist-entry-info-text"><span v-for="player in roomentry.players">{{player.name}} </span></span>
 				</div>
 				<div class="roomlist-entry-info slots">
-					<span class="roomlist-entry-info-text">{{roomentry.options.slots.current}}/{{roomentry.options.slots.value}}<span v-if="roomentry.options.slots.spectators > 0">({{roomentry.options.slots.spectators}})</span></span>
+					<span class="roomlist-entry-info-text">{{roomentry.options.slots.current}}/{{roomentry.options.slots.value}}<span v-if="roomentry.options.slots.spectators > 0"> ({{roomentry.options.slots.spectators}})</span></span>
 				</div>
 				<div class="roomlist-entry-info gamestate">
 					<span class="roomlist-entry-info-text">{{roomentry.gamestate}}</span>
@@ -105,11 +107,12 @@
 		</div>
 
 		<div class="pre in animated slideInDown" id="header">
-			<span class="header-info">Room: {{name}}</span>
-			<span class="header-info">{{gamestate}}</span>
-			<span class="header-info" style="white-space: pre;">Word: {{word}}</span>
-			<span class="header-info">Time: {{time}}</span>
-			<span class="header-info">Players: {{slots.current}}/{{slots.value}}<span v-if="slots.spectators > 0">({{slots.spectators}})</span></span>
+			<span>Room: {{name}}</span>
+			<span>{{gamestate}}</span>
+			<span id="header-word">Word: {{word}}</span>
+			<span>Time: {{time}}</span>
+			<span v-if="slots.spectators > 0">Players: {{slots.current}}/{{slots.value}} ({{slots.spectators}})</span>
+			<span v-else>Players: {{slots.current}}/{{slots.value}}</span>
 		</div>
 
 		<div class="pre in animated slideInLeft" id="userlist">
@@ -137,13 +140,13 @@
 				</div>
 				<div class="lobby-container-options-container" v-for="option in options">
 					<span class="lobby-container-options-container-description">{{option.name}}</span>
-					<input v-if="option.type == 'number' || option.type == 'text'" :id=`option-${option.id}` class="lobby-container-options-container-value" type="text" :disabled="!allowEdit || option.disabled" v-model="option.value" v-on:change="updateLobby($event)" v-on:input="updateLobby($event, false)" />
-					<select v-if="option.type == 'select'" :id=`option-${option.id}` class="lobby-container-options-container-value" :disabled="!allowEdit || option.disabled" v-model="option.value" v-on:change="updateLobby($event)">
+					<input v-if="option.type == 'number' || option.type == 'text'" :id=`option-${option.id}` class="lobby-container-options-container-value" type="text" :disabled="!allowEdit || option.disabled" v-model="option.value" v-on:change="updateLobby()" v-on:input="updateLobby(false)" />
+					<select v-if="option.type == 'select'" :id=`option-${option.id}` class="lobby-container-options-container-value" :disabled="!allowEdit || option.disabled" v-model="option.value" v-on:change="updateLobby()">
 						<option v-for="selectable in option.list" :value="selectable">
 							{{selectable}}
 						</option>
 					</select>
-					<input v-if="option.type == 'toggle'" :id=`option-${option.id}` class="lobby-container-options-container-value" type="checkbox" :disabled="!allowEdit || option.disabled" v-model="option.value" v-on:change="updateLobby($event)" />
+					<input v-if="option.type == 'toggle'" :id=`option-${option.id}` class="lobby-container-options-container-value" type="checkbox" :disabled="!allowEdit || option.disabled" v-model="option.value" v-on:change="updateLobby()" />
 				</div>
 			</div>
 			<div class="lobby-container">
@@ -152,11 +155,10 @@
 				</div>
 				<div class="lobby-container-options-container" v-for="dictionary in dictionaries">
 					<span class="lobby-container-options-container-description">{{dictionary.name}}</span>
-					<input class="lobby-container-options-container-value" :id=`lobby-option-dictionary-${dictionary.name}` type="checkbox" :disabled="!allowEdit" :checked="dictionary.activated" v-model="dictionary.activated" v-on:change="updateLobby($event)" />
+					<input class="lobby-container-options-container-value" :id=`lobby-option-dictionary-${dictionary.name}` type="checkbox" :disabled="!allowEdit" :checked="dictionary.activated" v-model="dictionary.activated" v-on:change="updateLobby()" />
 				</div>
 			</div>
 			<input id="lobby-start" type="button" value="Start Game!" :disabled="!allowEdit" />
-			<!-- FIXME: Disabled start button (gets enabled again if a owner leaves and someone becomes the new owner even if all dictionaries are disabled)-->
 		</div>
 
 		<div class="post animate slideInDown" id="results">
@@ -173,9 +175,9 @@
 			</div>
 		</div>
 
-		<div class="pre in animated slideInUp" id="drawingTools">
+		<div class="pre in animated zoomIn" id="drawingTools">
 			<div id="drawingTools-colors-container">
-				<div id="{}" class="color-source"></div>
+				<div v-for="color in colors" :id=`color-${color}` v-on:click="select(color)" v-on:mouseover="hover($event, color)" class="color-source" :style=`background-color:var(--${color})`></div>
 			</div>
 			<div id="pencil" class="tools active">
 				<i class="fas fa-pencil-alt"></i>
@@ -197,7 +199,8 @@
 			</div>
 		</div>
 
-		<div class="pre in animated slideInUp" id="drawingToolsDisabled"></div>
+		<div class="pre in animated fadeIn" id="drawingToolsDisabled"></div>
+		<div class="pre in animated zoomIn" id="fillSpace"></div>
 
 		<div class="pre in animated slideInRight" id="chatlog">
 			<div class="chatlog-message animated fadeIn" v-for="message in chatlog">

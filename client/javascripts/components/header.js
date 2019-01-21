@@ -11,9 +11,10 @@ function main_header() {
 				value: 0,
 				spectators: 0
 			}
-		},
-		methods: {
-
 		}
+	});
+
+	socket.on('word', (word) => {
+		vue_header.word = word;
 	});
 }

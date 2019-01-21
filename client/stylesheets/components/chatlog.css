@@ -1,8 +1,9 @@
 div#chatlog {
-	width: calc((100% / 2) - 388px);
+	width: calc((100% / 2) - 388px - 1px);
 	min-height: calc(572px + 80px - 75px);
 	height: calc(100% - 125px);
 	background-color: var(--grey2);
+	border-left: 1px solid var(--green7);
 	overflow-y: auto;
 }
 

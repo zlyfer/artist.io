@@ -2,8 +2,10 @@
 	--grey12: #EBEBEB;
 	--userColor: 0;
 	--msg-normal: var(--grey8);
-	--msg-guessed: var(--green7);
+	--msg-secret: var(--indigo7);
+	--msg-spectator: var(--cyan7);
 	--msg-system: var(--purple7);
+	--msg-guessed: var(--green7);
 	--msg-leave: var(--red7);
 	--msg-join: var(--orange7);
 }
@@ -50,10 +52,6 @@ body {
 	background-color: var(--grey3);
 	margin: 0;
 	padding: 0;
-	/* background-image: url('../images/background.png');
-	background-repeat: no-repeat;
-	background-size: cover;
-	background-position: center; */
 }
 
 input, select {
@@ -115,4 +113,17 @@ input[type="button"]:disabled {
 	font-size: 50px;
 	font-weight: bold;
 	color: var(--grey6);
+}
+
+#fillSpace {
+	position: absolute;
+	width: 776px;
+	height: calc(100% - 702px);
+	left: calc((100% / 2) - 388px);
+	top: 702px;
+	background-image: url('../images/background.png');
+	/* background-repeat: no-repeat; */
+	/* NOTE: no-repeat as long as banner.png is not repeatable. */
+	background-size: cover;
+	background-position: center;
 }

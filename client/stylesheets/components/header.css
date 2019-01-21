@@ -1,10 +1,11 @@
 div#header {
 	width: 100%;
-	height: 50px;
+	height: 49px;
 	background-color: var(--grey2);
+	border-bottom: 1px solid var(--green7);
 }
 
-div#header span.header-info {
+div#header span {
 	width: calc(20% - 20px);
 	height: calc(100% - 20px);
 	padding: 10px;
@@ -16,10 +17,14 @@ div#header span.header-info {
 	float: left;
 }
 
-div#header span.header-info:nth-child(1) {
+div#header span:nth-child(1) {
 	text-align: left;
 }
 
-div#header span.header-info:nth-child(5) {
+div#header span:nth-child(5) {
 	text-align: right;
+}
+
+div#header span#header-word {
+	white-space: pre;
 }

@@ -1,7 +1,8 @@
 div#userlist {
-	width: calc((100% / 2) - 388px);
+	width: calc((100% / 2) - 388px - 1px);
 	min-height: calc(572px + 80px);
 	height: calc(100% - 50px);
+	border-right: 1px solid var(--green7);
 	background-color: var(--grey2);
 	overflow-y: auto;
 	float: left;
