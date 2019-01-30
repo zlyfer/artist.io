@@ -11,8 +11,8 @@ function main_newmessage() {
 
 function sendMessage() {
 	let content = $('#newmessage-text').val();
-	if (content != "") {
+	if (content != '') {
 		socket.emit('sendMessage', content);
-		$('#newmessage-text').val("");
+		$('#newmessage-text').val('');
 	}
 }

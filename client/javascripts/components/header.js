@@ -2,9 +2,9 @@ function main_header() {
 	vue_header = new Vue({
 		el: '#header',
 		data: {
-			name: "",
-			gamestate: "",
-			word: "",
+			name: '',
+			gamestate: '',
+			word: '',
 			time: 0,
 			slots: {
 				current: 0,

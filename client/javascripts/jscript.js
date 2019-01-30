@@ -1,6 +1,7 @@
 // FIXME: When server restart and page not reloaded just 'soft' resetted, upon creating a room as previously not room-owner error message gets displayed: cannot change settings
 // TODO: Reset every component
 // TODO: add/remove classes of components and display/don't display them
+// FIXME: Cursor not updating, when click-dragging the mouse.
 var
 	vue_cursor,
 	vue_userform,
@@ -101,9 +102,12 @@ function main_socketio() {
 		if (artist) {
 			drawingCanvas.enableDrawingMode();
 			$('#drawingToolsDisabled').css('display', 'none');
+			changeCursor();
 		} else {
 			drawingCanvas.disableDrawingMode();
 			$('#drawingToolsDisabled').css('display', 'block');
+			drawingCanvas.tool = 'notartist';
+			changeCursor();
 		}
 	});
 	socket.on('startGame', () => {
@@ -164,4 +168,139 @@ function getRGB(cssString) {
 	rgb[1] = parseInt(rgb[1]);
 	rgb[2] = parseInt(rgb[2]);
 	return rgb;
+}
+
+function changeCursor(clear = true, context = $('#cursor')[0].getContext('2d')) {
+	let size = drawingCanvas.lineWidth;
+	let color = drawingCanvas.strokeColor;
+	if (clear)
+		context.clearRect(0, 0, 120, 120);
+	//drawingCanvas.tool = 'pencil'; // TODO: Keep this until not every cursor is implemented (see below)
+
+	switch (drawingCanvas.tool) {
+		case 'pencil':
+			context.beginPath();
+			context.lineWidth = 1;
+			context.strokeStyle = '#000000';
+			context.arc(60, 60, (size / 2) + 10, 0, 2 * Math.PI);
+			context.stroke();
+			context.closePath();
+
+			context.beginPath();
+			context.lineWidth = 5;
+			context.strokeStyle = `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
+			context.arc(60, 60, (size / 2) + 5, 0, 2 * Math.PI);
+			context.stroke();
+			context.closePath();
+
+			if (size > 9) {
+				context.beginPath();
+				context.lineWidth = 1;
+				context.strokeStyle = '#000000';
+				context.fillStyle = `rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.22)`;
+				context.arc(60, 60, (size / 2), 0, 2 * Math.PI);
+				context.fill();
+				context.stroke();
+				context.closePath();
+			}
+			break;
+		case 'eraser':
+			context.beginPath();
+			context.lineWidth = 1;
+			context.strokeStyle = '#000000';
+			context.fillStyle = `rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.22)`;
+			context.arc(60, 60, (size / 2), 0, 2 * Math.PI);
+			context.fill();
+			context.stroke();
+			context.closePath();
+			break;
+		case 'extractor':
+			context.beginPath();
+			context.lineWidth = 1;
+			context.strokeStyle = '#000000';
+			context.moveTo(60, 55);
+			context.lineTo(60, 65);
+			context.moveTo(55, 60);
+			context.lineTo(65, 60);
+			context.stroke();
+			context.closePath();
+
+			context.beginPath();
+			context.lineWidth = 5;
+			context.strokeStyle = `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
+			context.arc(60, 60, (20) + 5, 0, 2 * Math.PI);
+			context.stroke();
+			context.closePath();
+
+			context.beginPath();
+			context.lineWidth = 3;
+			context.strokeStyle = '#FFFFFF';
+			context.arc(60, 60, (22) + 5, 0, 2 * Math.PI);
+			context.stroke();
+			context.closePath();
+			break;
+		case 'bucket':
+			context.beginPath();
+			context.lineWidth = 1;
+			context.strokeStyle = '#FFFFFF';
+			context.moveTo(60, 55);
+			context.lineTo(60, 65);
+			context.moveTo(55, 60);
+			context.lineTo(65, 60);
+			context.stroke();
+			context.closePath();
+
+			context.beginPath();
+			context.lineWidth = 5
+			context.strokeStyle = '#000000';
+			context.arc(60, 60, (20) + 5, 0, 2 * Math.PI);
+			context.stroke();
+			context.closePath();
+
+			context.beginPath();
+			context.lineWidth = 3;
+			context.strokeStyle = `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
+			context.arc(60, 60, (22) + 5, 0, 2 * Math.PI);
+			context.stroke();
+			context.closePath();
+			break;
+		case 'zoom':
+			context.beginPath();
+			context.lineWidth = 1;
+			context.strokeStyle = '#000000';
+			context.rect(0, 0, 120, 120);
+			context.stroke();
+			context.closePath();
+			break;
+		case 'notartist':
+			context.beginPath();
+			context.lineWidth = 5;
+			context.strokeStyle = `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
+			context.arc(60, 60, (size / 2) + 10, 0, 2 * Math.PI);
+			context.stroke();
+			context.closePath();
+			break;
+	}
+	$('#canvas').css('cursor', `url(${$('#cursor')[0].toDataURL()}) 60 60, auto`);
+}
+
+// Thanks to: https://stackoverflow.com/a/17130415
+function getMousePos(canvas, evt) {
+	var rect = canvas.getBoundingClientRect();
+	return {
+		x: evt.clientX - rect.left,
+		y: evt.clientY - rect.top
+	};
+}
+
+function extractColor(pos) {
+	let pixel = $('#canvas')[0].getContext("2d").getImageData(pos.x, pos.y, 1, 1).data;
+	let rgb = [pixel[0], pixel[1], pixel[2]];
+	drawingCanvas.setStrokeColor(rgb);
+	drawingCanvas.configBucketTool({
+		color: rgb
+	});
+	drawingCanvas.lcolor = rgb;
+	$(`.color-source`).removeClass('active');
+	changeCursor();
 }

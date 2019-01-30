@@ -85,8 +85,10 @@ div#drawingTools div.tools.active, div#drawingTools div.tools:active {
 
 div#drawingTools div.tools i.fa-pencil-alt,
 div#drawingTools div.tools i.fa-eraser,
+div#drawingTools div.tools i.fa-eye-dropper,
 div#drawingTools div.tools i.fa-fill-drip,
 div#drawingTools div.tools i.fa-trash,
+div#drawingTools div.tools i.fa-search,
 div#drawingTools div.tools i.fa-undo-alt,
 div#drawingTools div.tools i.fa-redo-alt {
 	line-height: 70px;

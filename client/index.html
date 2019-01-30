@@ -179,19 +179,25 @@
 			<div id="drawingTools-colors-container">
 				<div v-for="color in colors" :id=`color-${color}` v-on:click="select(color)" v-on:mouseover="hover($event, color)" class="color-source" :style=`background-color:var(--${color})`></div>
 			</div>
-			<div id="pencil" class="tools active">
+			<div id="pencil" class="half first tools active">
 				<i class="fas fa-pencil-alt"></i>
 			</div>
-			<div id="eraser" class="tools">
+			<div id="eraser" class="half second tools">
 				<i class="fas fa-eraser"></i>
 			</div>
-			<div id="bucket" class="tools">
+			<div id="extractor" class="half first tools">
+				<i class="fas fa-eye-dropper"></i>
+			</div>
+			<div id="bucket" class="half second tools">
 				<i class="fas fa-fill-drip"></i>
 			</div>
-			<div id="undo" class="half tools first">
+			<div id="zoom" class="tools">
+				<i class="fas fa-search"></i>
+			</div>
+			<div id="undo" class="half first tools">
 				<i class="fas fa-undo-alt"></i>
 			</div>
-			<div id="redo" class="half tools second">
+			<div id="redo" class="half second tools">
 				<i class="fas fa-redo-alt"></i>
 			</div>
 			<div id="clear" class="tools">

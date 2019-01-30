@@ -3,9 +3,9 @@ function main_userform() {
 		el: '#userform',
 		data: {
 			onlinePlayers: 0,
-			username: "Unnamed",
+			username: 'Unnamed',
 			userColor: 0,
-			joinOrCreate: "Create Room"
+			joinOrCreate: 'Create Room'
 		}
 	});
 
@@ -44,11 +44,11 @@ function main_userform() {
 	});
 	socket.on('checkJoinOrCreate', function(joinOrCreate) {
 		if (joinOrCreate) {
-			vue_userform.joinOrCreate = "Join Room";
+			vue_userform.joinOrCreate = 'Join Room';
 			$('#userform-spectate').prop('disabled', false);
 			$('#userform-language').prop('disabled', true);
 		} else {
-			vue_userform.joinOrCreate = "Create Room";
+			vue_userform.joinOrCreate = 'Create Room';
 			$('#userform-spectate').prop('disabled', true);
 			$('#userform-language').prop('disabled', false);
 		}
@@ -56,7 +56,7 @@ function main_userform() {
 }
 
 function checkIfJoinable() {
-	if ($('#userform-username').val() != "" && $('#userform-roomname').val() != "") {
+	if ($('#userform-username').val() != '' && $('#userform-roomname').val() != '') {
 		$('#userform-join').prop('disabled', false);
 	} else {
 		$('#userform-join').prop('disabled', true);

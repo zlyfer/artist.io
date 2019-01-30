@@ -12,7 +12,7 @@ function main_lobby() {
 					for (opt in this.options) {
 						let option = this.options[opt];
 						// Check if number is in range:
-						if (option.type == "number") {
+						if (option.type == 'number') {
 							let num = parseInt(option.value);
 							if (num != option.value) {
 								option.value = option.min;
@@ -24,14 +24,12 @@ function main_lobby() {
 								}
 							}
 						}
-						// Check if value is one of the available options:
-						// if (option.type == "select") {} // Vue changes the value back automatically if alterd.
 						// Check if text length is in range:
-						if (option.type == "text") {
+						if (option.type == 'text') {
 							if (option.value.length > option.max) {
 								option.value = option.value.substr(0, 16);
 							} else if (option.value.length < option.min) {
-								option.value = "Unnamed";
+								option.value = 'Unnamed';
 							}
 						}
 						// Check dependency:

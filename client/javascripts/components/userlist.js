@@ -21,9 +21,9 @@ function main_userlist() {
 					let luma = 0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2];
 					// Change color of text
 					if (luma / 255 < 0.44) {
-						$(`#${this.id}`).css('color', "var(--grey1)");
+						$(`#${this.id}`).css('color', 'var(--grey1)');
 					} else {
-						$(`#${this.id}`).css('color', "var(--grey9)");
+						$(`#${this.id}`).css('color', 'var(--grey9)');
 					}
 				});
 			}

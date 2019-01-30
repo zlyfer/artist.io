@@ -13,6 +13,7 @@ function main_canvas() {
 		tolerance: 1
 	});
 
+	drawingCanvas.tool = 'pencil';
 	drawingCanvas.lcolor = drawingCanvas.strokeColor;
 	drawingCanvas.bucketToolTolerance = drawingCanvas.bucketToolTolerance;
 
