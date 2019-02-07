@@ -1,5 +1,6 @@
+// jshint esversion: 6
 function main_cursor() {
-	$('#canvas')[0].addEventListener('wheel', function(event) {
+	$('#canvas')[0].addEventListener('wheel', function (event) {
 		if (event.deltaY < 0 && drawingCanvas.lineWidth < 98) {
 			drawingCanvas.lineWidth += 2;
 			drawingCanvas.setLineWidth(drawingCanvas.lineWidth);
@@ -12,7 +13,7 @@ function main_cursor() {
 		event.returnValue = false;
 	}, false);
 
-	$('#canvas').on('mousemove', function(event) {
+	$('#canvas').on('mousemove', function (event) {
 		if (drawingCanvas.tool == "zoom") {
 			let pos = getMousePos($('#canvas')[0], event);
 			let tx = 0;
@@ -50,7 +51,7 @@ function main_cursor() {
 		}
 	});
 
-	$('#canvas').on('click', function(event) {
+	$('#canvas').on('click', function (event) {
 		if (drawingCanvas.tool == "extractor") {
 			let pos = getMousePos($('#canvas')[0], event);
 			extractColor(pos);

@@ -1,3 +1,4 @@
+// jshint esversion: 6
 // FIXME: When server restart and page not reloaded just 'soft' resetted, upon creating a room as previously not room-owner error message gets displayed: cannot change settings
 // TODO: Reset every component
 // TODO: add/remove classes of components and display/don't display them
@@ -20,7 +21,7 @@ var
 	drawingCanvas,
 	userlistTimeout;
 
-$(document).ready(function() {
+$(document).ready(function () {
 	main_vue();
 	main_socketio();
 
@@ -92,7 +93,7 @@ function main_socketio() {
 		}
 		vue_lobby.options = data.lobby.options;
 		vue_lobby.dictionaries = data.lobby.dictionaries;
-		userlistTimeout = setTimeout(function() {
+		userlistTimeout = setTimeout(function () {
 			$('.userlist-entry').removeClass('zoomOutLeft');
 			vue_userlist.userlist = data.userlist.players;
 			vue_lobby.checkStart();
@@ -135,7 +136,7 @@ function showWelcome() {
 	$('#roomlist').removeClass('slideOutRight');
 	$('#userform').addClass('slideInLeft');
 	$('#roomlist').addClass('slideInRight');
-	setTimeout(function() {
+	setTimeout(function () {
 		$('.welcome').css('display', 'block');
 		$('.pre').css('display', 'none');
 	}, 500);
@@ -148,7 +149,7 @@ function showLobby() {
 	$('#roomlist').removeClass('slideInRight');
 	$('#userform').addClass('slideOutLeft');
 	$('#roomlist').addClass('slideOutRight');
-	setTimeout(function() {
+	setTimeout(function () {
 		$('.welcome').css('display', 'none');
 		$('.pre').css('display', 'block');
 	}, 500);
@@ -251,7 +252,7 @@ function changeCursor(clear = true, context = $('#cursor')[0].getContext('2d')) 
 			context.closePath();
 
 			context.beginPath();
-			context.lineWidth = 5
+			context.lineWidth = 5;
 			context.strokeStyle = '#000000';
 			context.arc(60, 60, (20) + 5, 0, 2 * Math.PI);
 			context.stroke();
@@ -286,7 +287,7 @@ function changeCursor(clear = true, context = $('#cursor')[0].getContext('2d')) 
 
 // Thanks to: https://stackoverflow.com/a/17130415
 function getMousePos(canvas, evt) {
-	var rect = canvas.getBoundingClientRect();
+	let rect = canvas.getBoundingClientRect();
 	return {
 		x: evt.clientX - rect.left,
 		y: evt.clientY - rect.top

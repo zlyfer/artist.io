@@ -1,4 +1,5 @@
-var errors = require('../../config/errors.json');
+// jshint esversion: 6
+const errors = require("../../config/errors.json");
 class User {
 	constructor(id) {
 		this.id = id;
@@ -6,8 +7,8 @@ class User {
 		this.score = 0;
 		this.room = null;
 		this.color = Math.floor(Math.random() * 315);
-		this.title = 'default';
-		this.titleicon = 'clock';
+		this.title = "default";
+		this.titleicon = "clock";
 		// artist: <i class="fas fa-paint-brush"></i>
 		// spectator: <i class="fas fa-eye"></i>
 		// guesser: <i class="fas fa-question-circle"></i>
@@ -24,23 +25,23 @@ class User {
 	changeTitle(title) {
 		this.title = title;
 		switch (title) {
-			case 'artist':
-				this.titleicon = 'paint-brush';
+			case "artist":
+				this.titleicon = "paint-brush";
 				break;
-			case 'spectator':
-				this.titleicon = 'eye';
+			case "spectator":
+				this.titleicon = "eye";
 				break;
-			case 'guesser':
-				this.titleicon = 'question-circle';
+			case "guesser":
+				this.titleicon = "question-circle";
 				break;
-			case 'solver':
-				this.titleicon = 'check-circle';
+			case "solver":
+				this.titleicon = "check-circle";
 				break;
-			case 'owner':
-				this.titleicon = 'crown';
+			case "owner":
+				this.titleicon = "crown";
 				break;
 			default:
-				this.titleicon = 'clock';
+				this.titleicon = "clock";
 				break;
 		}
 	}

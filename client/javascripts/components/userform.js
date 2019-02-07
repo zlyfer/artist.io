@@ -1,3 +1,4 @@
+// jshint esversion: 6
 function main_userform() {
 	vue_userform = new Vue({
 		el: '#userform',
@@ -9,40 +10,40 @@ function main_userform() {
 		}
 	});
 
-	$('#userform-username').on('input', function() {
+	$('#userform-username').on('input', function () {
 		checkIfJoinable();
 	});
-	$('#userform-roomname').on('input', function() {
+	$('#userform-roomname').on('input', function () {
 		checkIfJoinable();
 		$('.roomlist-entry').removeClass('selected');
 		socket.emit('checkJoinOrCreate', this.value);
 	});
-	$('#userform-color').on('input', function() {
+	$('#userform-color').on('input', function () {
 		$('#userform-color').css('--userColor', this.value);
-	})
-	$('#userform-join').on('click', function() {
+	});
+	$('#userform-join').on('click', function () {
 		socket.emit('renameAndJoin', $('#userform-username').val(), $('#userform-color').val(), $('#userform-roomname').val(), $('#userform-language').val());
 	});
-	$('#userform-spectate').on('click', function() {
+	$('#userform-spectate').on('click', function () {
 		socket.emit('renameAndSpectate', $('#userform-username').val(), $('#userform-color').val(), $('#userform-roomname').val(), $('#userform-language').val());
 	});
-	$('.userform-enter2continue').on('keypress', function(event) {
+	$('.userform-enter2continue').on('keypress', function (event) {
 		if (event.keyCode == 13) {
 			socket.emit('renameAndJoin', $('#userform-username').val(), $('#userform-color').val(), $('#userform-roomname').val(), $('#userform-language').val());
 		}
-	})
+	});
 
-	socket.on('getUserColor', function(userColor) {
+	socket.on('getUserColor', function (userColor) {
 		vue_userform.userColor = userColor;
 		$('#userform-color').css('--userColor', userColor);
 	});
-	socket.on('getUsername', function(username) {
+	socket.on('getUsername', function (username) {
 		vue_userform.username = username;
 	});
-	socket.on('getOnlinePlayers', function(onlinePlayers) {
+	socket.on('getOnlinePlayers', function (onlinePlayers) {
 		vue_userform.onlinePlayers = onlinePlayers;
 	});
-	socket.on('checkJoinOrCreate', function(joinOrCreate) {
+	socket.on('checkJoinOrCreate', function (joinOrCreate) {
 		if (joinOrCreate) {
 			vue_userform.joinOrCreate = 'Join Room';
 			$('#userform-spectate').prop('disabled', false);

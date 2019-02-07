@@ -19,7 +19,10 @@ div#lobby div.lobby-container div.lobby-container-header {
 	height: 50px;
 }
 
-div#lobby div.lobby-container div.lobby-container-header span.lobby-container-header-text {
+div#lobby
+	div.lobby-container
+	div.lobby-container-header
+	span.lobby-container-header-text {
 	width: 100%;
 	color: var(--green7);
 	display: inline-block;
@@ -36,11 +39,16 @@ div#lobby div.lobby-container div.lobby-container-options-container {
 	float: left;
 }
 
-div#lobby div.lobby-container div.lobby-container-options-container:nth-child(odd) {
+div#lobby
+	div.lobby-container
+	div.lobby-container-options-container:nth-child(odd) {
 	margin-left: 1%;
 }
 
-div#lobby div.lobby-container div.lobby-container-options-container span.lobby-container-options-container-description {
+div#lobby
+	div.lobby-container
+	div.lobby-container-options-container
+	span.lobby-container-options-container-description {
 	width: 65%;
 	color: var(--green7);
 	display: inline-block;
@@ -49,26 +57,50 @@ div#lobby div.lobby-container div.lobby-container-options-container span.lobby-c
 	float: left;
 }
 
-div#lobby div.lobby-container div.lobby-container-options-container input.lobby-container-options-container-value {
+div#lobby
+	div.lobby-container
+	div.lobby-container-options-container
+	input.lobby-container-options-container-value {
 	float: left;
 }
 
-div#lobby div.lobby-container div.lobby-container-options-container input.lobby-container-options-container-value[type="text"],
-div#lobby div.lobby-container div.lobby-container-options-container select.lobby-container-options-container-value {
+div#lobby
+	div.lobby-container
+	div.lobby-container-options-container
+	input.lobby-container-options-container-value[type="text"],
+div#lobby
+	div.lobby-container
+	div.lobby-container-options-container
+	select.lobby-container-options-container-value {
 	width: calc(35% - 2px);
 }
 
-div#lobby div.lobby-container div.lobby-container-options-container select.lobby-container-options-container-value,
-div#lobby div.lobby-container div.lobby-container-options-container input.lobby-container-options-container-value {
+div#lobby
+	div.lobby-container
+	div.lobby-container-options-container
+	select.lobby-container-options-container-value,
+div#lobby
+	div.lobby-container
+	div.lobby-container-options-container
+	input.lobby-container-options-container-value {
 	background-color: var(--grey1);
 }
 
-div#lobby div.lobby-container div.lobby-container-options-container select.lobby-container-options-container-value:disabled,
-div#lobby div.lobby-container div.lobby-container-options-container input.lobby-container-options-container-value:disabled {
+div#lobby
+	div.lobby-container
+	div.lobby-container-options-container
+	select.lobby-container-options-container-value:disabled,
+div#lobby
+	div.lobby-container
+	div.lobby-container-options-container
+	input.lobby-container-options-container-value:disabled {
 	background-color: var(--grey12);
 }
 
-div#lobby div.lobby-container div.lobby-container-options-container input.lobby-container-options-container-value[type="checkbox"] {
+div#lobby
+	div.lobby-container
+	div.lobby-container-options-container
+	input.lobby-container-options-container-value[type="checkbox"] {
 	width: 28px;
 	height: 28px;
 	margin-top: 1px;
@@ -78,16 +110,25 @@ div#lobby div.lobby-container div.lobby-container-options-container input.lobby-
 	transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-div#lobby div.lobby-container div.lobby-container-options-container input.lobby-container-options-container-value[type="checkbox"]:checked {
+div#lobby
+	div.lobby-container
+	div.lobby-container-options-container
+	input.lobby-container-options-container-value[type="checkbox"]:checked {
 	background-color: var(--green6);
 	box-shadow: inset 0 0 0 2px var(--grey1);
 }
 
-div#lobby div.lobby-container div.lobby-container-options-container input.lobby-container-options-container-value[type="checkbox"]:checked:disabled {
+div#lobby
+	div.lobby-container
+	div.lobby-container-options-container
+	input.lobby-container-options-container-value[type="checkbox"]:checked:disabled {
 	box-shadow: inset 0 0 0 2px var(--grey12);
 }
 
-div#lobby div.lobby-container div.lobby-container-options-container input.lobby-container-options-container-value[type="checkbox"]:hover {
+div#lobby
+	div.lobby-container
+	div.lobby-container-options-container
+	input.lobby-container-options-container-value[type="checkbox"]:hover {
 	border: 1px solid var(--green6);
 }
 

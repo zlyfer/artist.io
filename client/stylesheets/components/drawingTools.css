@@ -1,9 +1,9 @@
 div#drawingTools {
 	width: 776px;
-	height: calc(80px - 1px);
+	height: 80px;
 	background-color: var(--grey2);
 	float: left;
-	border-top: 1px solid var(--green7);
+	/* border-top: 1px solid var(--green7); */
 }
 
 div#drawingTools div#drawingTools-colors-container {
@@ -78,7 +78,8 @@ div#drawingTools div.half.tools.second:hover {
 	border-bottom-right-radius: 50%;
 }
 
-div#drawingTools div.tools.active, div#drawingTools div.tools:active {
+div#drawingTools div.tools.active,
+div#drawingTools div.tools:active {
 	background-color: var(--grey8);
 	color: var(--grey2);
 }

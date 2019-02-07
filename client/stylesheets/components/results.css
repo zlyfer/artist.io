@@ -34,7 +34,10 @@ div#results div#results-players div.results-players-entry {
 	margin-left: 10%;
 }
 
-div#results div#results-players div.results-players-entry span.results-players-info {
+div#results
+	div#results-players
+	div.results-players-entry
+	span.results-players-info {
 	height: 32px;
 	color: var(--grey1);
 	display: inline-block;
@@ -49,17 +52,26 @@ div#results div#results-players div.results-players-entry span.results-players-i
 	padding-right: 1%;
 }
 
-div#results div#results-players div.results-players-entry span.results-players-info.place {
+div#results
+	div#results-players
+	div.results-players-entry
+	span.results-players-info.place {
 	width: 15%;
 	text-align: left;
 }
 
-div#results div#results-players div.results-players-entry span.results-players-info.name {
+div#results
+	div#results-players
+	div.results-players-entry
+	span.results-players-info.name {
 	width: 59%;
 	text-align: center;
 }
 
-div#results div#results-players div.results-players-entry span.results-players-info.score {
+div#results
+	div#results-players
+	div.results-players-entry
+	span.results-players-info.score {
 	width: 20%;
 	text-align: right;
 }

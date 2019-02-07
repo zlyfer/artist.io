@@ -1,7 +1,8 @@
-var shortid = require('shortid');
-var dictionaries = require('../../config/dictionaries.json')['dictionaries'];
-var errors = require('../../config/errors.json');
-var User = require('./user.js')
+// jshint esversion: 6
+const shortid = require("shortid");
+const dictionaries = require("../../config/dictionaries.json").dictionaries;
+const errors = require("../../config/errors.json");
+const User = require("./user.js");
 class Room {
 	constructor(name, owner, language) {
 		this.id = shortid.generate();
@@ -13,24 +14,24 @@ class Room {
 		this.dictionaries = dictionaries[this.language];
 		this.chatlog = [];
 		this.canvas = null;
-		this.gamestate = 'In Lobby';
+		this.gamestate = "In Lobby";
 		this.customEnd = null;
 		this.toScore = {};
 		this.word = {
-			actual: '',
-			hidden: '',
+			actual: "",
+			hidden: "",
 			revealed: [],
 			used: []
 		};
 		this.artist = {
 			actual: null,
 			used: []
-		}
+		};
 		this.options = {
 			roomName: {
-				id: 'roomName',
-				name: 'Room Name',
-				type: 'text',
+				id: "roomName",
+				name: "Room Name",
+				type: "text",
 				min: 1,
 				max: 16,
 				value: name,
@@ -38,18 +39,18 @@ class Room {
 				disabled: false
 			},
 			roomLang: {
-				id: 'roomLang',
-				name: 'Room Language',
-				type: 'select',
+				id: "roomLang",
+				name: "Room Language",
+				type: "select",
 				list: Object.keys(dictionaries),
 				value: language,
 				dependencies: false,
 				disabled: false
 			},
 			slots: {
-				id: 'slots',
-				name: 'Max. Players',
-				type: 'number',
+				id: "slots",
+				name: "Max. Players",
+				type: "number",
 				min: 2,
 				max: 99,
 				value: 10,
@@ -59,9 +60,9 @@ class Room {
 				disabled: false
 			},
 			drawTime: {
-				id: 'drawTime',
-				name: 'Draw Time',
-				type: 'number',
+				id: "drawTime",
+				name: "Draw Time",
+				type: "number",
 				min: 30,
 				max: 900,
 				value: 90,
@@ -70,9 +71,9 @@ class Room {
 				disabled: false
 			},
 			rounds: {
-				id: 'rounds',
-				name: 'Max. Rounds',
-				type: 'number',
+				id: "rounds",
+				name: "Max. Rounds",
+				type: "number",
 				min: 1,
 				max: 99,
 				value: 10,
@@ -81,9 +82,9 @@ class Room {
 				disabled: false
 			},
 			waitTime: {
-				id: 'waitTime',
-				name: 'Wait Time',
-				type: 'number',
+				id: "waitTime",
+				name: "Wait Time",
+				type: "number",
 				min: 1,
 				max: 60,
 				value: 8,
@@ -92,72 +93,78 @@ class Room {
 				disabled: false
 			},
 			multiWords: {
-				id: 'multiWords',
-				name: 'Allow Used Words',
-				type: 'toggle',
+				id: "multiWords",
+				name: "Allow Used Words",
+				type: "toggle",
 				value: false,
 				dependencies: false,
 				disabled: false
 			},
 			artistScore: {
-				id: 'artistScore',
-				name: 'Artist Score',
-				type: 'toggle',
+				id: "artistScore",
+				name: "Artist Score",
+				type: "toggle",
 				value: true,
 				dependencies: false,
 				disabled: false
 			},
 			showHints: {
-				id: 'showHints',
-				name: 'Show Hints',
-				type: 'toggle',
+				id: "showHints",
+				name: "Show Hints",
+				type: "toggle",
 				value: true,
 				dependencies: false,
 				disabled: false
 			},
 			hintLevel: {
-				id: 'hintLevel',
-				name: 'Max. Word Reveal',
-				type: 'select',
-				list: ['25%', '50%', '75%'],
-				value: '50%',
-				dependencies: [{
-					name: 'showHints',
-					value: true
-				}],
+				id: "hintLevel",
+				name: "Max. Word Reveal",
+				type: "select",
+				list: ["25%", "50%", "75%"],
+				value: "50%",
+				dependencies: [
+					{
+						name: "showHints",
+						value: true
+					}
+				],
 				disabled: false
 			},
 			allowSpectators: {
-				id: 'allowSpectators',
-				name: 'Allow Spectators',
-				type: 'toggle',
+				id: "allowSpectators",
+				name: "Allow Spectators",
+				type: "toggle",
 				value: true,
 				dependencies: false,
 				disabled: false
 			},
 			allowSpectatorChat: {
-				id: 'allowSpectatorChat',
-				name: 'Allow Spectator Chat',
-				type: 'toggle',
+				id: "allowSpectatorChat",
+				name: "Allow Spectator Chat",
+				type: "toggle",
 				value: false,
-				dependencies: [{
-					name: 'allowSpectators',
-					value: true
-				}],
+				dependencies: [
+					{
+						name: "allowSpectators",
+						value: true
+					}
+				],
 				disabled: false
 			},
 			showWordToSpectators: {
-				id: 'showWordToSpectators',
-				name: 'Show Word To Spectators',
-				type: 'toggle',
+				id: "showWordToSpectators",
+				name: "Show Word To Spectators",
+				type: "toggle",
 				value: false,
-				dependencies: [{
-					name: 'allowSpectators',
-					value: true
-				}],
+				dependencies: [
+					{
+						name: "allowSpectators",
+						value: true
+					}
+				],
 				disabled: false
 			}
-		}
+		};
 	}
 
 	applyOptions() {
@@ -199,29 +206,34 @@ class Room {
 		}
 		this.customEnd = null;
 		for (let player in this.players)
-			this.players[player].changeTitle('guesser');
+			this.players[player].changeTitle("guesser");
 		this.pickWord();
 		this.pickArtist();
 		this.word.revealed = [];
 		this.options.rounds.current++;
-		this.gamestate = `In Game (${this.options.rounds.current}/${this.options.rounds.value})`;
+		this.gamestate = `In Game (${this.options.rounds.current}/${
+			this.options.rounds.value
+		})`;
 		return true;
 	}
 
 	endGame() {
 		this.endRound();
-		this.gamestate = 'End Game';
-		this.word.actual = '';
+		this.gamestate = "End Game";
+		this.word.actual = "";
 		this.word.used = [];
 	}
 
 	resetGame() {
-		this.gamestate = 'In Lobby';
+		this.gamestate = "In Lobby";
 	}
 
 	tick() {
 		this.options.drawTime.current++;
-		if (this.options.drawTime.current > this.options.drawTime.value || this.customEnd != null) {
+		if (
+			this.options.drawTime.current > this.options.drawTime.value ||
+			this.customEnd != null
+		) {
 			return true;
 		}
 		this.genHidden();
@@ -230,23 +242,27 @@ class Room {
 
 	pickArtist() {
 		let artistlist = Object.keys(this.players);
-		artistlist = artistlist.filter(player => this.artist.used.includes(player) == false);
+		artistlist = artistlist.filter(
+			player => this.artist.used.includes(player) == false
+		);
 		let selartist = artistlist[Math.floor(Math.random() * artistlist.length)];
-		if (this.artist.used.length == Object.keys(this.players).length || selartist == undefined) {
+		if (
+			this.artist.used.length == Object.keys(this.players).length ||
+			selartist == undefined
+		) {
 			this.artist.used = [];
 			this.pickArtist();
 			return;
 		}
 		this.artist.used.push(selartist);
 		this.artist.actual = selartist;
-		this.players[selartist].changeTitle('artist');
+		this.players[selartist].changeTitle("artist");
 	}
 
 	getWordList(filter) {
 		let wordlist = [];
 		for (let dict of this.dictionaries) {
-			if (dict.activated)
-				wordlist = wordlist.concat(dict.words);
+			if (dict.activated) wordlist = wordlist.concat(dict.words);
 		}
 		if (filter)
 			wordlist = wordlist.filter(word => filter.includes(word) == false);
@@ -258,7 +274,10 @@ class Room {
 		if (this.options.multiWords.value == false)
 			wordlist = this.getWordList(this.word.used);
 		let selword = wordlist[Math.floor(Math.random() * wordlist.length)];
-		if (this.word.used.length == this.getWordList().length || selword == undefined) {
+		if (
+			this.word.used.length == this.getWordList().length ||
+			selword == undefined
+		) {
 			this.word.used = [];
 			this.pickWord();
 			return;
@@ -271,52 +290,62 @@ class Room {
 		// Fill this.word.revealed:
 		let hintlevel = 0;
 		if (this.options.showHints.value)
-			hintlevel = parseInt(this.options.hintLevel.value.substr(0, this.options.hintLevel.value.length - 1));
-		let wordprogress = (this.options.drawTime.current / (this.options.drawTime.value / 100));
+			hintlevel = parseInt(
+				this.options.hintLevel.value.substr(
+					0,
+					this.options.hintLevel.value.length - 1
+				)
+			);
+		let wordprogress =
+			this.options.drawTime.current / (this.options.drawTime.value / 100);
 		let maxreveal = Math.ceil(hintlevel * (this.word.actual.length / 100));
 		// Thanks to: https://gist.github.com/AugustMiller/85b54d49493bb71ba81e
-		let toreveal = Math.ceil((wordprogress - 0) * (maxreveal - 0) / (100 - 0) + 0);
+		let toreveal = Math.ceil(
+			((wordprogress - 0) * (maxreveal - 0)) / (100 - 0) + 0
+		);
 		for (let i = 0; i < toreveal - this.word.revealed.length; i++) {
 			let nextreveal = 0;
 			do {
 				nextreveal = Math.floor(Math.random() * this.word.actual.length - 1);
-			} while (this.word.revealed.includes(nextreveal) || this.word.actual[nextreveal] == ' ')
+			} while (
+				this.word.revealed.includes(nextreveal) ||
+				this.word.actual[nextreveal] == " "
+			);
 			this.word.revealed.push(nextreveal);
 		}
 		// Generate hint based on this.word.revealed:
-		this.word.hidden = '';
+		this.word.hidden = "";
 		for (let i = 0; i < this.word.actual.length; i++) {
-			if (this.word.actual[i] === ' ') {
-				this.word.hidden += ' ';
+			if (this.word.actual[i] === " ") {
+				this.word.hidden += " ";
 			} else {
 				if (this.word.revealed.includes(i)) {
 					this.word.hidden += this.word.actual[i];
 				} else {
-					this.word.hidden += '_';
+					this.word.hidden += "_";
 				}
-				if (i < this.word.actual.length - 1)
-					this.word.hidden += ' ';
+				if (i < this.word.actual.length - 1) this.word.hidden += " ";
 			}
 		}
 		return this.word.hidden;
 	}
 
 	solved(user) {
-		user.changeTitle('solver');
+		user.changeTitle("solver");
 		let score = 1; // TODO: Calculate score.
 		this.toScore[user.id] = score;
 	}
 
 	addPlayer(user) {
 		if (user.id in this.players) {
-			return [true, errors['alreadyjoined']];
+			return [true, errors.alreadyjoined];
 		} else if (this.options.slots.current < this.options.slots.value) {
 			user.room = this.id;
 			this.players[user.id] = user;
 			this.options.slots.current++;
-			return [false, errors['success']];
+			return [false, errors.success];
 		} else {
-			return [true, errors['roomfull']];
+			return [true, errors.roomfull];
 		}
 	}
 
@@ -328,14 +357,14 @@ class Room {
 
 	addSpectator(user) {
 		if (user.id in this.spectators) {
-			return [true, errors['alreadyjoinedspectator']];
+			return [true, errors.alreadyjoinedspectator];
 		} else if (this.options.allowSpectators.value == false) {
-			return [true, errors['nospectator']];
+			return [true, errors.nospectator];
 		} else {
 			user.room = this.id;
 			this.spectators[user.id] = user;
 			this.options.slots.spectators++;
-			return [false, errors['success']];
+			return [false, errors.success];
 		}
 	}
 

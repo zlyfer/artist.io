@@ -1,3 +1,4 @@
+// jshint esversion: 6
 function main_lobby() {
 	vue_lobby = new Vue({
 		el: '#lobby',
@@ -9,7 +10,7 @@ function main_lobby() {
 		methods: {
 			updateLobby(check = true) {
 				if (check) {
-					for (opt in this.options) {
+					for (let opt in this.options) {
 						let option = this.options[opt];
 						// Check if number is in range:
 						if (option.type == 'number') {
@@ -72,9 +73,9 @@ function main_lobby() {
 			}
 		},
 		watch: {
-			allowEdit: function(oldVal, newVal) {
+			allowEdit: function (oldVal, newVal) {
 				if (newVal != oldVal) {
-					Vue.nextTick(function() {
+					Vue.nextTick(function () {
 						vue_lobby.updateLobby();
 					});
 				}
@@ -82,7 +83,7 @@ function main_lobby() {
 		}
 	});
 
-	$('#lobby-start').on('click', function() {
+	$('#lobby-start').on('click', function () {
 		socket.emit('startGame');
 	});
 

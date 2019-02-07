@@ -1,3 +1,4 @@
+// jshint esversion: 6
 function main_userlist() {
 	vue_userlist = new Vue({
 		el: '#userlist',
@@ -5,12 +6,12 @@ function main_userlist() {
 			userlist: []
 		},
 		methods: {
-			fixTextColor: function() {
-				$('.userlist-entry').each(function() {
+			fixTextColor: function () {
+				$('.userlist-entry').each(function () {
 					// Get background-color
 					let rgb = getRGB($(`#${this.id}`).css('background-color'));
 					// Calculate luminescence
-					for (val in rgb) {
+					for (let val in rgb) {
 						val /= 255;
 						if (val <= 0.03928) {
 							val /= 12.92;

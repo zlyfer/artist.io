@@ -1,5 +1,5 @@
 :root {
-	--grey12: #EBEBEB;
+	--grey12: #ebebeb;
 	--userColor: 0;
 	--msg-normal: var(--grey8);
 	--msg-secret: var(--indigo7);
@@ -11,7 +11,7 @@
 }
 
 * {
-	font-family: 'Roboto', sans-serif;
+	font-family: "Roboto", sans-serif;
 	user-select: none;
 }
 
@@ -54,7 +54,8 @@ body {
 	padding: 0;
 }
 
-input, select {
+input,
+select {
 	padding: 6px 12px;
 	border: none;
 	border-radius: 4px;
@@ -62,12 +63,16 @@ input, select {
 	outline: none;
 }
 
-input[type="text"], input[type="checkbox"], select {
+input[type="text"],
+input[type="checkbox"],
+select {
 	color: var(--grey7);
 	border: 1px solid var(--grey4);
 }
 
-input[type="text"]:active, input[type="text"]:focus, select:focus {
+input[type="text"]:active,
+input[type="text"]:focus,
+select:focus {
 	border: 1px solid var(--green6);
 }
 
@@ -89,7 +94,8 @@ input[type="button"]:disabled {
 	background-color: var(--green2);
 }
 
-.misc {}
+.misc {
+}
 
 .welcome {
 	/* display: none; */
@@ -121,7 +127,7 @@ input[type="button"]:disabled {
 	height: calc(100% - 702px);
 	left: calc((100% / 2) - 388px);
 	top: 702px;
-	background-image: url('../images/background.png');
+	background-image: url("../images/background.png");
 	/* background-repeat: no-repeat; */
 	/* NOTE: no-repeat as long as banner.png is not repeatable. */
 	background-size: cover;

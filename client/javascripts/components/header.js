@@ -1,3 +1,4 @@
+// jshint esversion: 6
 function main_header() {
 	vue_header = new Vue({
 		el: '#header',

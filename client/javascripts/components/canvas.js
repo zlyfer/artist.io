@@ -1,3 +1,4 @@
+// jshint esversion: 6
 function main_canvas() {
 	drawingCanvas = new CanvasFreeDrawing({
 		elementId: 'canvas',

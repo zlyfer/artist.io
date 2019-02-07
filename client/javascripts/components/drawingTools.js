@@ -1,3 +1,4 @@
+// jshint esversion: 6
 function main_drawingTools() {
 	vue_drawingTools = new Vue({
 		el: '#drawingTools',

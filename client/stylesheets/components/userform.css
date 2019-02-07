@@ -17,7 +17,8 @@ div#userform div#userform-logo {
 	margin-top: 20px;
 }
 
-div#userform input, div#userform select#userform-language {
+div#userform input,
+div#userform select#userform-language {
 	width: 85%;
 	height: 45px;
 	margin-top: 5px;
@@ -43,7 +44,17 @@ div#userform input#userform-spectate {
 }
 
 div#userform input#userform-color {
-	background: -webkit-linear-gradient(-180deg, hsl(315, 50%, 45%), hsl(270, 50%, 45%), hsl(225, 50%, 45%), hsl(180, 50%, 45%), hsl(135, 50%, 45%), hsl(90, 50%, 45%), hsl(45, 50%, 45%), hsl(0, 50%, 45%));
+	background: -webkit-linear-gradient(
+		-180deg,
+		hsl(315, 50%, 45%),
+		hsl(270, 50%, 45%),
+		hsl(225, 50%, 45%),
+		hsl(180, 50%, 45%),
+		hsl(135, 50%, 45%),
+		hsl(90, 50%, 45%),
+		hsl(45, 50%, 45%),
+		hsl(0, 50%, 45%)
+	);
 	cursor: ew-resize;
 }
 
