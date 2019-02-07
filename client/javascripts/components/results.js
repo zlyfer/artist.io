@@ -1,3 +1,2 @@
 // jshint esversion: 6
-function main_results() {
-}
+function main_results() {}

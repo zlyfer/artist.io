@@ -1,21 +1,25 @@
 // jshint esversion: 6
 function main_cursor() {
-	$('#canvas')[0].addEventListener('wheel', function (event) {
-		if (event.deltaY < 0 && drawingCanvas.lineWidth < 98) {
-			drawingCanvas.lineWidth += 2;
-			drawingCanvas.setLineWidth(drawingCanvas.lineWidth);
-			changeCursor();
-		} else if (event.deltaY > 0 && drawingCanvas.lineWidth > 1) {
-			drawingCanvas.lineWidth -= 2;
-			drawingCanvas.setLineWidth(drawingCanvas.lineWidth);
-			changeCursor();
-		}
-		event.returnValue = false;
-	}, false);
+	$("#canvas")[0].addEventListener(
+		"wheel",
+		function(event) {
+			if (event.deltaY < 0 && drawingCanvas.lineWidth < 98) {
+				drawingCanvas.lineWidth += 2;
+				drawingCanvas.setLineWidth(drawingCanvas.lineWidth);
+				changeCursor();
+			} else if (event.deltaY > 0 && drawingCanvas.lineWidth > 1) {
+				drawingCanvas.lineWidth -= 2;
+				drawingCanvas.setLineWidth(drawingCanvas.lineWidth);
+				changeCursor();
+			}
+			event.returnValue = false;
+		},
+		false
+	);
 
-	$('#canvas').on('mousemove', function (event) {
+	$("#canvas").on("mousemove", function(event) {
 		if (drawingCanvas.tool == "zoom") {
-			let pos = getMousePos($('#canvas')[0], event);
+			let pos = getMousePos($("#canvas")[0], event);
 			let tx = 0;
 			let ty = 0;
 			pos.nx = pos.x + 60;
@@ -38,22 +42,23 @@ function main_cursor() {
 				pos.y = 0;
 				ty = 0;
 			}
-			let rawZoomData = $('#canvas')[0].getContext("2d").getImageData(pos.x, pos.y, pos.nx, pos.ny);
-			let cursorContext = $('#cursor')[0].getContext("2d");
+			let rawZoomData = $("#canvas")[0]
+				.getContext("2d")
+				.getImageData(pos.x, pos.y, pos.nx, pos.ny);
+			let cursorContext = $("#cursor")[0].getContext("2d");
 			cursorContext.clearRect(0, 0, 120, 120);
 			cursorContext.putImageData(rawZoomData, tx, ty);
-			cursorContext.drawImage($('#cursor')[0], 30, 30, 60, 60, 0, 0, 120, 120);
+			cursorContext.drawImage($("#cursor")[0], 30, 30, 60, 60, 0, 0, 120, 120);
 			changeCursor(false, cursorContext);
 		} else if (drawingCanvas.tool == "extractor") {
-			let pos = getMousePos($('#canvas')[0], event);
-			if (event.buttons > 0)
-				extractColor(pos);
+			let pos = getMousePos($("#canvas")[0], event);
+			if (event.buttons > 0) extractColor(pos);
 		}
 	});
 
-	$('#canvas').on('click', function (event) {
+	$("#canvas").on("click", function(event) {
 		if (drawingCanvas.tool == "extractor") {
-			let pos = getMousePos($('#canvas')[0], event);
+			let pos = getMousePos($("#canvas")[0], event);
 			extractColor(pos);
 		}
 	});

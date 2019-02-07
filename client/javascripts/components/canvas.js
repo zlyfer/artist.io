@@ -1,7 +1,7 @@
 // jshint esversion: 6
 function main_canvas() {
 	drawingCanvas = new CanvasFreeDrawing({
-		elementId: 'canvas',
+		elementId: "canvas",
 		width: 776,
 		height: 572,
 		maxSnapshots: 999,
@@ -14,20 +14,23 @@ function main_canvas() {
 		tolerance: 1
 	});
 
-	drawingCanvas.tool = 'pencil';
+	drawingCanvas.tool = "pencil";
 	drawingCanvas.lcolor = drawingCanvas.strokeColor;
 	drawingCanvas.bucketToolTolerance = drawingCanvas.bucketToolTolerance;
 
-	drawingCanvas.on({
-		event: 'redraw',
-		counter: 0
-	}, () => {
-		socket.emit('updateCanvas', drawingCanvas.save());
-	});
+	drawingCanvas.on(
+		{
+			event: "redraw",
+			counter: 0
+		},
+		() => {
+			socket.emit("updateCanvas", drawingCanvas.save());
+		}
+	);
 
 	drawingCanvas.disableDrawingMode();
 
-	socket.on('updateCanvas', data => {
+	socket.on("updateCanvas", data => {
 		drawingCanvas.restore(data);
 	});
 }

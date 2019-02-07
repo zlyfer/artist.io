@@ -3,8 +3,7 @@
 // TODO: Reset every component
 // TODO: add/remove classes of components and display/don't display them
 // FIXME: Cursor not updating, when click-dragging the mouse.
-var
-	vue_cursor,
+var vue_cursor,
 	vue_userform,
 	vue_roomlist,
 	vue_header,
@@ -17,11 +16,9 @@ var
 	vue_chatlog,
 	vue_newmessage;
 
-var
-	drawingCanvas,
-	userlistTimeout;
+var drawingCanvas, userlistTimeout;
 
-$(document).ready(function () {
+$(document).ready(function() {
 	main_vue();
 	main_socketio();
 
@@ -59,23 +56,23 @@ function main_socketio() {
 	// END
 
 	// TESTING:
-	socket = io('http://localhost:3000');
+	socket = io("http://localhost:3000");
 	// END
-	socket.on('connected', () => {
-		$('#connecting').css('display', 'none');
+	socket.on("connected", () => {
+		$("#connecting").css("display", "none");
 		showWelcome();
 	});
-	socket.on('toast', (message) => {
+	socket.on("toast", message => {
 		toastr[message.type](message.content);
 	});
-	socket.on('joinedRoom', () => {
+	socket.on("joinedRoom", () => {
 		showLobby();
 	});
-	socket.on('closeRoom', (message) => {
+	socket.on("closeRoom", message => {
 		toastr[message.type](message.content);
 		showWelcome();
 	});
-	socket.on('updateRoom', data => {
+	socket.on("updateRoom", data => {
 		clearTimeout(userlistTimeout);
 		vue_header.name = data.header.name;
 		vue_header.gamestate = data.header.gamestate;
@@ -86,72 +83,72 @@ function main_socketio() {
 		if (jsonCompare(data.userlist.players, vue_userlist.userlist) == false) {
 			for (let user of vue_userlist.userlist) {
 				if (JSON.stringify(data.userlist.players).includes(user.id) == false) {
-					$(`#${user.id}`).removeClass('zoomInLeft');
-					$(`#${user.id}`).addClass('zoomOutLeft');
+					$(`#${user.id}`).removeClass("zoomInLeft");
+					$(`#${user.id}`).addClass("zoomOutLeft");
 				}
 			}
 		}
 		vue_lobby.options = data.lobby.options;
 		vue_lobby.dictionaries = data.lobby.dictionaries;
-		userlistTimeout = setTimeout(function () {
-			$('.userlist-entry').removeClass('zoomOutLeft');
+		userlistTimeout = setTimeout(function() {
+			$(".userlist-entry").removeClass("zoomOutLeft");
 			vue_userlist.userlist = data.userlist.players;
 			vue_lobby.checkStart();
 		}, 1000);
 	});
-	socket.on('artist', (artist) => {
+	socket.on("artist", artist => {
 		if (artist) {
 			drawingCanvas.enableDrawingMode();
-			$('#drawingToolsDisabled').css('display', 'none');
+			$("#drawingToolsDisabled").css("display", "none");
 			changeCursor();
 		} else {
 			drawingCanvas.disableDrawingMode();
-			$('#drawingToolsDisabled').css('display', 'block');
-			drawingCanvas.tool = 'notartist';
+			$("#drawingToolsDisabled").css("display", "block");
+			drawingCanvas.tool = "notartist";
 			changeCursor();
 		}
 	});
-	socket.on('startGame', () => {
-		$('#lobby').removeClass('zoomIn');
-		$('#lobby').addClass('slideOutRight');
-		$('#canvas').css('display', 'block');
+	socket.on("startGame", () => {
+		$("#lobby").removeClass("zoomIn");
+		$("#lobby").addClass("slideOutRight");
+		$("#canvas").css("display", "block");
 	});
-	socket.on('nextRound', () => {
+	socket.on("nextRound", () => {
 		// TODO: update everything
 	});
-	socket.on('endRound', (reason, scores) => {
+	socket.on("endRound", (reason, scores) => {
 		// TODO: update everything
 	});
-	socket.on('endGame', (reason, scores) => {
+	socket.on("endGame", (reason, scores) => {
 		// TODO: update everything
 	});
-	socket.on('resetGame', () => {
+	socket.on("resetGame", () => {
 		// TODO: update everything
 	});
 }
 
 function showWelcome() {
 	vue_userlist.userlist = [];
-	$('#userform').removeClass('slideOutLeft');
-	$('#roomlist').removeClass('slideOutRight');
-	$('#userform').addClass('slideInLeft');
-	$('#roomlist').addClass('slideInRight');
-	setTimeout(function () {
-		$('.welcome').css('display', 'block');
-		$('.pre').css('display', 'none');
+	$("#userform").removeClass("slideOutLeft");
+	$("#roomlist").removeClass("slideOutRight");
+	$("#userform").addClass("slideInLeft");
+	$("#roomlist").addClass("slideInRight");
+	setTimeout(function() {
+		$(".welcome").css("display", "block");
+		$(".pre").css("display", "none");
 	}, 500);
-	$('#canvas').css('display', 'none');
+	$("#canvas").css("display", "none");
 	drawingCanvas.clear();
 }
 
 function showLobby() {
-	$('#userform').removeClass('slideInLeft');
-	$('#roomlist').removeClass('slideInRight');
-	$('#userform').addClass('slideOutLeft');
-	$('#roomlist').addClass('slideOutRight');
-	setTimeout(function () {
-		$('.welcome').css('display', 'none');
-		$('.pre').css('display', 'block');
+	$("#userform").removeClass("slideInLeft");
+	$("#roomlist").removeClass("slideInRight");
+	$("#userform").addClass("slideOutLeft");
+	$("#roomlist").addClass("slideOutRight");
+	setTimeout(function() {
+		$(".welcome").css("display", "none");
+		$(".pre").css("display", "block");
 	}, 500);
 }
 
@@ -164,61 +161,66 @@ function jsonCompare(obj1, obj2) {
 }
 
 function getRGB(cssString) {
-	let rgb = cssString.replace('rgb(', '').replace(')', '').split(',');
+	let rgb = cssString
+		.replace("rgb(", "")
+		.replace(")", "")
+		.split(",");
 	rgb[0] = parseInt(rgb[0]);
 	rgb[1] = parseInt(rgb[1]);
 	rgb[2] = parseInt(rgb[2]);
 	return rgb;
 }
 
-function changeCursor(clear = true, context = $('#cursor')[0].getContext('2d')) {
+function changeCursor(
+	clear = true,
+	context = $("#cursor")[0].getContext("2d")
+) {
 	let size = drawingCanvas.lineWidth;
 	let color = drawingCanvas.strokeColor;
-	if (clear)
-		context.clearRect(0, 0, 120, 120);
+	if (clear) context.clearRect(0, 0, 120, 120);
 	//drawingCanvas.tool = 'pencil'; // TODO: Keep this until not every cursor is implemented (see below)
 
 	switch (drawingCanvas.tool) {
-		case 'pencil':
+		case "pencil":
 			context.beginPath();
 			context.lineWidth = 1;
-			context.strokeStyle = '#000000';
-			context.arc(60, 60, (size / 2) + 10, 0, 2 * Math.PI);
+			context.strokeStyle = "#000000";
+			context.arc(60, 60, size / 2 + 10, 0, 2 * Math.PI);
 			context.stroke();
 			context.closePath();
 
 			context.beginPath();
 			context.lineWidth = 5;
 			context.strokeStyle = `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
-			context.arc(60, 60, (size / 2) + 5, 0, 2 * Math.PI);
+			context.arc(60, 60, size / 2 + 5, 0, 2 * Math.PI);
 			context.stroke();
 			context.closePath();
 
 			if (size > 9) {
 				context.beginPath();
 				context.lineWidth = 1;
-				context.strokeStyle = '#000000';
+				context.strokeStyle = "#000000";
 				context.fillStyle = `rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.22)`;
-				context.arc(60, 60, (size / 2), 0, 2 * Math.PI);
+				context.arc(60, 60, size / 2, 0, 2 * Math.PI);
 				context.fill();
 				context.stroke();
 				context.closePath();
 			}
 			break;
-		case 'eraser':
+		case "eraser":
 			context.beginPath();
 			context.lineWidth = 1;
-			context.strokeStyle = '#000000';
+			context.strokeStyle = "#000000";
 			context.fillStyle = `rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.22)`;
-			context.arc(60, 60, (size / 2), 0, 2 * Math.PI);
+			context.arc(60, 60, size / 2, 0, 2 * Math.PI);
 			context.fill();
 			context.stroke();
 			context.closePath();
 			break;
-		case 'extractor':
+		case "extractor":
 			context.beginPath();
 			context.lineWidth = 1;
-			context.strokeStyle = '#000000';
+			context.strokeStyle = "#000000";
 			context.moveTo(60, 55);
 			context.lineTo(60, 65);
 			context.moveTo(55, 60);
@@ -229,21 +231,21 @@ function changeCursor(clear = true, context = $('#cursor')[0].getContext('2d')) 
 			context.beginPath();
 			context.lineWidth = 5;
 			context.strokeStyle = `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
-			context.arc(60, 60, (20) + 5, 0, 2 * Math.PI);
+			context.arc(60, 60, 20 + 5, 0, 2 * Math.PI);
 			context.stroke();
 			context.closePath();
 
 			context.beginPath();
 			context.lineWidth = 3;
-			context.strokeStyle = '#FFFFFF';
-			context.arc(60, 60, (22) + 5, 0, 2 * Math.PI);
+			context.strokeStyle = "#FFFFFF";
+			context.arc(60, 60, 22 + 5, 0, 2 * Math.PI);
 			context.stroke();
 			context.closePath();
 			break;
-		case 'bucket':
+		case "bucket":
 			context.beginPath();
 			context.lineWidth = 1;
-			context.strokeStyle = '#FFFFFF';
+			context.strokeStyle = "#FFFFFF";
 			context.moveTo(60, 55);
 			context.lineTo(60, 65);
 			context.moveTo(55, 60);
@@ -253,36 +255,36 @@ function changeCursor(clear = true, context = $('#cursor')[0].getContext('2d')) 
 
 			context.beginPath();
 			context.lineWidth = 5;
-			context.strokeStyle = '#000000';
-			context.arc(60, 60, (20) + 5, 0, 2 * Math.PI);
+			context.strokeStyle = "#000000";
+			context.arc(60, 60, 20 + 5, 0, 2 * Math.PI);
 			context.stroke();
 			context.closePath();
 
 			context.beginPath();
 			context.lineWidth = 3;
 			context.strokeStyle = `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
-			context.arc(60, 60, (22) + 5, 0, 2 * Math.PI);
+			context.arc(60, 60, 22 + 5, 0, 2 * Math.PI);
 			context.stroke();
 			context.closePath();
 			break;
-		case 'zoom':
+		case "zoom":
 			context.beginPath();
 			context.lineWidth = 1;
-			context.strokeStyle = '#000000';
+			context.strokeStyle = "#000000";
 			context.rect(0, 0, 120, 120);
 			context.stroke();
 			context.closePath();
 			break;
-		case 'notartist':
+		case "notartist":
 			context.beginPath();
 			context.lineWidth = 5;
 			context.strokeStyle = `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
-			context.arc(60, 60, (size / 2) + 10, 0, 2 * Math.PI);
+			context.arc(60, 60, size / 2 + 10, 0, 2 * Math.PI);
 			context.stroke();
 			context.closePath();
 			break;
 	}
-	$('#canvas').css('cursor', `url(${$('#cursor')[0].toDataURL()}) 60 60, auto`);
+	$("#canvas").css("cursor", `url(${$("#cursor")[0].toDataURL()}) 60 60, auto`);
 }
 
 // Thanks to: https://stackoverflow.com/a/17130415
@@ -295,13 +297,15 @@ function getMousePos(canvas, evt) {
 }
 
 function extractColor(pos) {
-	let pixel = $('#canvas')[0].getContext("2d").getImageData(pos.x, pos.y, 1, 1).data;
+	let pixel = $("#canvas")[0]
+		.getContext("2d")
+		.getImageData(pos.x, pos.y, 1, 1).data;
 	let rgb = [pixel[0], pixel[1], pixel[2]];
 	drawingCanvas.setStrokeColor(rgb);
 	drawingCanvas.configBucketTool({
 		color: rgb
 	});
 	drawingCanvas.lcolor = rgb;
-	$(`.color-source`).removeClass('active');
+	$(`.color-source`).removeClass("active");
 	changeCursor();
 }

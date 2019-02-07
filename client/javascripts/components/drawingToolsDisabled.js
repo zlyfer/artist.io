@@ -1,2 +1,2 @@
 // jshint esversion: 6
-function main_drawingToolsDisabled() { }
+function main_drawingToolsDisabled() {}

@@ -1,16 +1,14 @@
 // jshint esversion: 6
 function main_chatlog() {
 	vue_chatlog = new Vue({
-		el: '#chatlog',
+		el: "#chatlog",
 		data: {
 			chatlog: []
 		},
-		methods: {
-
-		}
+		methods: {}
 	});
 
-	socket.on('getChatlog', function (chatlog) {
+	socket.on("getChatlog", function(chatlog) {
 		vue_chatlog.chatlog = chatlog;
 	});
 }
