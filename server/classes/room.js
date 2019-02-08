@@ -2,7 +2,6 @@
 const shortid = require("shortid");
 const dictionaries = require("../../config/dictionaries.json").dictionaries;
 const errors = require("../../config/errors.json");
-const User = require("./user.js");
 class Room {
 	constructor(name, owner, language) {
 		this.id = shortid.generate();
@@ -218,7 +217,6 @@ class Room {
 	}
 
 	endGame() {
-		this.endRound();
 		this.gamestate = "End Game";
 		this.word.actual = "";
 		this.word.used = [];
@@ -332,8 +330,29 @@ class Room {
 
 	solved(user) {
 		user.changeTitle("solver");
-		let score = 1; // TODO: Calculate score.
+		let score = Math.floor(Math.random() * 100); // TODO: Calculate score.
 		this.toScore[user.id] = score;
+	}
+
+	genScoreboard() {
+		let scoreboard = [];
+		for (let ply in this.players) {
+			let player = this.players[ply];
+			let entry = {
+				name: player.name,
+				score: player.score
+			};
+			scoreboard.push(entry);
+		}
+		scoreboard.sort(function(a, b) {
+			return b.score - a.score;
+		});
+		let place = 0;
+		scoreboard.forEach(entry => {
+			place++;
+			entry.place = place;
+		});
+		return scoreboard;
 	}
 
 	addPlayer(user) {
@@ -381,6 +400,18 @@ class Room {
 			type: type,
 			content: content
 		});
+	}
+
+	getChatlog(type) {
+		if (type == "secret") return this.chatlog;
+		else {
+			let chatlog = [];
+			this.chatlog.forEach(message => {
+				if (message.type != "spectator" && message.type != "secret")
+					chatlog.push(message);
+			});
+			return chatlog;
+		}
 	}
 }
 module.exports = Room;

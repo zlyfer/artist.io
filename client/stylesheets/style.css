@@ -94,13 +94,6 @@ input[type="button"]:disabled {
 	background-color: var(--green2);
 }
 
-.misc {
-}
-
-.welcome {
-	/* display: none; */
-}
-
 .pre {
 	display: none;
 }

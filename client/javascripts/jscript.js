@@ -1,8 +1,5 @@
 // jshint esversion: 6
-// FIXME: When server restart and page not reloaded just 'soft' resetted, upon creating a room as previously not room-owner error message gets displayed: cannot change settings
-// TODO: Reset every component
-// TODO: add/remove classes of components and display/don't display them
-// FIXME: Cursor not updating, when click-dragging the mouse.
+// BUG: Cursor not updating, when click-dragging the mouse. EDIT: Only sometimes?
 var vue_cursor,
 	vue_userform,
 	vue_roomlist,
@@ -17,6 +14,7 @@ var vue_cursor,
 	vue_newmessage;
 
 var drawingCanvas, userlistTimeout;
+var reset = false;
 
 $(document).ready(function() {
 	main_vue();
@@ -55,10 +53,12 @@ function main_socketio() {
 	// });
 	// END
 
-	// TESTING:
+	// TESTING: Client
 	socket = io("http://localhost:3000");
 	// END
 	socket.on("connected", () => {
+		if (reset) location.reload();
+		reset = true;
 		$("#connecting").css("display", "none");
 		showWelcome();
 	});
@@ -115,12 +115,24 @@ function main_socketio() {
 	});
 	socket.on("nextRound", () => {
 		// TODO: update everything
+		$("#results").css("display", "none");
+		drawingCanvas.clear();
 	});
-	socket.on("endRound", (reason, scores) => {
+	socket.on("endRound", (message, word) => {
 		// TODO: update everything
+		$("#results").css("display", "block");
+		vue_results.final = false;
+		vue_results.message = message;
+		vue_results.word = word;
+		vue_results.scoreboard = scoreboard;
 	});
-	socket.on("endGame", (reason, scores) => {
+	socket.on("endGame", (message, word, scoreboard) => {
 		// TODO: update everything
+		$("#results").css("display", "block");
+		vue_results.final = true;
+		vue_results.message = message;
+		vue_results.word = word;
+		vue_results.scoreboard = scoreboard;
 	});
 	socket.on("resetGame", () => {
 		// TODO: update everything
@@ -178,7 +190,6 @@ function changeCursor(
 	let size = drawingCanvas.lineWidth;
 	let color = drawingCanvas.strokeColor;
 	if (clear) context.clearRect(0, 0, 120, 120);
-	//drawingCanvas.tool = 'pencil'; // TODO: Keep this until not every cursor is implemented (see below)
 
 	switch (drawingCanvas.tool) {
 		case "pencil":

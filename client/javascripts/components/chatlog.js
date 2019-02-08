@@ -10,5 +10,10 @@ function main_chatlog() {
 
 	socket.on("getChatlog", function(chatlog) {
 		vue_chatlog.chatlog = chatlog;
+		$("#chatlog")[0].scrollTo({
+			top: $("#chatlog")[0].scrollHeight,
+			left: 0,
+			behavior: "smooth"
+		});
 	});
 }

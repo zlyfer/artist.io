@@ -11,7 +11,7 @@
 // const server = https.createServer(options);
 // END
 
-// TESTING:
+// TESTING: Server
 const http = require("http");
 const server = http.createServer();
 // END
@@ -32,7 +32,6 @@ io.on("connection", socket => {
 	socket.emit("connected");
 	newConnection(socket);
 	sendRoomList(socket);
-	// socket.on('', () => ());
 	socket.on("checkJoinOrCreate", checkJoinOrCreate);
 	socket.on("renameAndJoin", renameAndJoin);
 	socket.on("renameAndSpectate", (a, b, c, d) => {
@@ -147,10 +146,10 @@ function renameAndJoin(
 		socket.emit("joinedRoom");
 		updateRoom(room);
 		if (spec) {
-			socket.join(`spectators-${room.id}`);
+			socket.join(`secret-${room.id}`);
 			newMessage(room, user, "join", "is spectating now.");
 		} else {
-			socket.join(`players-${room.id}`);
+			socket.join(`normal-${room.id}`);
 			newMessage(room, user, "join", "joined the room.");
 		}
 	}
@@ -201,6 +200,7 @@ function startGame() {
 function setupTickInterval(room) {
 	// if (rooms[room.id]) {
 	sendArtist(room);
+	distRoles(room);
 	tickIntervals[room.id] = setInterval(function() {
 		let timeup = room.tick();
 		if (timeup) {
@@ -208,12 +208,13 @@ function setupTickInterval(room) {
 			// TODO: Reveal word to everyone when round is over.
 			let gameover = room.endRound();
 			if (gameover) {
-				room.endGame();
 				io.in(room.id).emit(
 					"endGame",
 					room.customEnd || "Time Up!",
-					room.players
+					room.word.actual,
+					room.genScoreboard()
 				);
+				room.endGame();
 				setTimeout(function() {
 					room.resetGame();
 					io.in(room.id).emit("resetGame");
@@ -223,7 +224,7 @@ function setupTickInterval(room) {
 				io.in(room.id).emit(
 					"endRound",
 					room.customEnd || "Time Up!",
-					room.players
+					room.word.actual
 				);
 				setTimeout(function() {
 					let startable = room.nextRound();
@@ -249,13 +250,24 @@ function sendArtist(room) {
 	sendWord(room);
 }
 
+function distRoles(room) {
+	for (let player in room.players) {
+		let socket = io.sockets.connected[room.players[player].id];
+		socket.leave(`secret-${room.id}`);
+		socket.join(`normal-${room.id}`);
+	}
+	let socket = io.sockets.connected[room.artist.actual];
+	socket.leave(`normal-${room.id}`);
+	socket.join(`secret-${room.id}`);
+}
+
 function sendWord(room) {
 	let socket = io.sockets.connected[room.artist.actual];
-	socket.in(`players-${room.id}`).emit("word", room.word.hidden);
+	socket.in(`normal-${room.id}`).emit("word", room.word.hidden);
 	if (room.options.showWordToSpectators.value) {
-		socket.in(`spectators-${room.id}`).emit("word", room.word.hidden);
+		socket.in(`secret-${room.id}`).emit("word", room.word.hidden);
 	} else {
-		socket.in(`spectators-${room.id}`).emit("word", "Hidden To Spectators");
+		socket.in(`secret-${room.id}`).emit("word", "Hidden To Spectators");
 	}
 	socket.emit("word", room.word.actual);
 }
@@ -282,14 +294,13 @@ function removeUser() {
 	let user = users[this.id];
 	let room = rooms[user.room];
 	if (room) {
-		let ownerID = room.owner.id; // NOTE: Is an extra variable needed?
 		if (user.title == "spectator") {
 			room.removeSpectator(user);
 		} else {
 			room.removePlayer(user);
 		}
 		newMessage(room, user, "leave", "left the room.");
-		if (user.id == ownerID && Object.keys(room.players).length != 0) {
+		if (user.id == room.owner.id && Object.keys(room.players).length != 0) {
 			let newOwner = room.players[Object.keys(room.players)[0]]; // IDEA: Pick random instead of first in the list.
 			newMessage(room, newOwner, "system", "is now the new room owner.");
 			room.owner = newOwner;
@@ -301,9 +312,9 @@ function removeUser() {
 			user.id == room.artist.actual &&
 			Object.keys(room.players).length == 1
 		) {
-			room.customEnd = "More than one non-spectator is needed to play!";
+			// TODO: Reset the game.
 		} else if (user.id == room.artist.actual) {
-			room.customEnd = "The artist left the game!";
+			// TODO: Reset the game.
 		}
 		if (Object.keys(room.players).length == 0) {
 			for (let spectator in room.spectators) {
@@ -331,9 +342,9 @@ function deleteUser(user) {
 }
 
 function sendMessage(content) {
-	// TODO: secret messages to non-guesser, all guessed
 	let user = users[this.id];
 	let room = rooms[user.room];
+	let socket = io.sockets.connected[user.id];
 	switch (user.title) {
 		case "solver":
 			newMessage(room, user, "secret", content);
@@ -353,8 +364,10 @@ function sendMessage(content) {
 		case "guesser":
 			if (content == room.word.actual) {
 				room.solved(user);
+				socket.leave(`normal-${room.id}`);
+				socket.join(`secret-${room.id}`);
 				newMessage(room, user, "guessed", "has guessed the word!");
-				// newMessage(room, user, 'secret', content); // NOTE: Is this really needed?
+				// newMessage(room, user, 'secret', content); // NOTE: Unnecessary
 				if (
 					Object.keys(room.toScore).length >=
 					Object.keys(room.players).length - 1
@@ -365,7 +378,6 @@ function sendMessage(content) {
 			} else {
 				newMessage(room, user, "normal", content);
 			}
-
 			break;
 	}
 	updateRoom(room);
@@ -373,7 +385,8 @@ function sendMessage(content) {
 
 function newMessage(room, author, type, content) {
 	room.addMessage(author, type, content);
-	io.in(room.id).emit("getChatlog", room.chatlog);
+	io.in(`normal-${room.id}`).emit("getChatlog", room.getChatlog("normal"));
+	io.in(`secret-${room.id}`).emit("getChatlog", room.getChatlog("secret"));
 }
 
 function jsonCompare(obj1, obj2) {
