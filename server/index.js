@@ -1,4 +1,8 @@
 // jshint esversion: 6
+
+// TODO: Custom word list.
+// TODO: Choosable words.
+
 // NOT TESTING:
 // const = require('fs');
 // const = require('https');
@@ -16,9 +20,7 @@ const http = require("http");
 const server = http.createServer();
 // END
 
-const schedule = require("node-schedule");
 const io = require("socket.io")(server);
-const { dictionaries } = require("../config/dictionaries.json");
 const { colors } = require("../config/colors.json");
 const errors = require("../config/errors.json");
 const User = require("./classes/user.js");

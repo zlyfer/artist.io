@@ -86,7 +86,7 @@ class Room {
 				type: "number",
 				min: 1,
 				max: 60,
-				value: 8,
+				value: 5,
 				current: 0,
 				dependencies: false,
 				disabled: false
@@ -97,6 +97,44 @@ class Room {
 				type: "toggle",
 				value: false,
 				dependencies: false,
+				disabled: false
+			},
+			chooseWords: {
+				id: "chooseWords",
+				name: "Choose Words",
+				type: "toggle",
+				value: false,
+				dependencies: false,
+				disabled: false
+			},
+			wordsCount: {
+				id: "wordsCount",
+				name: "Choosable Words",
+				type: "select",
+				list: [2, 3, 4, 5],
+				value: 3,
+				dependencies: [
+					{
+						name: "chooseWords",
+						value: true
+					}
+				],
+				disable: false
+			},
+			chooseTime: {
+				id: "chooseTime",
+				name: "Time To Choose",
+				type: "number",
+				min: 3,
+				max: 60,
+				value: 8,
+				current: 0,
+				dependencies: [
+					{
+						name: "chooseWords",
+						value: true
+					}
+				],
 				disabled: false
 			},
 			artistScore: {
