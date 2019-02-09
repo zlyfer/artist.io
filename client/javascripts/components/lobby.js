@@ -64,7 +64,7 @@ function main_lobby() {
 				for (let i = 0; i < vue_userlist.userlist.length; i++) {
 					if (vue_userlist.userlist[i].title != "spectator") players++;
 				}
-				if (one == false || players < 2) {
+				if (one == false || players < 2 || !vue_lobby.allowEdit) {
 					$("#lobby-start").prop("disabled", true);
 				} else {
 					$("#lobby-start").prop("disabled", false);

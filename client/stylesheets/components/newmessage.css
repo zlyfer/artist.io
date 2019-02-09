@@ -1,8 +1,8 @@
 div#newmessage {
-	width: calc((100% / 2) - 388px - 1px);
+	width: calc((100% / 2) - 388px - 2px);
 	height: 75px;
 	background-color: var(--grey2);
-	border-left: 1px solid var(--green7);
+	border-left: 2px solid var(--grey3);
 	float: right;
 }
 

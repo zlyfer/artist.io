@@ -1,8 +1,8 @@
 div#roomlist {
-	width: calc(100% - 1px - 480px);
+	width: calc(100% - 2px - 480px);
 	height: 100%;
 	background-color: var(--grey2);
-	border-left: 1px solid var(--green7);
+	border-left: 2px solid var(--grey3);
 	float: left;
 	display: none;
 }

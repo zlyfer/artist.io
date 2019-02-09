@@ -15,6 +15,10 @@
 		"type": "warning",
 		"content": "You cannot change lobby settings. You are not the lobby owner."
 	},
+	"notownerstart": {
+		"type": "warning",
+		"content": "You cannot start the game. You are not the lobby owner."
+	},
 	"alreadyjoinedspectator": {
 		"type": "warning",
 		"content": "You are already spectator in this lobby."
@@ -26,10 +30,6 @@
 	"roomclosedspectator": {
 		"type": "warning",
 		"content": "The room was closed because no non-spectator were left."
-	},
-	"invalidsession": {
-		"type": "error",
-		"content": "Your sessions seems to be outdated. Sorry."
 	},
 	"notartist": {
 		"type": "warning",

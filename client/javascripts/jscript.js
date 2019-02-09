@@ -114,20 +114,16 @@ function main_socketio() {
 		$("#canvas").css("display", "block");
 	});
 	socket.on("nextRound", () => {
-		// TODO: update everything
 		$("#results").css("display", "none");
 		drawingCanvas.clear();
 	});
 	socket.on("endRound", (message, word) => {
-		// TODO: update everything
 		$("#results").css("display", "block");
 		vue_results.final = false;
 		vue_results.message = message;
 		vue_results.word = word;
-		vue_results.scoreboard = scoreboard;
 	});
 	socket.on("endGame", (message, word, scoreboard) => {
-		// TODO: update everything
 		$("#results").css("display", "block");
 		vue_results.final = true;
 		vue_results.message = message;
@@ -135,7 +131,12 @@ function main_socketio() {
 		vue_results.scoreboard = scoreboard;
 	});
 	socket.on("resetGame", () => {
-		// TODO: update everything
+		$("#lobby").removeClass("slideOutRight");
+		$("#lobby").addClass("zoomIn");
+		$("#canvas").css("display", "none");
+		$("#results").css("display", "none");
+		$("#drawingToolsDisabled").css("display", "block");
+		drawingCanvas.clear();
 	});
 }
 

@@ -5,9 +5,13 @@ function main_results() {
 		data: {
 			final: false,
 			message: "",
-			nextin: 0,
+			nextIn: 0,
 			word: "",
 			scoreboard: []
 		}
+	});
+
+	socket.on("tickNextIn", nextIn => {
+		vue_results.nextIn = nextIn;
 	});
 }

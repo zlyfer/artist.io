@@ -188,6 +188,7 @@ function updateLobby(opts, dicts) {
 function startGame() {
 	let user = users[this.id];
 	let room = rooms[user.room];
+	let socket = io.sockets.connected[user.id];
 	if (user.id == room.owner.id) {
 		let startable = room.startGame();
 		if (startable) {
@@ -196,7 +197,7 @@ function startGame() {
 			io.in(room.id).emit("startGame");
 		}
 		updateRoom(room);
-	}
+	} else socket.emit("toast", errors.notownerstart);
 }
 
 function setupTickInterval(room) {
@@ -207,7 +208,10 @@ function setupTickInterval(room) {
 		let timeup = room.tick();
 		if (timeup) {
 			clearTickInterval(room);
-			// TODO: Reveal word to everyone when round is over.
+			io.in(room.id).emit(
+				"tickNextIn",
+				room.options.waitTime.value - room.options.waitTime.current
+			);
 			let gameover = room.endRound();
 			if (gameover) {
 				io.in(room.id).emit(
@@ -217,30 +221,50 @@ function setupTickInterval(room) {
 					room.genScoreboard()
 				);
 				room.endGame();
-				setTimeout(function() {
-					room.resetGame();
-					io.in(room.id).emit("resetGame");
-					updateRoom(room);
-				}, room.options.waitTime.value * 1000);
+				tickIntervals[room.id] = setInterval(function() {
+					room.options.waitTime.current++;
+					if (room.options.waitTime.current >= room.options.waitTime.value) {
+						clearInterval(tickIntervals[room.id]);
+						room.resetGame();
+						io.in(room.id).emit("resetGame");
+						updateRoom(room);
+					}
+					io.in(room.id).emit(
+						"tickNextIn",
+						room.options.waitTime.value - room.options.waitTime.current
+					);
+				}, 1000);
 			} else {
 				io.in(room.id).emit(
 					"endRound",
 					room.customEnd || "Time Up!",
 					room.word.actual
 				);
-				setTimeout(function() {
-					let startable = room.nextRound();
-					if (startable) {
-						io.in(room.id).emit("nextRound");
-						setupTickInterval(room);
-						updateRoom(room);
+				tickIntervals[room.id] = setInterval(function() {
+					room.options.waitTime.current++;
+					if (room.options.waitTime.current >= room.options.waitTime.value) {
+						clearInterval(tickIntervals[room.id]);
+						let startable = room.nextSemiRound();
+						if (startable) {
+							io.in(room.id).emit("nextRound");
+							setupTickInterval(room);
+							updateRoom(room);
+						}
 					}
-				}, room.options.waitTime.value * 1000);
+					io.in(room.id).emit(
+						"tickNextIn",
+						room.options.waitTime.value - room.options.waitTime.current
+					);
+				}, 1000);
 			}
 		} else {
 			sendWord(room);
 		}
 		updateRoom(room);
+		io.in(room.id).emit(
+			"tickNextIn",
+			room.options.waitTime.value - room.options.waitTime.current
+		);
 	}, 1000);
 	// }
 }

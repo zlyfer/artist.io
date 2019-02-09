@@ -379,8 +379,10 @@
 					{{ word }}
 				</span>
 			</span>
-			<span class="results-headers" v-if="!final">
-				Next artist in {{ nextin }}
+			<span class="results-headers">
+				<span v-if="!final">Next artist</span>
+				<span v-if="final">Back to lobby</span>
+				in {{ nextIn }} second<span v-if="nextIn != 1">s</span>..
 			</span>
 			<!-- <span class="results-headers" v-if="final">Scoreboard:</span> -->
 			<div id="results-players" v-if="final">

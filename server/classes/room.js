@@ -105,7 +105,7 @@ class Room {
 				type: "toggle",
 				value: false,
 				dependencies: false,
-				disabled: false
+				disabled: true // TODO: Change to false, when implemented.
 			},
 			wordsCount: {
 				id: "wordsCount",
@@ -222,7 +222,8 @@ class Room {
 	}
 
 	startGame() {
-		return this.nextRound();
+		this.updateGamestate();
+		return this.nextSemiRound();
 	}
 
 	endRound() {
@@ -231,26 +232,31 @@ class Room {
 				this.players[player].score += this.toScore[player];
 		}
 		this.options.drawTime.current = 0;
+		this.options.waitTime.current = 0;
 		if (this.options.rounds.current >= this.options.rounds.value) {
 			return true;
 		}
 		return false;
 	}
 
+	nextSemiRound() {
+		for (let player in this.players)
+			this.players[player].changeTitle("guesser");
+		this.pickWord();
+		this.word.revealed = [];
+		this.customEnd = null;
+		let doNextRound = this.pickArtist();
+		if (doNextRound) {
+			return this.nextRound();
+		}
+		return true;
+	}
+
 	nextRound() {
 		if (Object.keys(this.players).length <= 1) {
 			return false;
 		}
-		this.customEnd = null;
-		for (let player in this.players)
-			this.players[player].changeTitle("guesser");
-		this.pickWord();
-		this.pickArtist();
-		this.word.revealed = [];
-		this.options.rounds.current++;
-		this.gamestate = `In Game (${this.options.rounds.current}/${
-			this.options.rounds.value
-		})`;
+		this.updateGamestate();
 		return true;
 	}
 
@@ -262,6 +268,13 @@ class Room {
 
 	resetGame() {
 		this.gamestate = "In Lobby";
+	}
+
+	updateGamestate() {
+		this.options.rounds.current++;
+		this.gamestate = `In Game (${this.options.rounds.current}/${
+			this.options.rounds.value
+		})`;
 	}
 
 	tick() {
@@ -288,11 +301,12 @@ class Room {
 		) {
 			this.artist.used = [];
 			this.pickArtist();
-			return;
+			return true;
 		}
 		this.artist.used.push(selartist);
 		this.artist.actual = selartist;
 		this.players[selartist].changeTitle("artist");
+		return false;
 	}
 
 	getWordList(filter) {
