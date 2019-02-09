@@ -10,12 +10,14 @@ function main_drawingTools() {
 				$(`.color-source`).removeClass("active");
 				$(`#color-${color}`).addClass("active");
 				let rgb = getRGB($(`#color-${color}`).css("background-color"));
-				drawingCanvas.enableDrawingMode();
 				drawingCanvas.setStrokeColor(rgb);
 				drawingCanvas.configBucketTool({
 					color: rgb
 				});
 				drawingCanvas.lcolor = rgb;
+				if (drawingCanvas.tool != "pencil" && drawingCanvas.tool != "bucket")
+					toogleTool("pencil");
+				drawingCanvas.enableDrawingMode();
 				changeCursor();
 			},
 			hover(event, color) {

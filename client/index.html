@@ -278,7 +278,7 @@
 				class="userlist-entry animated zoomInLeft"
 				:id="user.id"
 				v-for="user in userlist"
-				:style="`background-color:hsl(${user.color},50%,45%);`"
+				:style="`background-color:hsla(${user.color}, 50%, 45%, 0.5);`"
 			>
 				<div class="userlist-entry-info status">
 					<span>
@@ -293,8 +293,6 @@
 				</div>
 			</div>
 		</div>
-
-		<canvas class="in" id="canvas"></canvas>
 
 		<div class="pre animated zoomIn" id="lobby">
 			<div class="lobby-container">
@@ -371,6 +369,8 @@
 			/>
 		</div>
 
+		<canvas class="in" id="canvas"></canvas>
+
 		<div class="post animate zoomIn" id="results">
 			<span class="results-headers">{{ message }}</span>
 			<span class="results-headers"
@@ -445,7 +445,7 @@
 					<span
 						class="chatlog-message author"
 						:style="`color:hsl(${message.authorcolor},50%,45%);`"
-						>{{ message.author }}</span
+						>{{ message.author }}:</span
 					>
 					<span
 						class="chatlog-message content"

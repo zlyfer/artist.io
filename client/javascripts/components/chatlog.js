@@ -5,15 +5,18 @@ function main_chatlog() {
 		data: {
 			chatlog: []
 		},
-		methods: {}
+		methods: {},
+		updated() {
+			// TODO: Make initial scroll when joining the room.
+			$("#chatlog")[0].scrollTo({
+				top: $("#chatlog")[0].scrollHeight,
+				left: 0,
+				behavior: "smooth"
+			});
+		}
 	});
 
 	socket.on("getChatlog", function(chatlog) {
 		vue_chatlog.chatlog = chatlog;
-		$("#chatlog")[0].scrollTo({
-			top: $("#chatlog")[0].scrollHeight,
-			left: 0,
-			behavior: "smooth"
-		});
 	});
 }

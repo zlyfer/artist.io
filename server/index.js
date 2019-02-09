@@ -289,13 +289,15 @@ function distRoles(room) {
 
 function sendWord(room) {
 	let socket = io.sockets.connected[room.artist.actual];
-	socket.in(`normal-${room.id}`).emit("word", room.word.hidden);
-	if (room.options.showWordToSpectators.value) {
-		socket.in(`secret-${room.id}`).emit("word", room.word.hidden);
-	} else {
-		socket.in(`secret-${room.id}`).emit("word", "Hidden To Spectators");
+	if (socket) {
+		socket.in(`normal-${room.id}`).emit("word", room.word.hidden);
+		if (room.options.showWordToSpectators.value) {
+			socket.in(`secret-${room.id}`).emit("word", room.word.hidden);
+		} else {
+			socket.in(`secret-${room.id}`).emit("word", "Hidden To Spectators");
+		}
+		socket.emit("word", room.word.actual);
 	}
-	socket.emit("word", room.word.actual);
 }
 
 function clearTickInterval(room) {
@@ -404,6 +406,9 @@ function sendMessage(content) {
 			} else {
 				newMessage(room, user, "normal", content);
 			}
+			break;
+		default:
+			newMessage(room, user, "normal", content);
 			break;
 	}
 	updateRoom(room);

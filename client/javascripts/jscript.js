@@ -97,6 +97,7 @@ function main_socketio() {
 		}, 1000);
 	});
 	socket.on("artist", artist => {
+		console.log("test", artist);
 		if (artist) {
 			drawingCanvas.enableDrawingMode();
 			$("#drawingToolsDisabled").css("display", "none");
@@ -110,7 +111,7 @@ function main_socketio() {
 	});
 	socket.on("startGame", () => {
 		$("#lobby").removeClass("zoomIn");
-		$("#lobby").addClass("slideOutRight");
+		$("#lobby").addClass("zoomOut");
 		$("#canvas").css("display", "block");
 	});
 	socket.on("nextRound", () => {
@@ -131,7 +132,7 @@ function main_socketio() {
 		vue_results.scoreboard = scoreboard;
 	});
 	socket.on("resetGame", () => {
-		$("#lobby").removeClass("slideOutRight");
+		$("#lobby").removeClass("zoomOut");
 		$("#lobby").addClass("zoomIn");
 		$("#canvas").css("display", "none");
 		$("#results").css("display", "none");

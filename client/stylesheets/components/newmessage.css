@@ -1,9 +1,11 @@
 div#newmessage {
 	width: calc((100% / 2) - 388px - 2px);
 	height: 75px;
-	background-color: var(--grey2);
-	border-left: 2px solid var(--grey3);
 	float: right;
+	/* background-color: var(--grey2); */
+	/* border-left: 2px solid var(--grey3); */
+	background-color: var(--opaque0);
+	border-left: 2px solid var(--opaque1);
 }
 
 div#newmessage input#newmessage-text {
@@ -16,6 +18,7 @@ div#newmessage input#newmessage-text {
 	border-bottom-right-radius: 0;
 	border-right: none;
 	float: left;
+	background-color: var(--opaquegrey1);
 }
 
 div#newmessage input#newmessage-send {

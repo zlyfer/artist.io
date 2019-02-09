@@ -4,6 +4,6 @@ div#drawingToolsDisabled {
 	top: 622px;
 	width: 776px;
 	height: 80px;
-	background-color: rgba(0, 0, 0, 0.7);
 	display: none;
+	background-color: #4242427f;
 }
