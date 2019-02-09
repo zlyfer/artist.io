@@ -4,14 +4,14 @@
 // TODO: Choosable words.
 
 // NOT TESTING:
-const = require('fs');
-const = require('https');
-const = {
-	key: fs.readFileSync('/etc/letsencrypt/live/zlyfer.net/privkey.pem'),
-	cert: fs.readFileSync('/etc/letsencrypt/live/zlyfer.net/cert.pem'),
-	ca: fs.readFileSync('/etc/letsencrypt/live/zlyfer.net/chain.pem'),
+const fs = require("fs");
+const https = require("https");
+const options = {
+	key: fs.readFileSync("/etc/letsencrypt/live/zlyfer.net/privkey.pem"),
+	cert: fs.readFileSync("/etc/letsencrypt/live/zlyfer.net/cert.pem"),
+	ca: fs.readFileSync("/etc/letsencrypt/live/zlyfer.net/chain.pem"),
 	rejectUnauthorized: false
-}
+};
 const server = https.createServer(options);
 // END
 
