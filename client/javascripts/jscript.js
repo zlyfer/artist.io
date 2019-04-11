@@ -186,10 +186,7 @@ function getRGB(cssString) {
 	return rgb;
 }
 
-function changeCursor(
-	clear = true,
-	context = $("#cursor")[0].getContext("2d")
-) {
+function changeCursor(clear = true, context = $("#cursor")[0].getContext("2d")) {
 	let size = drawingCanvas.lineWidth;
 	let color = drawingCanvas.strokeColor;
 	if (clear) context.clearRect(0, 0, 120, 120);

@@ -78,8 +78,7 @@ function updateRoom(room) {
 	};
 	data.header.name = room.name;
 	data.header.gamestate = room.gamestate;
-	data.header.time =
-		room.options.drawTime.value - room.options.drawTime.current;
+	data.header.time = room.options.drawTime.value - room.options.drawTime.current;
 	data.header.slots = {};
 	data.header.slots.current = room.options.slots.current;
 	data.header.slots.value = room.options.slots.value;
@@ -110,14 +109,7 @@ function sendOnlinePlayers() {
 	io.emit("getOnlinePlayers", Object.keys(users).length);
 }
 
-function renameAndJoin(
-	username,
-	usercolor,
-	roomname,
-	language,
-	spec = false,
-	socket = this
-) {
+function renameAndJoin(username, usercolor, roomname, language, spec = false, socket = this) {
 	let user = users[socket.id];
 	user.changeName(username);
 	user.changeColor(usercolor);
@@ -202,24 +194,16 @@ function startGame() {
 
 function setupTickInterval(room) {
 	// if (rooms[room.id]) {
-	sendArtist(room);
 	distRoles(room);
+	sendArtist(room);
 	tickIntervals[room.id] = setInterval(function() {
 		let timeup = room.tick();
 		if (timeup) {
 			clearTickInterval(room);
-			io.in(room.id).emit(
-				"tickNextIn",
-				room.options.waitTime.value - room.options.waitTime.current
-			);
+			io.in(room.id).emit("tickNextIn", room.options.waitTime.value - room.options.waitTime.current);
 			let gameover = room.endRound();
 			if (gameover) {
-				io.in(room.id).emit(
-					"endGame",
-					room.customEnd || "Time Up!",
-					room.word.actual,
-					room.genScoreboard()
-				);
+				io.in(room.id).emit("endGame", room.customEnd || "Time Up!", room.word.actual, room.genScoreboard());
 				room.endGame();
 				tickIntervals[room.id] = setInterval(function() {
 					room.options.waitTime.current++;
@@ -229,17 +213,10 @@ function setupTickInterval(room) {
 						io.in(room.id).emit("resetGame");
 						updateRoom(room);
 					}
-					io.in(room.id).emit(
-						"tickNextIn",
-						room.options.waitTime.value - room.options.waitTime.current
-					);
+					io.in(room.id).emit("tickNextIn", room.options.waitTime.value - room.options.waitTime.current);
 				}, 1000);
 			} else {
-				io.in(room.id).emit(
-					"endRound",
-					room.customEnd || "Time Up!",
-					room.word.actual
-				);
+				io.in(room.id).emit("endRound", room.customEnd || "Time Up!", room.word.actual);
 				tickIntervals[room.id] = setInterval(function() {
 					room.options.waitTime.current++;
 					if (room.options.waitTime.current >= room.options.waitTime.value) {
@@ -251,20 +228,14 @@ function setupTickInterval(room) {
 							updateRoom(room);
 						}
 					}
-					io.in(room.id).emit(
-						"tickNextIn",
-						room.options.waitTime.value - room.options.waitTime.current
-					);
+					io.in(room.id).emit("tickNextIn", room.options.waitTime.value - room.options.waitTime.current);
 				}, 1000);
 			}
 		} else {
 			sendWord(room);
 		}
 		updateRoom(room);
-		io.in(room.id).emit(
-			"tickNextIn",
-			room.options.waitTime.value - room.options.waitTime.current
-		);
+		io.in(room.id).emit("tickNextIn", room.options.waitTime.value - room.options.waitTime.current);
 	}, 1000);
 	// }
 }
@@ -336,10 +307,7 @@ function removeUser() {
 				room.owner.changeTitle("owner");
 			}
 		}
-		if (
-			user.id == room.artist.actual &&
-			Object.keys(room.players).length == 1
-		) {
+		if (user.id == room.artist.actual && Object.keys(room.players).length == 1) {
 			// TODO: Reset the game.
 		} else if (user.id == room.artist.actual) {
 			// TODO: Reset the game.
@@ -390,16 +358,13 @@ function sendMessage(content) {
 			}
 			break;
 		case "guesser":
-			if (content == room.word.actual) {
+			if (content.toLowerCase() == room.word.actual.toLowerCase()) {
 				room.solved(user);
 				socket.leave(`normal-${room.id}`);
 				socket.join(`secret-${room.id}`);
 				newMessage(room, user, "guessed", "has guessed the word!");
 				// newMessage(room, user, 'secret', content); // NOTE: Unnecessary
-				if (
-					Object.keys(room.toScore).length >=
-					Object.keys(room.players).length - 1
-				) {
+				if (Object.keys(room.toScore).length >= Object.keys(room.players).length - 1) {
 					// -1 because the artist counts as a player but cannot guess
 					room.customEnd = "Everyone guessed the word!";
 				}
