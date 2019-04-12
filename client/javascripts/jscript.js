@@ -48,7 +48,7 @@ function main_vue() {
 
 function main_socketio() {
 	// NOT TESTING:
-	socket = io("https://zlyfer.net:3001", {
+	socket = io("https://zlyfer.net:3000", {
 		rejectUnauthorized: false
 	});
 	// END
