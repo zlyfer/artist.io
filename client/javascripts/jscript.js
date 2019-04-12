@@ -48,13 +48,13 @@ function main_vue() {
 
 function main_socketio() {
 	// NOT TESTING:
-	socket = io("https://zlyfer.net:3000", {
+	socket = io("https://zlyfer.net:3001", {
 		rejectUnauthorized: false
 	});
 	// END
 
 	// TESTING: Client
-	// socket = io("http://localhost:3000");
+	// socket = io("http://localhost:3001");
 	// END
 
 	socket.on("connected", () => {

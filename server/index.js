@@ -252,7 +252,7 @@ function roomNextRound(room) {
 	});
 }
 
-server.listen(3000);
+server.listen(3001);
 
 function checkRoundEnd(roomname) {
 	if (rooms[roomname].guessedIt.length >= Object.keys(rooms[roomname].players).length - 1 && rooms[roomname].gamestate != "Lobby") {
