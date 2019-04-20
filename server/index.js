@@ -300,7 +300,8 @@ function removeUser() {
 		}
 		newMessage(room, user, "leave", "left the room.");
 		if (user.id == room.owner.id && Object.keys(room.players).length != 0) {
-			let newOwner = room.players[Object.keys(room.players)[0]]; // IDEA: Pick random instead of first in the list.
+			let trnd = Math.floor(Math.random() * (Object.keys(room.players).length - 1));
+			let newOwner = room.players[Object.keys(room.players)[trnd]];
 			newMessage(room, newOwner, "system", "is now the new room owner.");
 			room.owner = newOwner;
 			if (room.gamestate == "In Lobby") {
@@ -309,6 +310,7 @@ function removeUser() {
 		}
 		if (user.id == room.artist.actual && Object.keys(room.players).length == 1) {
 			// TODO: Reset the game.
+			io.in(room.id).emit("endRound", "Artist Left!", room.word.actual); // TODO: Setup timer, etc.
 		} else if (user.id == room.artist.actual) {
 			// TODO: Reset the game.
 		}

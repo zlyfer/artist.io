@@ -228,8 +228,7 @@ class Room {
 
 	endRound() {
 		for (let player in this.players) {
-			if (this.toScore[player])
-				this.players[player].score += this.toScore[player];
+			if (this.toScore[player]) this.players[player].score += this.toScore[player];
 		}
 		this.options.drawTime.current = 0;
 		this.options.waitTime.current = 0;
@@ -240,8 +239,7 @@ class Room {
 	}
 
 	nextSemiRound() {
-		for (let player in this.players)
-			this.players[player].changeTitle("guesser");
+		for (let player in this.players) this.players[player].changeTitle("guesser");
 		this.pickWord();
 		this.word.revealed = [];
 		this.customEnd = null;
@@ -272,17 +270,12 @@ class Room {
 
 	updateGamestate() {
 		this.options.rounds.current++;
-		this.gamestate = `In Game (${this.options.rounds.current}/${
-			this.options.rounds.value
-		})`;
+		this.gamestate = `In Game (${this.options.rounds.current}/${this.options.rounds.value})`;
 	}
 
 	tick() {
 		this.options.drawTime.current++;
-		if (
-			this.options.drawTime.current > this.options.drawTime.value ||
-			this.customEnd != null
-		) {
+		if (this.options.drawTime.current > this.options.drawTime.value || this.customEnd != null) {
 			return true;
 		}
 		this.genHidden();
@@ -291,14 +284,9 @@ class Room {
 
 	pickArtist() {
 		let artistlist = Object.keys(this.players);
-		artistlist = artistlist.filter(
-			player => this.artist.used.includes(player) == false
-		);
+		artistlist = artistlist.filter(player => this.artist.used.includes(player) == false);
 		let selartist = artistlist[Math.floor(Math.random() * artistlist.length)];
-		if (
-			this.artist.used.length == Object.keys(this.players).length ||
-			selartist == undefined
-		) {
+		if (this.artist.used.length == Object.keys(this.players).length || selartist == undefined) {
 			this.artist.used = [];
 			this.pickArtist();
 			return true;
@@ -314,20 +302,15 @@ class Room {
 		for (let dict of this.dictionaries) {
 			if (dict.activated) wordlist = wordlist.concat(dict.words);
 		}
-		if (filter)
-			wordlist = wordlist.filter(word => filter.includes(word) == false);
+		if (filter) wordlist = wordlist.filter(word => filter.includes(word) == false);
 		return wordlist;
 	}
 
 	pickWord() {
 		let wordlist = this.getWordList();
-		if (this.options.multiWords.value == false)
-			wordlist = this.getWordList(this.word.used);
+		if (this.options.multiWords.value == false) wordlist = this.getWordList(this.word.used);
 		let selword = wordlist[Math.floor(Math.random() * wordlist.length)];
-		if (
-			this.word.used.length == this.getWordList().length ||
-			selword == undefined
-		) {
+		if (this.word.used.length == this.getWordList().length || selword == undefined) {
 			this.word.used = [];
 			this.pickWord();
 			return;
@@ -339,28 +322,16 @@ class Room {
 	genHidden() {
 		// Fill this.word.revealed:
 		let hintlevel = 0;
-		if (this.options.showHints.value)
-			hintlevel = parseInt(
-				this.options.hintLevel.value.substr(
-					0,
-					this.options.hintLevel.value.length - 1
-				)
-			);
-		let wordprogress =
-			this.options.drawTime.current / (this.options.drawTime.value / 100);
+		if (this.options.showHints.value) hintlevel = parseInt(this.options.hintLevel.value.substr(0, this.options.hintLevel.value.length - 1));
+		let wordprogress = this.options.drawTime.current / (this.options.drawTime.value / 100);
 		let maxreveal = Math.ceil(hintlevel * (this.word.actual.length / 100));
 		// Thanks to: https://gist.github.com/AugustMiller/85b54d49493bb71ba81e
-		let toreveal = Math.ceil(
-			((wordprogress - 0) * (maxreveal - 0)) / (100 - 0) + 0
-		);
+		let toreveal = Math.ceil(((wordprogress - 0) * (maxreveal - 0)) / (100 - 0) + 0);
 		for (let i = 0; i < toreveal - this.word.revealed.length; i++) {
 			let nextreveal = 0;
 			do {
 				nextreveal = Math.floor(Math.random() * this.word.actual.length - 1);
-			} while (
-				this.word.revealed.includes(nextreveal) ||
-				this.word.actual[nextreveal] == " "
-			);
+			} while (this.word.revealed.includes(nextreveal) || this.word.actual[nextreveal] == " ");
 			this.word.revealed.push(nextreveal);
 		}
 		// Generate hint based on this.word.revealed:
@@ -382,7 +353,7 @@ class Room {
 
 	solved(user) {
 		user.changeTitle("solver");
-		let score = Math.floor(Math.random() * 100); // TODO: Calculate score.
+		let score = 1; // Calculate a proper score.
 		this.toScore[user.id] = score;
 	}
 
@@ -459,8 +430,7 @@ class Room {
 		else {
 			let chatlog = [];
 			this.chatlog.forEach(message => {
-				if (message.type != "spectator" && message.type != "secret")
-					chatlog.push(message);
+				if (message.type != "spectator" && message.type != "secret") chatlog.push(message);
 			});
 			return chatlog;
 		}
