@@ -56,9 +56,14 @@ function viewartgallery(username, password, socket = this) {
     socket.emit("toast", notifications.login2);
     socket.emit("viewartgallery", username);
     // TODO: Send images.
-    getUserImages(username).forEach((image) => socket.emit("art", image.word, image.data));
+    getUserImages(username).forEach((image, index) => {
+      setTimeout(() => {
+        socket.emit("art", image.word, image.data);
+      }, index * 200);
+    });
   } else socket.emit("toast", notifications.wronglogin2);
 }
+
 function getUserImages(username) {
   let images = [];
   let dir = fs.readdirSync(`users/${username}/gallery`);
@@ -67,7 +72,7 @@ function getUserImages(username) {
       let content = JSON.parse(fs.readFileSync(`users/${username}/gallery/${file}`));
       let word = content.word;
       let image = fs.readFileSync(`users/${username}/gallery/${file.replace(".json", ".png")}`);
-      let data = new Buffer(image).toString("base64");
+      let data = new Buffer.from(image).toString("base64");
       images.push({ word, data });
     }
   });
