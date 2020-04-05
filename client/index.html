@@ -1,410 +1,464 @@
 <html>
-  <head>
-    <!-- Basic -->
-    <title>Artist.io - by zlyfer</title>
+	<head>
+		<!-- Basic -->
+		<title>Artist.io - by zlyfer</title>
 
-    <!-- Third Party Stylesheets -->
-    <!-- Google Fonts -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto" />
-    <!-- Font Awesome -->
-    <link
-      rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
-      integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
-      crossorigin="anonymous"
-    />
-    <!-- Animate.css -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.css"
-      integrity="sha256-gVCm5mRCmW9kVgsSjQ7/5TLtXqvfCoxhdsjE6O1QLm8="
-      crossorigin="anonymous"
-    />
-    <!-- Toastr -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css"
-      integrity="sha256-ENFZrbVzylNbgnXx0n3I1g//2WeO47XxoPe0vkp3NC8="
-      crossorigin="anonymous"
-    />
-    <!-- TippyJS -->
-    <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/animations/scale.css" />
+		<!-- Third Party Stylesheets -->
+		<link
+			rel="stylesheet"
+			href="https://fonts.googleapis.com/css?family=Roboto"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
+			integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
+			crossorigin="anonymous"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.css"
+			integrity="sha256-gVCm5mRCmW9kVgsSjQ7/5TLtXqvfCoxhdsjE6O1QLm8="
+			crossorigin="anonymous"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css"
+			integrity="sha256-ENFZrbVzylNbgnXx0n3I1g//2WeO47XxoPe0vkp3NC8="
+			crossorigin="anonymous"
+		/>
 
-    <!-- Stylesheets -->
-    <link rel="stylesheet" type="text/css" href="./stylesheets/colors.css" />
-    <link rel="stylesheet" type="text/css" href="./stylesheets/style.css" />
-    <link rel="stylesheet" type="text/css" href="./stylesheets/animations.css" />
-    <link rel="stylesheet" type="text/css" href="./stylesheets/components/cursor.css" />
-    <link rel="stylesheet" type="text/css" href="./stylesheets/components/userform.css" />
-    <link rel="stylesheet" type="text/css" href="./stylesheets/components/roomlist.css" />
-    <link rel="stylesheet" type="text/css" href="./stylesheets/components/header.css" />
-    <link rel="stylesheet" type="text/css" href="./stylesheets/components/userlist.css" />
-    <link rel="stylesheet" type="text/css" href="./stylesheets/components/lobby.css" />
-    <link rel="stylesheet" type="text/css" href="./stylesheets/components/canvas.css" />
-    <link rel="stylesheet" type="text/css" href="./stylesheets/components/results.css" />
-    <link rel="stylesheet" type="text/css" href="./stylesheets/components/drawingTools.css" />
-    <link rel="stylesheet" type="text/css" href="./stylesheets/components/drawingToolsDisabled.css" />
-    <link rel="stylesheet" type="text/css" href="./stylesheets/components/chatlog.css" />
-    <link rel="stylesheet" type="text/css" href="./stylesheets/components/newmessage.css" />
-    <link rel="stylesheet" type="text/css" href="./stylesheets/components/chooseWords.css" />
-    <link rel="stylesheet" type="text/css" href="./stylesheets/components/artgallery.css" />
+		<!-- Stylesheets -->
+		<link rel="stylesheet" type="text/css" href="./stylesheets/colors.css" />
+		<link rel="stylesheet" type="text/css" href="./stylesheets/style.css" />
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="./stylesheets/animations.css"
+		/>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="./stylesheets/components/cursor.css"
+		/>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="./stylesheets/components/userform.css"
+		/>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="./stylesheets/components/roomlist.css"
+		/>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="./stylesheets/components/header.css"
+		/>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="./stylesheets/components/userlist.css"
+		/>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="./stylesheets/components/lobby.css"
+		/>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="./stylesheets/components/canvas.css"
+		/>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="./stylesheets/components/results.css"
+		/>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="./stylesheets/components/drawingTools.css"
+		/>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="./stylesheets/components/drawingToolsDisabled.css"
+		/>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="./stylesheets/components/chatlog.css"
+		/>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="./stylesheets/components/newmessage.css"
+		/>
 
-    <!-- Third Party Javascripts -->
-    <!-- Canvas Free Drawing -->
-    <script src="./javascripts/thirdparty/canvas-free-drawing.js" type="text/javascript"></script>
-    <!-- JQuery -->
-    <script
-      src="https://code.jquery.com/jquery-3.3.1.min.js"
-      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-      crossorigin="anonymous"
-    ></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.3/dist/vue.js"></script>
-    <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2.6.3/dist/vue.min.js"></script> -->
-    <!-- Socket.io -->
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.dev.js"
-      integrity="sha256-i2Orhi397HWPn93rsCUTW8HBoso65vY/VNTllm9Kuqo="
-      crossorigin="anonymous"
-    ></script>
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script> -->
-    <!-- Toastr -->
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"
-      integrity="sha256-3blsJd4Hli/7wCQ+bmgXfOdK7p/ZUMtPXY08jmxSSgk="
-      crossorigin="anonymous"
-    ></script>
-    <!-- TippyJS -->
-    <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
-    <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
-    <!-- <script src="https://unpkg.com/@popperjs/core@2"></script>
-      <script src="https://unpkg.com/tippy.js@6"></script> -->
-    <!-- JSHashes -->
-    <script src="http://cdn.rawgit.com/h2non/jsHashes/master/hashes.js"></script>
+		<!-- Third Party Javascripts -->
+		<script
+			src="./javascripts/thirdparty/canvas-free-drawing.js"
+			type="text/javascript"
+		></script>
+		<script
+			src="https://code.jquery.com/jquery-3.3.1.min.js"
+			integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+			crossorigin="anonymous"
+		></script>
+		<script src="https://cdn.jsdelivr.net/npm/vue@2.6.3/dist/vue.js"></script>
+		<!-- <script src="https://cdn.jsdelivr.net/npm/vue@2.6.3/dist/vue.min.js"></script> -->
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.dev.js"
+			integrity="sha256-i2Orhi397HWPn93rsCUTW8HBoso65vY/VNTllm9Kuqo="
+			crossorigin="anonymous"
+		></script>
+		<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script> -->
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"
+			integrity="sha256-3blsJd4Hli/7wCQ+bmgXfOdK7p/ZUMtPXY08jmxSSgk="
+			crossorigin="anonymous"
+		></script>
 
-    <!-- Javascripts -->
-    <script type="text/javascript" src="./javascripts/components/cursor.js"></script>
-    <script type="text/javascript" src="./javascripts/components/userform.js"></script>
-    <script type="text/javascript" src="./javascripts/components/roomlist.js"></script>
-    <script type="text/javascript" src="./javascripts/components/header.js"></script>
-    <script type="text/javascript" src="./javascripts/components/userlist.js"></script>
-    <script type="text/javascript" src="./javascripts/components/lobby.js"></script>
-    <script type="text/javascript" src="./javascripts/components/canvas.js"></script>
-    <script type="text/javascript" src="./javascripts/components/results.js"></script>
-    <script type="text/javascript" src="./javascripts/components/drawingTools.js"></script>
-    <script type="text/javascript" src="./javascripts/components/drawingToolsDisabled.js"></script>
-    <script type="text/javascript" src="./javascripts/components/chatlog.js"></script>
-    <script type="text/javascript" src="./javascripts/components/newmessage.js"></script>
-    <script type="text/javascript" src="./javascripts/components/chooseWords.js"></script>
-    <script type="text/javascript" src="./javascripts/components/artgallery.js"></script>
-    <script type="text/javascript" src="./javascripts/jscript.js"></script>
+		<!-- Javascripts -->
+		<script
+			type="text/javascript"
+			src="./javascripts/components/cursor.js"
+		></script>
+		<script
+			type="text/javascript"
+			src="./javascripts/components/userform.js"
+		></script>
+		<script
+			type="text/javascript"
+			src="./javascripts/components/roomlist.js"
+		></script>
+		<script
+			type="text/javascript"
+			src="./javascripts/components/header.js"
+		></script>
+		<script
+			type="text/javascript"
+			src="./javascripts/components/userlist.js"
+		></script>
+		<script
+			type="text/javascript"
+			src="./javascripts/components/lobby.js"
+		></script>
+		<script
+			type="text/javascript"
+			src="./javascripts/components/canvas.js"
+		></script>
+		<script
+			type="text/javascript"
+			src="./javascripts/components/results.js"
+		></script>
+		<script
+			type="text/javascript"
+			src="./javascripts/components/drawingTools.js"
+		></script>
+		<script
+			type="text/javascript"
+			src="./javascripts/components/drawingToolsDisabled.js"
+		></script>
+		<script
+			type="text/javascript"
+			src="./javascripts/components/chatlog.js"
+		></script>
+		<script
+			type="text/javascript"
+			src="./javascripts/components/newmessage.js"
+		></script>
+		<script type="text/javascript" src="./javascripts/jscript.js"></script>
 
-    <!-- Favicons -->
-    <link rel="apple-touch-icon" href="./images/logo_round.png" />
-    <link rel="shortcut icon" type="image/x-icon" href="./images/logo.png" />
+		<!-- Favicons -->
+		<link rel="apple-touch-icon" href="./images/logo_round.png" />
+		<link rel="shortcut icon" type="image/x-icon" href="./images/logo.png" />
 
-    <!-- Meta Tags For Mobile Compability -->
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="theme-color" content="#DA7604" />
+		<!-- Meta Tags For Mobile Compability -->
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="theme-color" content="#DA7604" />
 
-    <!-- Other Meta -->
-  </head>
+		<!-- Other Meta -->
+	</head>
 
-  <body>
-    <p class="state_loading animated pulse" id="connecting">Connecting..</p>
+	<body>
+		<p class="animated pulse" id="connecting">Connecting..</p>
 
-    <canvas class="cursor" id="cursor" width="120" height="120"></canvas>
+		<canvas class="cursor" id="cursor" width="120" height="120"></canvas>
 
-    <div class="state_welcome animated" id="userform">
-      <div id="userform-logo"></div>
-      <input
-        id="userform-username"
-        class="userform-enter2continue"
-        type="text"
-        placeholder="Username"
-        v-model="username"
-      />
-      <input id="userform-password" class="userform-enter2continue" type="password" placeholder="Password (Optional)" />
-      <input id="userform-color" type="range" v-model="userColor" min="0" max="315" />
-      <input id="userform-roomname" class="userform-enter2continue" type="text" placeholder="Room Name" />
-      <select id="userform-language">
-        <!-- TODO: Auto generate -->
-        <option id="userform-language-english" value="English">English</option>
-        <option id="userform-language-german" value="German">German</option>
-      </select>
-      <input id="userform-join" type="button" :value="joinOrCreate" disabled />
-      <input id="userform-spectate" type="button" value="Spectate" disabled />
-      <input id="userform-viewartgallery" type="button" value="View Art Gallery" />
-      <a id="userform-credits" href="./pages/3rd-party.html" target="_blank">3rd party sources</a>
-      <p id="userform-online">Online: {{ onlinePlayers }}</p>
-    </div>
+		<div class="welcome animated" id="userform">
+			<div id="userform-logo"></div>
+			<input
+				id="userform-username"
+				class="userform-enter2continue"
+				type="text"
+				placeholder="Username"
+				v-model="username"
+			/>
+			<input
+				id="userform-color"
+				type="range"
+				v-model="userColor"
+				min="0"
+				max="315"
+			/>
+			<input
+				id="userform-roomname"
+				class="userform-enter2continue"
+				type="text"
+				placeholder="Room Name"
+			/>
+			<select id="userform-language">
+				<!-- TODO: Auto generate -->
+				<option id="userform-language-german" value="German">German</option>
+				<option id="userform-language-english" value="English">English</option>
+			</select>
+			<input id="userform-join" type="button" :value="joinOrCreate" disabled />
+			<input id="userform-spectate" type="button" value="Spectate" disabled />
+			<a id="userform-credits" href="./pages/credits.html" target="_blank"
+				>credits</a
+			>
+			<p id="userform-online">Online: {{ onlinePlayers }}</p>
+		</div>
 
-    <div class="state_welcome animated" id="roomlist">
-      <div class="header roomlist-entry">
-        <div class="header roomlist-entry-info name">
-          <span class="roomlist-entry-info-text"> Room </span>
-        </div>
-        <div class="header roomlist-entry-info language">
-          <span class="roomlist-entry-info-text"> Language </span>
-        </div>
-        <div class="header roomlist-entry-info players">
-          <span class="roomlist-entry-info-text"><span> Players </span></span>
-        </div>
-        <div class="header roomlist-entry-info slots">
-          <span class="roomlist-entry-info-text">Slots</span>
-        </div>
-        <div class="header roomlist-entry-info gamestate">
-          <span class="roomlist-entry-info-text">Gamestate</span>
-        </div>
-      </div>
-      <div
-        class="roomlist-entry animated fadeIn"
-        :id="roomentry.id"
-        v-for="roomentry in roomlist"
-        v-on:click="select(`${roomentry.id}`)"
-      >
-        <div class="roomlist-entry-info name">
-          <span class="roomlist-entry-info-text">{{ roomentry.name }}</span>
-        </div>
-        <div class="roomlist-entry-info language">
-          <span class="roomlist-entry-info-text">{{ roomentry.language }}</span>
-        </div>
-        <div class="roomlist-entry-info players">
-          <span class="roomlist-entry-info-text"
-            ><span v-for="player in roomentry.players">{{ player.name }} </span></span
-          >
-        </div>
-        <div class="roomlist-entry-info slots">
-          <span class="roomlist-entry-info-text"
-            >{{ roomentry.options.slots.current }}/{{ roomentry.options.slots.value }}<span
-              v-if="roomentry.options.slots.spectators > 0"
-            >
-              ({{ roomentry.options.slots.spectators }})</span
-            ></span
-          >
-        </div>
-        <div class="roomlist-entry-info gamestate">
-          <span class="roomlist-entry-info-text">{{ roomentry.gamestate }}</span>
-        </div>
-      </div>
-    </div>
+		<div class="welcome animated" id="roomlist">
+			<!-- TODO: Make header for roomlist-entry to display which column has which information. -->
+			<div
+				class="roomlist-entry animated fadeIn"
+				:id="roomentry.id"
+				v-for="roomentry in roomlist"
+				v-on:click="select(`${roomentry.id}`)"
+			>
+				<div class="roomlist-entry-info name">
+					<span class="roomlist-entry-info-text">{{ roomentry.name }}</span>
+				</div>
+				<div class="roomlist-entry-info language">
+					<span class="roomlist-entry-info-text">{{ roomentry.language }}</span>
+				</div>
+				<div class="roomlist-entry-info players">
+					<span class="roomlist-entry-info-text"
+						><span v-for="player in roomentry.players"
+							>{{ player.name }}
+						</span></span
+					>
+				</div>
+				<div class="roomlist-entry-info slots">
+					<span class="roomlist-entry-info-text"
+						>{{ roomentry.options.slots.current }}/{{
+							roomentry.options.slots.value
+						}}<span v-if="roomentry.options.slots.spectators > 0">
+							({{ roomentry.options.slots.spectators }})</span
+						></span
+					>
+				</div>
+				<div class="roomlist-entry-info gamestate">
+					<span class="roomlist-entry-info-text">{{
+						roomentry.gamestate
+					}}</span>
+				</div>
+			</div>
+		</div>
 
-    <div class="zoomIn animated" id="artgallery">
-      <div id="artgallery_header">
-        <span id="artgallery_username">
-          {{username}}'{{genitive(username)}} Art Gallery
-        </span>
-      </div>
-      <div id="images">
-        <div class="imageframe" v-for="image in images">
-          <div class="imageframe_nameheader">
-            <span class="imageframe_name">{{image.word}}</span>
-          </div>
-          <div class="imageframe_image">
-            <img class="imageframe_image_img" :src="image.data" alt="image.word" />
-          </div>
-        </div>
-      </div>
-    </div>
+		<div class="pre in animated slideInDown" id="header">
+			<span>Room: {{ name }}</span>
+			<span>{{ gamestate }}</span>
+			<span id="header-word">Word: {{ word }}</span>
+			<span>Time: {{ time }}</span>
+			<span v-if="slots.spectators > 0"
+				>Players: {{ slots.current }}/{{ slots.value }} ({{
+					slots.spectators
+				}})</span
+			>
+			<span v-else>Players: {{ slots.current }}/{{ slots.value }}</span>
+		</div>
 
-    <div class="state_lobby animated slideInDown" id="header">
-      <div class="slot">
-        <span>Room: {{ name }}</span>
-      </div>
-      <div class="slot">
-        <span>{{ gamestate }}</span>
-      </div>
-      <div class="slot">
-        <span id="header-word-word">Word:</span>
-        <div id="header-word">
-          <div v-for="letter in word" class="header-word-letter" :class="{'hidden': letter === ' '}">
-            <span>{{letter}}</span>
-          </div>
-        </div>
-      </div>
-      <div class="slot">
-        <span>Time: {{ time }}</span>
-      </div>
-      <div class="slot">
-        <span v-if="slots.spectators > 0">Players: {{ slots.current }}/{{ slots.value }} ({{ slots.spectators }})</span>
-        <span v-else>Players: {{ slots.current }}/{{ slots.value }}</span>
-      </div>
-    </div>
+		<div class="pre in animated slideInLeft" id="userlist">
+			<div
+				class="userlist-entry animated zoomInLeft"
+				:id="user.id"
+				v-for="user in userlist"
+				:style="`background-color:hsla(${user.color}, 50%, 45%, 0.5);`"
+			>
+				<div class="userlist-entry-info status">
+					<span>
+						<i class="fas" :class="`fa-${user.titleicon}`"></i>
+					</span>
+				</div>
+				<div class="userlist-entry-info username">
+					<span>{{ user.name }}</span>
+				</div>
+				<div class="userlist-entry-info score">
+					<span>{{ user.score }}</span>
+				</div>
+			</div>
+		</div>
 
-    <div class="state_lobby pre in animated slideInLeft" id="userlist">
-      <div
-        class="userlist-entry animated zoomInLeft"
-        :id="user.id"
-        v-for="user in userlist"
-        :style="`background-color:hsla(${user.color}, 50%, 45%, 0.5);`"
-      >
-        <div class="userlist-entry-info status">
-          <span>
-            <i class="fas" :class="`fa-${user.titleicon}`"></i>
-          </span>
-        </div>
-        <div class="userlist-entry-info username">
-          <span>{{ user.name }}</span>
-        </div>
-        <div class="userlist-entry-info score">
-          <span>{{ user.score }}</span>
-        </div>
-      </div>
-    </div>
+		<div class="pre animated zoomIn" id="lobby">
+			<div class="lobby-container">
+				<div class="lobby-container-header">
+					<span class="lobby-container-header-text">Options</span>
+				</div>
+				<div
+					class="lobby-container-options-container"
+					v-for="option in options"
+				>
+					<span class="lobby-container-options-container-description">{{
+						option.name
+					}}</span>
+					<input
+						v-if="option.type == 'number' || option.type == 'text'"
+						:id="`option-${option.id}`"
+						class="lobby-container-options-container-value"
+						type="text"
+						:disabled="!allowEdit || option.disabled"
+						v-model="option.value"
+						v-on:change="updateLobby()"
+						v-on:input="updateLobby(false)"
+					/>
+					<select
+						v-if="option.type == 'select'"
+						:id="`option-${option.id}`"
+						class="lobby-container-options-container-value"
+						:disabled="!allowEdit || option.disabled"
+						v-model="option.value"
+						v-on:change="updateLobby()"
+					>
+						<option v-for="selectable in option.list" :value="selectable">
+							{{ selectable }}
+						</option>
+					</select>
+					<input
+						v-if="option.type == 'toggle'"
+						:id="`option-${option.id}`"
+						class="lobby-container-options-container-value"
+						type="checkbox"
+						:disabled="!allowEdit || option.disabled"
+						v-model="option.value"
+						v-on:change="updateLobby()"
+					/>
+				</div>
+			</div>
+			<div class="lobby-container">
+				<div class="lobby-container-header">
+					<span class="lobby-container-header-text">Dictionaries</span>
+				</div>
+				<div
+					class="lobby-container-options-container"
+					v-for="dictionary in dictionaries"
+				>
+					<span class="lobby-container-options-container-description">{{
+						dictionary.name
+					}}</span>
+					<input
+						class="lobby-container-options-container-value"
+						:id="`lobby-option-dictionary-${dictionary.name}`"
+						type="checkbox"
+						:disabled="!allowEdit"
+						:checked="dictionary.activated"
+						v-model="dictionary.activated"
+						v-on:change="updateLobby()"
+					/>
+				</div>
+			</div>
+			<input
+				id="lobby-start"
+				type="button"
+				value="Start Game!"
+				:disabled="!allowEdit"
+			/>
+		</div>
 
-    <div class="state_lobby animated zoomIn" id="lobby">
-      <div class="lobby-container">
-        <div class="lobby-container-header">
-          <span class="lobby-container-header-text">Room Options</span>
-        </div>
-        <div class="lobby-container-options-container" v-for="option in options">
-          <span :data-tippy-content="option.description" class="lobby-container-options-container-description"
-            >{{ option.name }}</span
-          >
-          <input
-            v-if="option.type == 'number' || option.type == 'text'"
-            :id="`option-${option.id}`"
-            class="lobby-container-options-container-value"
-            type="text"
-            :disabled="!allowEdit || option.disabled"
-            v-model="option.value"
-            v-on:change="updateLobby()"
-            v-on:input="updateLobby(false)"
-          />
-          <select
-            v-if="option.type == 'select'"
-            :id="`option-${option.id}`"
-            class="lobby-container-options-container-value"
-            :disabled="!allowEdit || option.disabled"
-            v-model="option.value"
-            v-on:change="updateLobby()"
-          >
-            <option v-for="selectable in option.list" :value="selectable">
-              {{ selectable }}
-            </option>
-          </select>
-          <input
-            v-if="option.type == 'toggle'"
-            :id="`option-${option.id}`"
-            class="lobby-container-options-container-value"
-            type="checkbox"
-            :disabled="!allowEdit || option.disabled"
-            v-model="option.value"
-            v-on:change="updateLobby()"
-          />
-        </div>
-      </div>
-      <div class="lobby-container">
-        <div class="lobby-container-header">
-          <span class="lobby-container-header-text">Dictionaries</span>
-        </div>
-        <div class="lobby-container-options-container" v-for="dictionary in dictionaries">
-          <span class="lobby-container-options-container-description">{{ dictionary.name }}</span>
-          <input
-            class="lobby-container-options-container-value"
-            :id="`lobby-option-dictionary-${dictionary.name}`"
-            type="checkbox"
-            :disabled="!allowEdit"
-            :checked="dictionary.activated"
-            v-model="dictionary.activated"
-            v-on:change="updateLobby()"
-          />
-        </div>
-      </div>
-      <input id="lobby-start" type="button" value="Start Game!" :disabled="!allowEdit" />
-    </div>
+		<canvas class="in" id="canvas"></canvas>
 
-    <canvas class="state_drawing" id="canvas"></canvas>
+		<div class="post animate zoomIn" id="results">
+			<span class="results-headers">{{ message }}</span>
+			<span class="results-headers"
+				>The word was:
+				<span id="results-word">
+					{{ word }}
+				</span>
+			</span>
+			<span class="results-headers">
+				<span v-if="!final">Next artist</span>
+				<span v-if="final">Back to lobby</span>
+				in {{ nextIn }} second<span v-if="nextIn != 1">s</span>..
+			</span>
+			<!-- <span class="results-headers" v-if="final">Scoreboard:</span> -->
+			<div id="results-players" v-if="final">
+				<div class="results-players-entry">
+					<span class="results-players-info place">Place</span>
+					<span class="results-players-info name">Name</span>
+					<span class="results-players-info score">Score</span>
+				</div>
+				<div class="results-players-entry" v-for="entry in scoreboard">
+					<span class="results-players-info place">{{ entry.place }}.</span>
+					<span class="results-players-info name">{{ entry.name }}</span>
+					<span class="results-players-info score">{{ entry.score }}</span>
+				</div>
+			</div>
+		</div>
 
-    <div class="state_chooseWords" id="chooseWords">
-      <span>{{chooseTime}}</span>
-      <span v-for="word in choosables">{{word}}</span>
-    </div>
+		<div class="pre in animated zoomIn" id="drawingTools">
+			<div id="drawingTools-colors-container">
+				<div
+					v-for="color in colors"
+					:id="`color-${color}`"
+					v-on:click="select(color)"
+					v-on:mouseover="hover($event, color)"
+					class="color-source"
+					:style="`background-color:var(--${color})`"
+				></div>
+			</div>
+			<div id="pencil" class="half first tools active">
+				<i class="fas fa-pencil-alt"></i>
+			</div>
+			<div id="eraser" class="half second tools">
+				<i class="fas fa-eraser"></i>
+			</div>
+			<div id="extractor" class="half first tools">
+				<i class="fas fa-eye-dropper"></i>
+			</div>
+			<div id="bucket" class="half second tools">
+				<i class="fas fa-fill-drip"></i>
+			</div>
+			<div id="zoom" class="tools">
+				<i class="fas fa-search"></i>
+			</div>
+			<div id="undo" class="half first tools">
+				<i class="fas fa-undo-alt"></i>
+			</div>
+			<div id="redo" class="half second tools">
+				<i class="fas fa-redo-alt"></i>
+			</div>
+			<div id="clear" class="tools">
+				<i class="fas fa-trash"></i>
+			</div>
+		</div>
 
-    <div class="state_result animate zoomIn" id="results">
-      <span class="results-headers">{{ message }}</span>
-      <span class="results-headers"
-        >The word was:
-        <span id="results-word">
-          {{ word }}
-        </span>
-      </span>
-      <span class="results-headers">
-        <span v-if="!final">Next artist</span>
-        <span v-if="final">Back to lobby</span>
-        in {{ nextIn }} second<span v-if="nextIn != 1">s</span>..
-      </span>
-      <!-- <span class="results-headers" v-if="final">Scoreboard:</span> -->
-      <div id="results-players" v-if="final">
-        <div class="results-players-entry">
-          <span class="results-players-info place">Place</span>
-          <span class="results-players-info name">Name</span>
-          <span class="results-players-info score">Score</span>
-        </div>
-        <div class="results-players-entry" v-for="entry in scoreboard">
-          <span class="results-players-info place">{{ entry.place }}.</span>
-          <span class="results-players-info name">{{ entry.name }}</span>
-          <span class="results-players-info score">{{ entry.score }}</span>
-        </div>
-      </div>
-    </div>
+		<div class="pre in animated fadeIn" id="drawingToolsDisabled"></div>
+		<div class="pre in animated zoomIn" id="fillSpace"></div>
 
-    <div class="state_drawing animated zoomIn" id="drawingTools">
-      <div id="drawingTools-colors-container">
-        <div
-          v-for="color in colors"
-          :id="`color-${color}`"
-          v-on:click="select(color)"
-          v-on:mouseover="hover($event, color)"
-          class="color-source"
-          :style="`background-color:var(--${color})`"
-        ></div>
-      </div>
-      <div id="pencil" class="half first tools active">
-        <i class="fas fa-pencil-alt"></i>
-      </div>
-      <div id="eraser" class="half second tools">
-        <i class="fas fa-eraser"></i>
-      </div>
-      <div id="extractor" class="half first tools">
-        <i class="fas fa-eye-dropper"></i>
-      </div>
-      <div id="bucket" class="half second tools">
-        <i class="fas fa-fill-drip"></i>
-      </div>
-      <div id="zoom" class="tools">
-        <i class="fas fa-search"></i>
-      </div>
-      <div id="undo" class="half first tools">
-        <i class="fas fa-undo-alt"></i>
-      </div>
-      <div id="redo" class="half second tools">
-        <i class="fas fa-redo-alt"></i>
-      </div>
-      <div id="clear" class="tools">
-        <i class="fas fa-trash"></i>
-      </div>
-    </div>
+		<div class="pre in animated slideInRight" id="chatlog">
+			<div class="chatlog-message animated fadeIn" v-for="message in chatlog">
+				<span class="chatlog-message-wrapper">
+					<span
+						class="chatlog-message author"
+						:style="`color:hsl(${message.authorcolor},50%,45%);`"
+						>{{ message.author }}:</span
+					>
+					<span
+						class="chatlog-message content"
+						:style="`color:var(--msg-${message.type});`"
+						>{{ message.content }}</span
+					>
+				</span>
+			</div>
+		</div>
 
-    <div class="state_drawing animated fadeIn" id="drawingToolsDisabled"></div>
-
-    <div class="state_drawing animated zoomIn" id="fillSpace"></div>
-
-    <div class="state_lobby animated slideInRight" id="chatlog">
-      <div class="chatlog-message animated fadeIn" v-for="message in chatlog">
-        <span class="chatlog-message-wrapper">
-          <span class="chatlog-message author" :style="`color:hsl(${message.authorcolor},50%,45%);`"
-            >{{ message.author }}:</span
-          >
-          <span class="chatlog-message content" :style="`color:var(--msg-${message.type});`"
-            >{{ message.content }}</span
-          >
-        </span>
-      </div>
-    </div>
-
-    <div class="state_lobby animated slideInRight" id="newmessage">
-      <input id="newmessage-text" type="text" placeholder="Send a message.." />
-      <input id="newmessage-send" type="button" value="Send" />
-    </div>
-  </body>
+		<div class="pre in animated slideInRight" id="newmessage">
+			<input id="newmessage-text" type="text" placeholder="Send a message.." />
+			<input id="newmessage-send" type="button" value="Send" />
+		</div>
+	</body>
 </html>

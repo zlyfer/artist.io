@@ -1,21 +1,21 @@
 // jshint esversion: 6
 function main_header() {
-  vue_header = new Vue({
-    el: "#header",
-    data: {
-      name: "",
-      gamestate: "",
-      word: "",
-      time: 0,
-      slots: {
-        current: 0,
-        value: 0,
-        spectators: 0
-      }
-    }
-  });
+	vue_header = new Vue({
+		el: "#header",
+		data: {
+			name: "",
+			gamestate: "",
+			word: "",
+			time: 0,
+			slots: {
+				current: 0,
+				value: 0,
+				spectators: 0
+			}
+		}
+	});
 
-  socket.on("word", word => {
-    vue_header.word = word;
-  });
+	socket.on("word", word => {
+		vue_header.word = word;
+	});
 }

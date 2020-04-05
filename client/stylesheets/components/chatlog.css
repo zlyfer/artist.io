@@ -1,38 +1,43 @@
 div#chatlog {
-  width: calc((100% / 2) - 388px - 2px);
-  min-height: calc(572px + 80px - 75px);
-  height: calc(100% - 125px);
-  overflow-y: auto;
-  /* background-color: var(--grey2); */
-  /* border-left: 2px solid var(--grey3); */
-  background-color: var(--opaque0);
-  border-left: 2px solid var(--opaque1);
-  display: none;
+	width: calc((100% / 2) - 388px - 2px);
+	min-height: calc(572px + 80px - 75px);
+	height: calc(100% - 125px);
+	overflow-y: auto;
+	/* background-color: var(--grey2); */
+	/* border-left: 2px solid var(--grey3); */
+	background-color: var(--opaque0);
+	border-left: 2px solid var(--opaque1);
 }
 
 div#chatlog div.chatlog-message {
-  width: calc(100% - 3px - 3px - 5px - 5px);
-  float: left;
-  word-break: break-all;
-  word-wrap: break-word;
-  background-color: var(--opaque2);
-  margin-top: 3px;
-  margin-left: 3px;
-  padding: 5px;
+	width: calc(100% - 3px - 3px - 5px - 5px);
+	float: left;
+	word-break: break-all;
+	word-wrap: break-word;
+	background-color: var(--opaque1);
+	margin-top: 3px;
+	margin-left: 3px;
+	padding: 5px;
 }
 
 div#chatlog div.chatlog-message span.chatlog-message {
-  line-height: 24px;
-  padding-left: 2px;
-  padding-right: 2px;
-  float: left;
+	line-height: 24px;
+	padding-left: 2px;
+	padding-right: 2px;
+	float: left;
 }
 
-div#chatlog div.chatlog-message span.chatlog-message-wrapper span.chatlog-message.author {
-  /* width: calc(25% - 4px); */
-  font-weight: bold;
+div#chatlog
+	div.chatlog-message
+	span.chatlog-message-wrapper
+	span.chatlog-message.author {
+	/* width: calc(25% - 4px); */
+	font-weight: bold;
 }
 
-div#chatlog div.chatlog-message span.chatlog-message-wrapper span.chatlog-message.content {
-  max-width: calc(75% - 4px);
+div#chatlog
+	div.chatlog-message
+	span.chatlog-message-wrapper
+	span.chatlog-message.content {
+	max-width: calc(75% - 4px);
 }
