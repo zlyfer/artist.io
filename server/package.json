@@ -13,6 +13,7 @@
   "author": "Frederik 'zlyfer' Shull",
   "license": "SEE LICENSE IN LICENSE.md",
   "dependencies": {
+    "jshashes": "^1.0.8",
     "shortid": "^2.2.14",
     "socket.io": "^2.1.1"
   }

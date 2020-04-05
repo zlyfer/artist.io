@@ -1,0 +1,73 @@
+div#artgallery {
+  width: 100%;
+  min-height: calc(100% - 25px);
+  background-color: var(--opaque2);
+  display: none;
+  float: left;
+  overflow-y: auto;
+  padding-bottom: 25px;
+}
+
+div#artgallery div#artgallery_header {
+  width: 80%;
+  height: 100px;
+  background-color: var(--opaque2);
+  margin-left: 10%;
+  margin-top: 25px;
+  border: 1px solid white;
+  border-radius: 15px;
+  float: left;
+}
+
+div#artgallery div#artgallery_header span#artgallery_username {
+  font-size: 3em;
+  text-align: center;
+  width: 100%;
+  display: inline-block;
+  line-height: 100px;
+  color: var(--bluegrey6);
+}
+
+div#artgallery div#images {
+  width: 95%;
+  margin-top: 25px;
+  float: left;
+  margin-left: 2.5%;
+  background-color: var(--opaque2);
+  border: 1px solid white;
+  border-radius: 15px;
+}
+
+div#artgallery div#images div.imageframe {
+  width: 45%;
+  background-color: var(--opaque-1);
+  margin-left: 1%;
+  border-radius: 15px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  float: left;
+}
+div#artgallery div#images div.imageframe:nth-child(even) {
+  margin-left: 8%;
+}
+
+div#artgallery div#images div.imageframe div.imageframe_nameheader {
+  height: 50px;
+  width: 100%;
+}
+
+div#artgallery div#images div.imageframe div.imageframe_nameheader span.imageframe_name {
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  line-height: 49px;
+  font-size: 1.5em;
+  color: var(--grey2);
+}
+div#artgallery div#images div.imageframe div.imageframe_image {
+  padding-bottom: 25px;
+}
+div#artgallery div#images div.imageframe div.imageframe_image img.imageframe_image_img {
+  width: 90%;
+  margin-left: 5%;
+}

@@ -1,51 +1,57 @@
 div#roomlist {
-	width: calc(100% - 2px - 480px);
-	height: 100%;
-	float: left;
-	display: none;
-	/* background-color: var(--grey2); */
-	/* border-left: 2px solid var(--grey3); */
-	background-color: var(--opaque0);
-	border-left: 2px solid var(--opaque1);
+  width: calc(100% - 2px - 480px);
+  height: 100%;
+  float: right;
+  /* background-color: var(--grey2); */
+  /* border-left: 2px solid var(--grey3); */
+  background-color: var(--opaque0);
+  border-left: 2px solid var(--opaque1);
+  display: none;
 }
 
 div#roomlist div.roomlist-entry {
-	width: 100%;
-	height: 30px;
-	cursor: pointer;
-	/* background-color: var(--grey3); */
-	/* border-bottom: 1px solid var(--grey5); */
-	background-color: var(--opaque0);
-	border-top: 1px solid var(--opaque1);
+  width: 100%;
+  height: 30px;
+  /* background-color: var(--grey3); */
+  /* border-bottom: 1px solid var(--grey5); */
+  background-color: var(--opaque0);
+  border-top: 1px solid var(--opaque1);
+}
+div#roomlist div.roomlist-entry:not(.header) {
+  cursor: pointer;
 }
 
-div#roomlist div.roomlist-entry:hover,
+div#roomlist div.roomlist-entry div.header {
+  background-color: var(--opaque1);
+}
+
+div#roomlist div.roomlist-entry:not(.header):hover,
 div#roomlist div.roomlist-entry.selected {
-	/* background-color: var(--green1); */
-	background-color: var(--opaquehover);
+  /* background-color: var(--green1); */
+  background-color: var(--opaquehover);
 }
 
 div#roomlist div.roomlist-entry div.roomlist-entry-info {
-	width: calc(100% / 5 - 1px);
-	height: 100%;
-	float: left;
-	overflow-x: auto;
+  width: calc(100% / 5 - 1px);
+  height: 100%;
+  float: left;
+  overflow-x: auto;
 }
 
 div#roomlist div.roomlist-entry div.roomlist-entry-info:not(:nth-child(1)) {
-	/* border-left: 1px solid var(--grey5); */
-	border-left: 1px solid var(--opaque1);
+  /* border-left: 1px solid var(--grey5); */
+  border-left: 1px solid var(--opaque1);
 }
 
 div#roomlist div.roomlist-entry span.roomlist-entry-info-text {
-	width: calc(98%);
-	height: 100%;
-	padding-left: 1%;
-	color: var(--green7);
-	display: inline-block;
-	text-align: center;
-	line-height: 30px;
-	/* text-overflow: ellipsis; */
-	/* white-space: nowrap; */
-	/* overflow: hidden; */
+  width: calc(98%);
+  height: 100%;
+  padding-left: 1%;
+  color: var(--green7);
+  display: inline-block;
+  text-align: center;
+  line-height: 30px;
+  /* text-overflow: ellipsis; */
+  /* white-space: nowrap; */
+  /* overflow: hidden; */
 }

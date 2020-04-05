@@ -1,5 +1,7 @@
 canvas#canvas {
-	position: absolute;
-	left: calc((100% / 2) - 388px);
-	top: 50px;
+  /* position: absolute; */
+  left: calc((100% / 2) - 388px);
+  /* top: 50px; */
+  float: left;
+  display: none;
 }
