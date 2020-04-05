@@ -4,20 +4,20 @@
 // TODO: Choosable words.
 
 // NOT TESTING:
-// const fs = require("fs");
-// const https = require("https");
-// const options = {
-//   key: fs.readFileSync("/etc/letsencrypt/live/medievo.de-0001/privkey.pem"),
-//   cert: fs.readFileSync("/etc/letsencrypt/live/medievo.de-0001/cert.pem"),
-//   ca: fs.readFileSync("/etc/letsencrypt/live/medievo.de-0001/chain.pem"),
-//   rejectUnauthorized: false
-// };
-// const server = https.createServer(options);
+const fs = require("fs");
+const https = require("https");
+const options = {
+  key: fs.readFileSync("/etc/letsencrypt/live/medievo.de-0001/privkey.pem"),
+  cert: fs.readFileSync("/etc/letsencrypt/live/medievo.de-0001/cert.pem"),
+  ca: fs.readFileSync("/etc/letsencrypt/live/medievo.de-0001/chain.pem"),
+  rejectUnauthorized: false,
+};
+const server = https.createServer(options);
 // END
 
 // TESTING: Server
-const http = require("http");
-const server = http.createServer();
+// const http = require("http");
+// const server = http.createServer();
 // END
 
 const fs = require("fs");
