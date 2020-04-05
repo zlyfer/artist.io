@@ -4,47 +4,75 @@
 // TODO: Choosable words.
 
 // NOT TESTING:
-const fs = require("fs");
-const https = require("https");
-const options = {
-  key: fs.readFileSync("/etc/letsencrypt/live/medievo.de-0001/privkey.pem"),
-  cert: fs.readFileSync("/etc/letsencrypt/live/medievo.de-0001/cert.pem"),
-  ca: fs.readFileSync("/etc/letsencrypt/live/medievo.de-0001/chain.pem"),
-  rejectUnauthorized: false
-};
-const server = https.createServer(options);
+// const fs = require("fs");
+// const https = require("https");
+// const options = {
+//   key: fs.readFileSync("/etc/letsencrypt/live/medievo.de-0001/privkey.pem"),
+//   cert: fs.readFileSync("/etc/letsencrypt/live/medievo.de-0001/cert.pem"),
+//   ca: fs.readFileSync("/etc/letsencrypt/live/medievo.de-0001/chain.pem"),
+//   rejectUnauthorized: false
+// };
+// const server = https.createServer(options);
 // END
 
 // TESTING: Server
-// const http = require("http");
-// const server = http.createServer();
+const http = require("http");
+const server = http.createServer();
 // END
 
+const fs = require("fs");
+const hashes = require("jshashes");
 const io = require("socket.io")(server);
 const { colors } = require("../config/colors.json");
-const errors = require("../config/errors.json");
+const notifications = require("../config/notifications.json");
 const User = require("./classes/user.js");
 const Room = require("./classes/room.js");
 
 var rooms = {};
 var users = {};
 var tickIntervals = {};
+var tickIntervals2 = {};
 
-io.on("connection", socket => {
+io.on("connection", (socket) => {
   socket.emit("connected");
   newConnection(socket);
   sendRoomList(socket);
   socket.on("checkJoinOrCreate", checkJoinOrCreate);
   socket.on("renameAndJoin", renameAndJoin);
-  socket.on("renameAndSpectate", (a, b, c, d) => {
-    renameAndJoin(a, b, c, d, true, socket);
+  socket.on("renameAndSpectate", (a, b, c, d, e) => {
+    renameAndJoin(a, b, c, d, e, true, socket);
   });
+  socket.on("viewartgallery", viewartgallery);
   socket.on("sendMessage", sendMessage);
   socket.on("updateLobby", updateLobby);
   socket.on("startGame", startGame);
   socket.on("updateCanvas", updateCanvas);
   socket.on("disconnect", removeUser);
 });
+
+function viewartgallery(username, password, socket = this) {
+  if (!checkUserExists(username)) socket.emit("toast", notifications.nouser);
+  else if (login(username, password, socket, false)) {
+    socket.emit("toast", notifications.login2);
+    socket.emit("viewartgallery", username);
+    // TODO: Send images.
+    getUserImages(username).forEach((image) => socket.emit("art", image.word, image.data));
+  } else socket.emit("toast", notifications.wronglogin2);
+}
+function getUserImages(username) {
+  let images = [];
+  let dir = fs.readdirSync(`users/${username}/gallery`);
+  dir.forEach((file) => {
+    if (file.endsWith(".json")) {
+      let content = JSON.parse(fs.readFileSync(`users/${username}/gallery/${file}`));
+      let word = content.word;
+      let image = fs.readFileSync(`users/${username}/gallery/${file.replace(".json", ".png")}`);
+      let data = new Buffer(image).toString("base64");
+      images.push({ word, data });
+    }
+  });
+  return images;
+}
 
 function newConnection(socket) {
   let user = new User(socket.id);
@@ -66,7 +94,7 @@ function genColors() {
 }
 
 function sendRoomList(socket) {
-  let user = users[socket.id];
+  // let user = users[socket.id];
   socket.emit("getRoomlist", rooms);
 }
 
@@ -74,7 +102,7 @@ function updateRoom(room) {
   let data = {
     header: {},
     userlist: {},
-    lobby: {}
+    lobby: {},
   };
   data.header.name = room.name;
   data.header.gamestate = room.gamestate;
@@ -98,53 +126,87 @@ function sendAllowEdit(room) {
 }
 
 function checkJoinOrCreate(roomname) {
-  let exists = false;
-  if (roomExists(roomname)) {
-    exists = true;
-  }
-  this.emit("checkJoinOrCreate", exists);
+  this.emit("checkJoinOrCreate", roomExists(roomname));
 }
 
 function sendOnlinePlayers() {
   io.emit("getOnlinePlayers", Object.keys(users).length);
 }
 
-function renameAndJoin(username, usercolor, roomname, language, spec = false, socket = this) {
-  let user = users[socket.id];
-  user.changeName(username);
-  user.changeColor(usercolor);
-  if (spec) {
-    user.changeTitle("spectator");
+function checkUserExists(username) {
+  return fs.existsSync(`users/${username}`);
+}
+
+function createUser(username, password) {
+  fs.mkdirSync(`users/${username}`);
+  fs.mkdirSync(`users/${username}/gallery`);
+  fs.writeFileSync(
+    `users/${username}/login.json`,
+    JSON.stringify({
+      username,
+      password,
+    })
+  );
+}
+
+function login(username, password, socket, create) {
+  let user = checkUserExists(username);
+  if (!user && create) {
+    if (password != new hashes.SHA256().hex("")) {
+      createUser(username, password);
+      socket.emit("toast", notifications.registerd);
+    } else socket.emit("toast", notifications.notregistered);
+    return true;
   } else {
-    user.changeTitle();
-  }
-  let room = roomExists(roomname);
-  let error = false;
-  if (room) {
-    if (spec) {
-      error = room.addSpectator(user);
+    let content = JSON.parse(fs.readFileSync(`users/${username}/login.json`));
+    if (content.password == password) {
+      if (create) socket.emit("toast", notifications.login);
+      return true;
     } else {
+      if (create) socket.emit("toast", notifications.wronglogin);
+      return false;
+    }
+  }
+}
+
+function renameAndJoin(username, password, usercolor, roomname, language, spec = false, socket = this) {
+  let user = users[socket.id];
+  if (login(username, password, socket, true)) {
+    user.changeName(username);
+    user.changeColor(usercolor);
+    if (spec) {
+      user.changeTitle("spectator");
+    } else {
+      user.changeTitle();
+    }
+    let room = roomExists(roomname);
+    let error = false;
+    if (room) {
+      if (spec) {
+        error = room.addSpectator(user);
+      } else {
+        error = room.addPlayer(user);
+      }
+    } else if (spec == false) {
+      user.changeTitle("owner");
+      room = new Room(roomname, user, language);
+      rooms[room.id] = room;
+      clearTickInterval(room);
       error = room.addPlayer(user);
     }
-  } else if (spec == false) {
-    user.changeTitle("owner");
-    room = new Room(roomname, user, language);
-    rooms[room.id] = room;
-    clearTickInterval(room);
-    error = room.addPlayer(user);
-  }
-  if (error[0]) {
-    socket.emit("toast", error[1]);
-  } else {
-    socket.join(room.id);
-    socket.emit("joinedRoom");
-    updateRoom(room);
-    if (spec) {
-      socket.join(`secret-${room.id}`);
-      newMessage(room, user, "join", "is spectating now.");
+    if (error[0]) {
+      socket.emit("toast", error[1]);
     } else {
-      socket.join(`normal-${room.id}`);
-      newMessage(room, user, "join", "joined the room.");
+      socket.join(room.id);
+      socket.emit("joinedRoom");
+      updateRoom(room);
+      if (spec) {
+        socket.join(`secret-${room.id}`);
+        newMessage(room, user, "join", "is spectating now.");
+      } else {
+        socket.join(`normal-${room.id}`);
+        newMessage(room, user, "join", "joined the room.");
+      }
     }
   }
 }
@@ -172,7 +234,7 @@ function updateLobby(opts, dicts) {
     }
     updateRoom(room);
   } else {
-    this.emit("toast", errors.notowner);
+    this.emit("toast", notifications.notowner);
     updateRoom(room);
   }
 }
@@ -182,30 +244,45 @@ function startGame() {
   let room = rooms[user.room];
   let socket = io.sockets.connected[user.id];
   if (user.id == room.owner.id) {
-    let startable = room.startGame();
-    if (startable) {
-      clearTickInterval(room);
-      setupTickInterval(room);
-      io.in(room.id).emit("startGame");
+    if (room.options.chooseWords.value == true) {
+      room.genChoosableWords();
+      io.in(room.id).emit("choosableWords", room.word.choosables, room.options.chooseTime.value);
+      tickIntervals[room.id] = setInterval(function () {
+        room.tickChoosableWord();
+        io.in(room.id).emit("tickChooseWord", room.options.chooseTime.value - room.options.chooseTime.current);
+      }, 1000);
+      setTimeout(function () {
+        clearTickInterval(room);
+        roomStartGame(room);
+      }, room.options.chooseTime.value * 1000);
+    } else {
+      if (room.startGame()) roomStartGame(room);
     }
-    updateRoom(room);
-  } else socket.emit("toast", errors.notownerstart);
+  } else socket.emit("toast", notifications.notownerstart);
+}
+
+function roomStartGame(room) {
+  clearTickInterval(room);
+  setupTickInterval(room);
+  io.in(room.id).emit("startGame");
+  updateRoom(room);
 }
 
 function setupTickInterval(room) {
   // if (rooms[room.id]) {
   distRoles(room);
   sendArtist(room);
-  tickIntervals[room.id] = setInterval(function() {
+  tickIntervals[room.id] = setInterval(function () {
     let timeup = room.tick();
     if (timeup) {
+      if (checkUserExists(users[room.artist.actual].name)) saveToGallery(room);
       clearTickInterval(room);
       io.in(room.id).emit("tickNextIn", room.options.waitTime.value - room.options.waitTime.current);
       let gameover = room.endRound();
       if (gameover) {
         io.in(room.id).emit("endGame", room.customEnd || "Time Up!", room.word.actual, room.genScoreboard());
         room.endGame();
-        tickIntervals[room.id] = setInterval(function() {
+        tickIntervals[room.id] = setInterval(function () {
           room.options.waitTime.current++;
           if (room.options.waitTime.current >= room.options.waitTime.value) {
             clearInterval(tickIntervals[room.id]);
@@ -217,15 +294,26 @@ function setupTickInterval(room) {
         }, 1000);
       } else {
         io.in(room.id).emit("endRound", room.customEnd || "Time Up!", room.word.actual);
-        tickIntervals[room.id] = setInterval(function() {
+        tickIntervals[room.id] = setInterval(function () {
           room.options.waitTime.current++;
           if (room.options.waitTime.current >= room.options.waitTime.value) {
             clearInterval(tickIntervals[room.id]);
-            let startable = room.nextSemiRound();
-            if (startable) {
-              io.in(room.id).emit("nextRound");
-              setupTickInterval(room);
-              updateRoom(room);
+
+            if (room.options.chooseWords.value == true) {
+              room.genChoosableWords();
+              io.in(room.id).emit("choosableWords", room.word.choosables, room.options.chooseTime.value);
+              tickIntervals2[room.id] = setInterval(function () {
+                room.tickChoosableWord();
+                io.in(room.id).emit("tickChooseWord", room.options.chooseTime.value - room.options.chooseTime.current);
+              }, 1000);
+              setTimeout(function () {
+                clearTickInterval2(room);
+                if (room.nextSemiRound()) {
+                  roomNextRound(room);
+                }
+              }, room.options.chooseTime.value * 1000);
+            } else {
+              if (room.nextSemiRoundNonChooseableWords()) roomNextRound(room);
             }
           }
           io.in(room.id).emit("tickNextIn", room.options.waitTime.value - room.options.waitTime.current);
@@ -238,6 +326,12 @@ function setupTickInterval(room) {
     io.in(room.id).emit("tickNextIn", room.options.waitTime.value - room.options.waitTime.current);
   }, 1000);
   // }
+}
+
+function roomNextRound(room) {
+  io.in(room.id).emit("nextRound");
+  setupTickInterval(room);
+  updateRoom(room);
 }
 
 function sendArtist(room) {
@@ -275,6 +369,24 @@ function clearTickInterval(room) {
   clearInterval(tickIntervals[room.id]);
   tickIntervals[room.id] = null;
 }
+function clearTickInterval2(room) {
+  clearInterval(tickIntervals2[room.id]);
+  tickIntervals2[room.id] = null;
+}
+
+function saveToGallery(room) {
+  let author = users[room.artist.actual].name;
+  let word = room.word.actual;
+  let image = room.canvas.replace(/^data:image\/\w+;base64,/, "");
+
+  let imagename = new hashes.SHA256().hex(image);
+  let imagedata = {
+    word,
+  };
+
+  fs.writeFileSync(`users/${author}/gallery/${imagename}.png`, new Buffer.from(image, "base64"));
+  fs.writeFileSync(`users/${author}/gallery/${imagename}.json`, JSON.stringify(imagedata));
+}
 
 function updateCanvas(data) {
   let user = users[this.id];
@@ -284,7 +396,7 @@ function updateCanvas(data) {
       room.canvas = data;
       this.in(room.id).emit("updateCanvas", room.canvas);
     } else {
-      this.emit("toast", errors.notartist);
+      this.emit("toast", notifications.notartist);
     }
   }
 }
@@ -318,7 +430,7 @@ function removeUser() {
     if (Object.keys(room.players).length == 0) {
       for (let spectator in room.spectators) {
         let socket = io.sockets.connected[room.spectators[spectator].id];
-        socket.emit("closeRoom", errors.roomclosedspectator);
+        socket.emit("closeRoom", notifications.roomclosedspectator);
         user.room = null;
       }
       deleteRoom(room);
@@ -395,6 +507,6 @@ function jsonCompare(obj1, obj2) {
   }
 }
 
-server.listen(3000, function() {
+server.listen(3000, function () {
   console.log("Server started.");
 });
