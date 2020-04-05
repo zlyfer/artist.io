@@ -2,4 +2,4 @@
 desktop.ini
 node_modules
 .vscode
-server/users/*
+server/users/
