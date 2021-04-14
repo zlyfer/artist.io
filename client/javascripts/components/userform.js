@@ -57,12 +57,10 @@ function main_userform() {
     socket.emit("viewartgallery", $("#userform-username").val(), hash($("#userform-password").val()));
   });
 
-  socket.on("getUserColor", (userColor) => {
-    vue_userform.userColor = userColor;
-    $("#userform-color").css("--userColor", userColor);
-  });
-  socket.on("getUsername", (username) => {
-    vue_userform.username = username;
+  socket.on("getUser", (user) => {
+    vue_userform.username = user.name;
+    vue_userform.userColor = user.color;
+    $("#userform-color").css("--userColor", user.color);
   });
   socket.on("getOnlinePlayers", (onlinePlayers) => {
     vue_userform.onlinePlayers = onlinePlayers;

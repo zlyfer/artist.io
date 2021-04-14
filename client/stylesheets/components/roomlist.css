@@ -36,6 +36,7 @@ div#roomlist div.roomlist-entry div.roomlist-entry-info {
   height: 100%;
   float: left;
   overflow-x: auto;
+  scrollbar-width: none;
 }
 
 div#roomlist div.roomlist-entry div.roomlist-entry-info:not(:nth-child(1)) {

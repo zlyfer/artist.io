@@ -16,7 +16,7 @@ function main_chatlog() {
     },
   });
 
-  socket.on("getChatlog", (chatlog) => {
-    vue_chatlog.chatlog = chatlog;
+  socket.on("message", (message) => {
+    vue_chatlog.chatlog.push(message);
   });
 }

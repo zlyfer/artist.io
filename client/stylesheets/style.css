@@ -172,7 +172,7 @@ body {
 #fillSpace {
   /* position: absolute; */
   width: 776px;
-  height: calc(100% - 702px);
+  height: calc(100vh - 702px);
   /* left: calc((100% / 2) - 388px); */
   /* top: 702px; */
   float: left;

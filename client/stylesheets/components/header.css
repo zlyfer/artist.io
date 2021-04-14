@@ -27,19 +27,19 @@ div#header div.slot span {
 
 div#header div.slot:nth-child(1) {
   margin-left: 4px;
-  width: calc(15% - 20px - 4px - 1px);
+  width: calc(20% - 20px - 4px - 1px);
 }
 div#header div.slot:nth-child(2) {
   width: calc(10% - 20px - 4px - 1px);
 }
 div#header div.slot:nth-child(3) {
-  width: calc(55% - 20px - 4px - 1px);
+  width: calc(45% - 20px - 4px - 1px);
 }
 div#header div.slot:nth-child(4) {
   width: calc(10% - 20px - 4px - 1px);
 }
 div#header div.slot:nth-child(5) {
-  width: calc(10% - 20px - 4px - 1px);
+  width: calc(15% - 20px - 4px - 1px);
 }
 
 div#header div.slot span#header-word-word {

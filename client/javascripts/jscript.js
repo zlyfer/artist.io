@@ -50,15 +50,11 @@ function main_vue() {
 }
 
 function main_socketio() {
-  // NOT TESTING:
-  socket = io("https://zlyfer.net:3000", {
+  // let server = "https://zlyfer.net:3000";
+  let server = "http://localhost:3000";
+  socket = io(server, {
     rejectUnauthorized: false,
   });
-  // END
-
-  // TESTING: Client
-  // socket = io("http://localhost:3000");
-  // END
 
   socket.on("connected", () => {
     if (reset) location.reload();

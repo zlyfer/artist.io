@@ -183,7 +183,7 @@
           >
         </div>
         <div class="roomlist-entry-info gamestate">
-          <span class="roomlist-entry-info-text">{{ roomentry.gamestate }}</span>
+          <span class="roomlist-entry-info-text">{{ roomentry.gamestate.text }}</span>
         </div>
       </div>
     </div>
@@ -238,9 +238,11 @@
         :style="`background-color:hsla(${user.color}, 50%, 45%, 0.5);`"
       >
         <div class="userlist-entry-info status">
-          <span>
-            <i class="fas" :class="`fa-${user.titleicon}`"></i>
-          </span>
+          <i class="fas" :class="`fa-${user.titleicon}`"></i>
+        </div>
+        <div class="userlist-entry-info status">
+          <i v-if="user.owner == true" class="fas" :class="`fa-crown`"></i>
+          <i v-else></i>
         </div>
         <div class="userlist-entry-info username">
           <span>{{ user.name }}</span>
@@ -392,12 +394,10 @@
     <div class="state_lobby animated slideInRight" id="chatlog">
       <div class="chatlog-message animated fadeIn" v-for="message in chatlog">
         <span class="chatlog-message-wrapper">
-          <span class="chatlog-message author" :style="`color:hsl(${message.authorcolor},50%,45%);`"
-            >{{ message.author }}:</span
+          <span class="chatlog-message author" :style="`color:hsl(${message.color},50%,45%);`"
+            >{{ message.user }}:</span
           >
-          <span class="chatlog-message content" :style="`color:var(--msg-${message.type});`"
-            >{{ message.content }}</span
-          >
+          <span class="chatlog-message content" :style="`color:var(--msg-${message.type});`">{{ message.text }}</span>
         </span>
       </div>
     </div>

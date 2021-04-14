@@ -62,5 +62,9 @@
   "nouser": {
     "type": "error",
     "content": "The provided username is not registered. Please check your login details."
+  },
+  "unknownerror": {
+    "type": "error",
+    "content": "An unexpected error has accured. Please refresh the page!"
   }
 }

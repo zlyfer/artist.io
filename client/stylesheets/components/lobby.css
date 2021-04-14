@@ -1,7 +1,7 @@
 div#lobby {
   width: 776px;
   min-height: calc(572px + 80px);
-  height: calc(100% - 2px - (50px - 2px));
+  height: calc(100vh - 2px - (50px - 2px));
   overflow-y: auto;
   float: left;
   /* background-color: var(--grey2); */
